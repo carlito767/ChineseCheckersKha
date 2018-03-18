@@ -26,6 +26,7 @@ class Main {
 
     System.init({ title:Game.TITLE, width:Game.WIDTH, height:Game.HEIGHT }, function() {
       Assets.loadEverything(function() {
+        Game.init();
         Scheduler.addTimeTask(Game.update, 0, 1 / 60);
         System.notifyOnRender(Game.render);
       });
