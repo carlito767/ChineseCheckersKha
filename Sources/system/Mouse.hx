@@ -34,6 +34,6 @@ class Mouse {
   }
 
   function onMouseWheel(delta:Int) {
-    // TODO : onMouseWheel
+    // TODO: onMouseWheel
   }
 }
