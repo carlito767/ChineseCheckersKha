@@ -8,6 +8,14 @@ package ui;
 
 import kha.Scheduler;
 
+typedef MuiEval = {
+  var hot:Bool;
+  var active:Bool;
+  var hit:Bool;
+  var longPress:Bool;
+  var longPressRatio:Float;
+}
+
 typedef MuiId = Int;
 
 typedef MuiObject = {
@@ -15,14 +23,6 @@ typedef MuiObject = {
   var y:Float;
   var w:Float;
   var h:Float;
-}
-
-typedef MuiEval = {
-  var hot:Bool;
-  var active:Bool;
-  var hit:Bool;
-  var longPress:Bool;
-  var longPressRatio:Float;
 }
 
 class Mui {

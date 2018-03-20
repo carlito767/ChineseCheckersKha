@@ -1,21 +1,22 @@
 package;
 
+import kha.Assets;
 import kha.Framebuffer;
 
 import system.Mouse;
-import ui.Mui;
+import ui.UI;
 
 class Game {
   static public inline var TITLE:String = 'ChineseCheckersKha';
   static public inline var WIDTH:Int = 800;
   static public inline var HEIGHT:Int = 600;
 
-  var layers:Array<String> = [];
   var mouse:Mouse = new Mouse();
-  var ui:Mui = new Mui();
+  var ui:UI = new UI();
+  var screen:Array<String> = [];
 
   public function new() {
-    layers.push('test');
+    screen.push('title');
   }
 
   public function update() {
@@ -29,17 +30,14 @@ class Game {
     var graphics = framebuffer.g2;
     graphics.begin();
     ui.begin(x, y, select);
+    ui.graphics = graphics;
 
-    for (layer in layers) {
+    for (layer in screen) {
       switch layer {
-        case 'test':
-          graphics.color = 0xffff0000;
-          graphics.fillRect(0, 0, WIDTH/2, HEIGHT/2);
-          var eval = ui.evaluate({x:0.0, y:0.0, w:WIDTH/2, h:HEIGHT/2});
-          if (eval.hit) layers.push('test2');
-        case 'test2':
-          graphics.color = 0xff00ff00;
-          graphics.fillRect(WIDTH/2, HEIGHT/2, WIDTH/2, HEIGHT/2);
+        case 'title':
+          ui.image({ x:0, y:0, w:0, h:0, image:Assets.images.background_title });
+          ui.label({ x:350, y:50, w:0, h:0, text:'Dames', title:true });
+          ui.label({ x:380, y:170, w:0, h:0, text:'Chinoises', title:true });
       }
     }
 
