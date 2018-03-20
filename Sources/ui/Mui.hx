@@ -98,7 +98,7 @@ class Mui {
     var id:MuiId = ++idCounter;
 
     // Next frame
-    if (x >= object.x && y >= object.y && x < object.x + object.w && y < object.y + object.h) {
+    if (x >= object.x && y >= object.y && x <= object.x + object.w && y <= object.y + object.h) {
       next = id;
     }
 

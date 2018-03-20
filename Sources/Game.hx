@@ -10,10 +10,12 @@ class Game {
   static public inline var WIDTH:Int = 800;
   static public inline var HEIGHT:Int = 600;
 
+  var layers:Array<String> = [];
   var mouse:Mouse = new Mouse();
   var ui:Mui = new Mui();
 
   public function new() {
+    layers.push('test');
   }
 
   public function update() {
@@ -28,14 +30,18 @@ class Game {
     graphics.begin();
     ui.begin(x, y, select);
 
-    // Test
-    graphics.color = 0xffff0000;
-    graphics.fillRect(0, 0, WIDTH/2, HEIGHT/2);
-    var eval = ui.evaluate({x:0.0, y:0.0, w:WIDTH/2, h:HEIGHT/2});
-    if (eval.longPress) trace('longPress');
-    else if (eval.hit) trace('hit');
-    else if (eval.active) trace('active');
-    else if (eval.hot) trace('hot');
+    for (layer in layers) {
+      switch layer {
+        case 'test':
+          graphics.color = 0xffff0000;
+          graphics.fillRect(0, 0, WIDTH/2, HEIGHT/2);
+          var eval = ui.evaluate({x:0.0, y:0.0, w:WIDTH/2, h:HEIGHT/2});
+          if (eval.hit) layers.push('test2');
+        case 'test2':
+          graphics.color = 0xff00ff00;
+          graphics.fillRect(WIDTH/2, HEIGHT/2, WIDTH/2, HEIGHT/2);
+      }
+    }
 
     ui.end();
     graphics.end();
