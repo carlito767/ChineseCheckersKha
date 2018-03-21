@@ -3,6 +3,7 @@ package;
 import kha.Assets;
 import kha.Framebuffer;
 
+import Global.*;
 import system.Mouse;
 import ui.UI;
 
@@ -16,6 +17,7 @@ class Game {
   var screen:Array<String> = [];
 
   public function new() {
+    language = 'en';
     screen.push('title');
   }
 
@@ -36,8 +38,12 @@ class Game {
       switch layer {
         case 'title':
           ui.image({ x:0, y:0, w:0, h:0, image:Assets.images.background_title });
-          ui.label({ x:350, y:50, w:0, h:0, text:'Dames', title:true });
-          ui.label({ x:380, y:170, w:0, h:0, text:'Chinoises', title:true });
+          ui.label({ x:350, y:50, w:0, h:0, text:tr('title1'), title:true });
+          ui.label({ x:380, y:170, w:0, h:0, text:tr('title2'), title:true });
+          var eval = ui.label({ x:10, y:10, w:30, h:30, text:language });
+          if (eval.hit) {
+            language = (language == 'en') ? 'fr' : 'en';
+          }
       }
     }
 
