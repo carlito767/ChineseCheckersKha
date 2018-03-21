@@ -3,7 +3,8 @@ package;
 import kha.Assets;
 import kha.Framebuffer;
 
-import Global.*;
+import Translations.language;
+import Translations.tr;
 import system.Mouse;
 import ui.UI;
 

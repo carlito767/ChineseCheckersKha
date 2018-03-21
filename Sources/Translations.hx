@@ -5,11 +5,7 @@ typedef Translation = {
   var title2:String;
 }
 
-class Global {
-  //
-  // Translations
-  //
-
+class Translations {
   static public function tr(id:String):String {
     var value:Null<String> = Reflect.field(translation, id);
     return (value == null) ? id : value;
