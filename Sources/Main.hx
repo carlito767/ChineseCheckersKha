@@ -1,5 +1,3 @@
-package;
-
 #if kha_html5
 import js.html.CanvasElement;
 import js.Browser.document;

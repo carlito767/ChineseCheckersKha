@@ -1,5 +1,3 @@
-package;
-
 typedef Translation = {
   var title1:String;
   var title2:String;

@@ -1,5 +1,3 @@
-package ui;
-
 //
 // Minimal UI
 //

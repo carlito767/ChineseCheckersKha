@@ -1,5 +1,3 @@
-package ui;
-
 import kha.Assets;
 import kha.Color;
 import kha.Font;
@@ -7,9 +5,9 @@ import kha.Image;
 import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
 
-import ui.Mui;
-import ui.Mui.MuiEval;
-import ui.Mui.MuiObject;
+import Mui;
+import Mui.MuiEval;
+import Mui.MuiObject;
 
 //
 // Components

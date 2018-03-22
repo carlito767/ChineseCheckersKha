@@ -1,5 +1,3 @@
-package system;
-
 class Mouse {
   public var x(default, null):Int = 0;
   public var y(default, null):Int = 0;

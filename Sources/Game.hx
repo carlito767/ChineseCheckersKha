@@ -1,12 +1,10 @@
-package;
-
 import kha.Assets;
 import kha.Framebuffer;
 
+import Mouse;
 import Translations.language;
 import Translations.tr;
-import system.Mouse;
-import ui.UI;
+import UI;
 
 class Game {
   static public inline var TITLE:String = 'ChineseCheckersKha';
