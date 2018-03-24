@@ -22,7 +22,7 @@ class Main {
     canvas.height = Game.HEIGHT;
     #end
 
-    System.init({ title:Game.TITLE, width:Game.WIDTH, height:Game.HEIGHT }, function() {
+    System.init({ title:Game.TITLE, width:Game.WIDTH, height:Game.HEIGHT, samplesPerPixel:4 }, function() {
       Assets.loadEverything(function() {
         var game = new Game();
         Scheduler.addTimeTask(game.update, 0, 1 / 60);

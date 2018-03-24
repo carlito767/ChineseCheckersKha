@@ -59,7 +59,6 @@ class UI extends Mui {
   var radius:Int = 16;
   var distanceX:Float = 16 * 1.25;
   var distanceY:Float = 16 * 1.25 * 1.7;
-  var segments:Int = 2 * 16;
 
   function screenCoordinates(object:UIBoard, tile:Tile):Coordinates {
     var boardWidth = ((object.state.width - 1) * distanceX) + (2 * radius);
@@ -82,10 +81,10 @@ class UI extends Mui {
       var coordinates:Coordinates = screenCoordinates(object, tile);
       if (tile.piece != null) {
         graphics.color = object.state.players[tile.piece].color;
-        graphics.fillCircle(coordinates.x, coordinates.y, radius, segments);
+        graphics.fillCircle(coordinates.x, coordinates.y, radius);
       }
       graphics.color = Color.Black;
-      graphics.drawCircle(coordinates.x, coordinates.y, radius, 2, segments);
+      graphics.drawCircle(coordinates.x, coordinates.y, radius, 2);
     }
 
     return eval;
