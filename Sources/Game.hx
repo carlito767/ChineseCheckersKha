@@ -2,11 +2,14 @@ import kha.Assets;
 import kha.Framebuffer;
 
 import Board;
+import Board.ChineseCheckers;
+import Board.RawMode;
 import Board.State;
 import Mouse;
 import Translations.language;
 import Translations.tr;
 import UI;
+import UI.Dimensions;
 
 class Game {
   static public inline var TITLE:String = 'ChineseCheckersKha';
@@ -17,6 +20,8 @@ class Game {
   var ui:UI = new UI();
   var screen:Array<String> = [];
   var state:State;
+
+  var modeIndex:Int = 0;
 
   public function new() {
     language = 'en';
@@ -38,23 +43,50 @@ class Game {
 
     for (layer in screen) {
       switch layer {
+        case 'game_new':
+          ui.shadow({ x:0, y:0, w:WIDTH, h:HEIGHT });
+          var window:UIWindow = { x:200, y:200, w:400, h:200 };
+          var dimensions:Dimensions = UI.dimensions(window);
+          ui.window(window);
+
+          ui.label({ text:tr("numberOfPlayers"), x:dimensions.left, y:dimensions.top, w:dimensions.width, h:40 });
+
+          for (i in 0...ChineseCheckers.modes.length) {
+            var mode:RawMode = ChineseCheckers.modes[i];
+            if (ui.button({
+              text:Std.string(mode.id),
+              x:dimensions.left + (i * 60),
+              y:dimensions.top + 50,
+              w:40,
+              h:40,
+              selected:(modeIndex == i),
+            }).hit) {
+              modeIndex = i;
+            }
+          }
+
+          if (ui.button({ text:tr('cancel'), x:dimensions.right - 210, y:dimensions.bottom - 40, w:100, h:40 }).hit) {
+            screen.pop();
+          }
+          if (ui.button({ text:tr("play"), x:dimensions.right - 100, y:dimensions.bottom - 40, w:100, h:40 }).hit) {
+            state = Board.create(modeIndex);
+            screen = ['play'];
+          }
         case 'play':
-          ui.image({ x:0, y:0, w:0, h:0, image:Assets.images.background_play });
-          ui.board({ x:0, y:0, w:WIDTH, h:HEIGHT, state:state });
-          if (ui.button({ x:680, y:20, w:100, h:30, text:tr('quit') }).hit) {
+          ui.image({ image:Assets.images.background_play, x:0, y:0, w:0, h:0 });
+          ui.board({ state:state, x:0, y:0, w:WIDTH, h:HEIGHT });
+          if (ui.button({ text:tr('quit'), x:680, y:20, w:100, h:40 }).hit) {
             screen = ['title'];
           }
         case 'title':
-          ui.image({ x:0, y:0, w:0, h:0, image:Assets.images.background_title });
-          ui.label({ x:350, y:50, w:0, h:0, text:tr('title1'), title:true });
-          ui.label({ x:380, y:170, w:0, h:0, text:tr('title2'), title:true });
-          if (ui.label({ x:10, y:10, w:30, h:30, text:language }).hit) {
+          ui.image({ image:Assets.images.background_title, x:0, y:0, w:0, h:0 });
+          ui.label({ text:tr('title1'), x:350, y:50, w:0, h:0, title:true });
+          ui.label({ text:tr('title2'), x:380, y:170, w:0, h:0, title:true });
+          if (ui.label({ text:language, x:10, y:10, w:30, h:30 }).hit) {
             language = (language == 'en') ? 'fr' : 'en';
           }
-          if (ui.button({ x:480, y:385, w:100, h:50, text:tr('play') }).hit) {
-            // @Test
-            state = Board.create(0);
-            screen = ['play'];
+          if (ui.button({ text:tr('newGame'), x:430, y:385, w:200, h:50 }).hit) {
+            screen.push('game_new');
           }
       }
     }

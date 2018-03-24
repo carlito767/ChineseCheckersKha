@@ -68,8 +68,8 @@ class ChineseCheckers {
 
   static public var players(default, null):Array<RawPlayer> = [
     { home:4, color:Color.Black },
-    { home:5, color:0xff008080 }, // teal
-    { home:6, color:Color.Green },
+    { home:5, color:Color.fromBytes(  0, 128, 128) }, // teal
+    { home:6, color:Color.fromBytes(  0, 128,   0) }, // green
     { home:1, color:Color.Red },
     { home:2, color:Color.Purple },
     { home:3, color:Color.Yellow },

@@ -7,6 +7,7 @@ using kha.graphics2.GraphicsExtension;
 
 import Board.State;
 import Board.Tile;
+import Game;
 import Mui;
 import Mui.MuiEval;
 import Mui.MuiObject;
@@ -20,6 +21,16 @@ typedef Coordinates = {
   var y:Float;
 }
 
+typedef Dimensions = {
+  var margin:Float;
+  var width:Float;
+  var height:Float;
+  var left:Float;
+  var right:Float;
+  var top:Float;
+  var bottom:Float;
+}
+
 typedef UIBoard = {
   > MuiObject,
   var state:State;
@@ -28,6 +39,7 @@ typedef UIBoard = {
 typedef UIButton = {
   > MuiObject,
   var text:String;
+  @:optional var selected:Bool;
 }
 
 typedef UIImage = {
@@ -41,6 +53,14 @@ typedef UILabel = {
   @:optional var title:Bool;
 }
 
+typedef UIShadow = {
+  > MuiObject,
+}
+
+typedef UIWindow = {
+  > MuiObject,
+}
+
 //
 // UI
 //
@@ -50,6 +70,28 @@ class UI extends Mui {
 
   public function new() {
     super();
+  }
+
+  static public function dimensions(?window:UIWindow):Dimensions {
+    if (window == null) {
+      window = { x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT };
+    }
+    var margin = window.w * 0.05;
+    var width = window.w - 2 * margin;
+    var height = window.h - 2 * margin;
+    var left = window.x + margin;
+    var right = left + width;
+    var top = window.y + margin;
+    var bottom = top + height;
+    return {
+      margin:margin,
+      width:width,
+      height:height,
+      left:left,
+      right:right,
+      top:top,
+      bottom:bottom,
+    }
   }
 
   //
@@ -100,7 +142,7 @@ class UI extends Mui {
     graphics.color = Color.fromBytes(0, 0, 0, 200);
     graphics.fillRect(object.x, object.y, object.w, object.h);
 
-    graphics.color = Color.White;
+    graphics.color = (object.selected == true) ? Color.Yellow : Color.White;
     graphics.font = Assets.fonts.maharani;
     graphics.fontSize = 28;
     var textX = object.x + ((object.w - graphics.font.width(graphics.fontSize, object.text)) / 2);
@@ -131,7 +173,7 @@ class UI extends Mui {
     var eval:MuiEval = evaluate(object);
 
     graphics.color = Color.White;
-    if (object.title != null && object.title == true) {
+    if (object.title == true) {
       graphics.font = Assets.fonts.batik_gangster;
       graphics.fontSize = 100;
     }
@@ -140,6 +182,32 @@ class UI extends Mui {
       graphics.fontSize = 28;
     }
     graphics.drawString(object.text, object.x, object.y);
+
+    return eval;
+  }
+
+  //
+  // Shadow
+  //
+
+  public function shadow(object:UIShadow):MuiEval {
+    var eval:MuiEval = evaluate(object);
+
+    graphics.color = Color.Transparent;
+    graphics.fillRect(object.x, object.y, object.w, object.h);
+
+    return eval;
+  }
+
+  //
+  // Window
+  //
+
+  public function window(object:UIWindow):MuiEval {
+    var eval:MuiEval = evaluate(object);
+
+    graphics.color = Color.fromBytes(0, 0, 0, 200);
+    graphics.fillRect(object.x, object.y, object.w, object.h);
 
     return eval;
   }
