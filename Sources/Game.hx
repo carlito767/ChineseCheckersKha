@@ -1,6 +1,8 @@
 import kha.Assets;
 import kha.Framebuffer;
 
+import Board;
+import Board.GameState;
 import Mouse;
 import Translations.language;
 import Translations.tr;
@@ -14,6 +16,7 @@ class Game {
   var mouse:Mouse = new Mouse();
   var ui:UI = new UI();
   var screen:Array<String> = [];
+  var state:GameState;
 
   public function new() {
     language = 'en';
@@ -35,13 +38,23 @@ class Game {
 
     for (layer in screen) {
       switch layer {
+        case 'play':
+          ui.image({ x:0, y:0, w:0, h:0, image:Assets.images.background_play });
+          ui.board({ x:0, y:0, w:WIDTH, h:HEIGHT, state:state });
+          if (ui.button({ x:680, y:20, w:100, h:30, text:tr('quit') }).hit) {
+            screen = ['title'];
+          }
         case 'title':
           ui.image({ x:0, y:0, w:0, h:0, image:Assets.images.background_title });
           ui.label({ x:350, y:50, w:0, h:0, text:tr('title1'), title:true });
           ui.label({ x:380, y:170, w:0, h:0, text:tr('title2'), title:true });
-          var eval = ui.label({ x:10, y:10, w:30, h:30, text:language });
-          if (eval.hit) {
+          if (ui.label({ x:10, y:10, w:30, h:30, text:language }).hit) {
             language = (language == 'en') ? 'fr' : 'en';
+          }
+          if (ui.button({ x:480, y:385, w:100, h:50, text:tr('play') }).hit) {
+            // @Test
+            state = Board.create(0);
+            screen = ['play'];
           }
       }
     }

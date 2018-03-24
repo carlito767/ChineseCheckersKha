@@ -1,4 +1,6 @@
 typedef Translation = {
+  var play:String;
+  var quit:String;
   var title1:String;
   var title2:String;
 }
@@ -14,10 +16,14 @@ class Translations {
   static function set_language(iso) {
     translation = switch(iso) {
       case 'fr': {
+        play:'Jouer',
+        quit:'Quitter',
         title1:'Dames',
         title2:'Chinoises',
       }
       default: {
+        play:'Play',
+        quit:'Quit',
         title1:'Chinese',
         title2:'Checkers',
       }
