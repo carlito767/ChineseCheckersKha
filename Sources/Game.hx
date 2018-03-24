@@ -2,7 +2,7 @@ import kha.Assets;
 import kha.Framebuffer;
 
 import Board;
-import Board.GameState;
+import Board.State;
 import Mouse;
 import Translations.language;
 import Translations.tr;
@@ -16,7 +16,7 @@ class Game {
   var mouse:Mouse = new Mouse();
   var ui:UI = new UI();
   var screen:Array<String> = [];
-  var state:GameState;
+  var state:State;
 
   public function new() {
     language = 'en';

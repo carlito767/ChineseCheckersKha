@@ -5,7 +5,7 @@ import kha.Image;
 import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
 
-import Board.GameState;
+import Board.State;
 import Board.Tile;
 import Mui;
 import Mui.MuiEval;
@@ -22,7 +22,7 @@ typedef Coordinates = {
 
 typedef UIBoard = {
   > MuiObject,
-  var state:GameState;
+  var state:State;
 }
 
 typedef UIButton = {
@@ -62,10 +62,10 @@ class UI extends Mui {
   var segments:Int = 2 * 16;
 
   function screenCoordinates(object:UIBoard, tile:Tile):Coordinates {
-    var boardWidth:Float = ((object.state.width - 1) * distanceX) + (2 * radius);
-    var boardHeight:Float = ((object.state.height - 1) * distanceY) + (2 * radius);
-    var x:Float = (object.w - boardWidth) / 2;
-    var y:Float = (object.h - boardHeight) / 2;
+    var boardWidth = ((object.state.width - 1) * distanceX) + (2 * radius);
+    var boardHeight = ((object.state.height - 1) * distanceY) + (2 * radius);
+    var x = (object.w - boardWidth) / 2;
+    var y = (object.h - boardHeight) / 2;
     var dx = radius + ((tile.x - 1) * distanceX);
     var dy = radius + ((tile.y - 1) * distanceY);
     return {
@@ -80,6 +80,10 @@ class UI extends Mui {
     // Tiles
     for (tile in object.state.tiles) {
       var coordinates:Coordinates = screenCoordinates(object, tile);
+      if (tile.piece != null) {
+        graphics.color = object.state.players[tile.piece].color;
+        graphics.fillCircle(coordinates.x, coordinates.y, radius, segments);
+      }
       graphics.color = Color.Black;
       graphics.drawCircle(coordinates.x, coordinates.y, radius, 2, segments);
     }

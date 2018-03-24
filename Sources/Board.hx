@@ -1,7 +1,7 @@
 import kha.Color;
 
 //
-// Game State
+// State
 //
 
 typedef Move = {
@@ -22,7 +22,7 @@ typedef Tile = {
   var piece:Null<Int>;
 }
 
-typedef GameState = {
+typedef State = {
   var width:Int;
   var height:Int;
   var order:Array<Int>;
@@ -88,7 +88,7 @@ class ChineseCheckers {
 //
 
 class Board {
-  static public function create(modeIndex:Int):GameState {
+  static public function create(modeIndex:Int):State {
     // Size
     var width:Int = ChineseCheckers.board[0].length;
     var height:Int = ChineseCheckers.board.length;
@@ -119,7 +119,7 @@ class Board {
             x:x + 1,
             y:y + 1,
             owner:(player != null) ? owners[player] : null,
-            piece:(player != null) ? player : null,
+            piece:(player != null && players[player] != null) ? player : null,
           });
         } 
       }
