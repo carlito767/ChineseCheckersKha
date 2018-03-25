@@ -143,7 +143,7 @@ class UI extends Mui {
     graphics.fillRect(object.x, object.y, object.w, object.h);
 
     graphics.color = (object.selected == true) ? Color.Yellow : Color.White;
-    graphics.font = Assets.fonts.maharani;
+    graphics.font = Assets.fonts.Wortellina;
     graphics.fontSize = 28;
     var textX = object.x + ((object.w - graphics.font.width(graphics.fontSize, object.text)) / 2);
     var textY = object.y + ((object.h - graphics.font.height(graphics.fontSize)) / 2);
@@ -174,11 +174,11 @@ class UI extends Mui {
 
     graphics.color = Color.White;
     if (object.title == true) {
-      graphics.font = Assets.fonts.batik_gangster;
+      graphics.font = Assets.fonts.BatikGangster;
       graphics.fontSize = 100;
     }
     else {
-      graphics.font = Assets.fonts.maharani;
+      graphics.font = Assets.fonts.Wortellina;
       graphics.fontSize = 28;
     }
     graphics.drawString(object.text, object.x, object.y);

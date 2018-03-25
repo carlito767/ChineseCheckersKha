@@ -73,13 +73,13 @@ class Game {
             screen = ['play'];
           }
         case 'play':
-          ui.image({ image:Assets.images.background_play, x:0, y:0, w:0, h:0 });
+          ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
           ui.board({ state:state, x:0, y:0, w:WIDTH, h:HEIGHT });
           if (ui.button({ text:tr('quit'), x:680, y:20, w:100, h:40 }).hit) {
             screen = ['title'];
           }
         case 'title':
-          ui.image({ image:Assets.images.background_title, x:0, y:0, w:0, h:0 });
+          ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:0, h:0 });
 
           var languages:Array<String> = ['en', 'fr'];
           for (i in 0...languages.length) {
