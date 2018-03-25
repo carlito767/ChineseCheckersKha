@@ -19,12 +19,7 @@ class Game {
   var mouse:Mouse = new Mouse();
   var ui:UI = new UI();
 
-  var screen(default, set):String;
-  function set_screen(id) {
-    screenState = '';
-    return screen = id;
-  }
-  var screenState:String;
+  var screen:String;
 
   var modeIndex(default, set):Null<Int>;
   function set_modeIndex(value) {
@@ -57,8 +52,7 @@ class Game {
       ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
       ui.board({ state:state, x:0, y:0, w:WIDTH, h:HEIGHT });
 
-      switch screenState {
-      case '':
+      if (!state.ready) {
         var window:UIWindow = { x:250, y:220, w:300, h:160, title:tr('numberOfPlayers') };
         var dimensions:Dimensions = UI.dimensions(window);
         ui.window(window);
@@ -80,10 +74,8 @@ class Game {
         }
 
         if (ui.button({ text:tr('play'), disabled:(modeIndex == null), x:dimensions.left, y:dimensions.bottom - 40, w:dimensions.width, h:40 }).hit) {
-          screenState = 'play';
+          state.ready = true;
         }
-      case 'play':
-        state.ready = true;
       }
 
       if (ui.button({ text:tr('quit'), x:680, y:20, w:100, h:40 }).hit) {
