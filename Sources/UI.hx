@@ -5,6 +5,7 @@ import kha.Image;
 import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
 
+import Board.Player;
 import Board.State;
 import Board.Tile;
 import Game;
@@ -109,8 +110,8 @@ class UI extends Mui {
   function screenCoordinates(object:UIBoard, tile:Tile):Coordinates {
     var boardWidth = ((object.state.width - 1) * distanceX) + (2 * radius);
     var boardHeight = ((object.state.height - 1) * distanceY) + (2 * radius);
-    var x = (object.w - boardWidth) / 2;
-    var y = (object.h - boardHeight) / 2;
+    var x = (object.w - boardWidth) * 0.5;
+    var y = (object.h - boardHeight) * 0.5;
     var dx = radius + ((tile.x - 1) * distanceX);
     var dy = radius + ((tile.y - 1) * distanceY);
     return {
@@ -122,6 +123,8 @@ class UI extends Mui {
   public function board(object:UIBoard):MuiEval {
     var eval:MuiEval = evaluate(object);
 
+    var currentPlayer:Null<Player> = Board.currentPlayer(object.state);
+
     // Tiles
     for (tile in object.state.tiles) {
       var coordinates:Coordinates = screenCoordinates(object, tile);
@@ -131,6 +134,20 @@ class UI extends Mui {
       }
       graphics.color = Color.Black;
       graphics.drawCircle(coordinates.x, coordinates.y, radius, 2);
+    }
+
+    // Current player
+    if (currentPlayer != null) {
+      var window:MuiObject = {x:20, y:20, w:100, h:100};
+      graphics.color = Color.fromBytes(0, 0, 0, 50);
+      graphics.fillRect(window.x, window.y, window.w, window.h);
+      graphics.color = Color.fromBytes(220, 20, 60); // crimson
+      graphics.drawRect(window.x + 2, window.y + 2, window.w - 4, window.h - 4);
+      var x:Float = window.x + (window.w * 0.5);
+      var y:Float = window.y + (window.h * 0.5);
+      var radius:Float = Math.min(window.w, window.h) * 0.5 * 0.7;
+      graphics.color = currentPlayer.color;
+      graphics.fillCircle(x, y, radius);
     }
 
     return eval;

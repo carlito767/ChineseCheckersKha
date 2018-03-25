@@ -87,6 +87,7 @@ class Game {
           screenState = 'play';
         }
       case 'play':
+        state.ready = true;
       }
     case 'title':
       ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:0, h:0 });

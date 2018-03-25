@@ -23,12 +23,14 @@ typedef Tile = {
 }
 
 typedef State = {
+  var ready:Bool;
   var width:Int;
   var height:Int;
   var order:Array<Int>;
   var players:Map<Int, Player>;
   var tiles:Array<Tile>;
   var moves:Array<Move>;
+  var standings:Array<Int>;
 }
 
 //
@@ -95,6 +97,7 @@ class Board {
     var players:Map<Int, Player> = new Map<Int, Player>();
     var tiles:Array<Tile> = [];
     var moves:Array<Move> = [];
+    var standings:Array<Int> = [];
 
     // Players
     var owners:Map<Int, Int> = new Map<Int, Int>();
@@ -130,12 +133,39 @@ class Board {
     }
 
     return {
+      ready:false,
       width:width,
       height:height,
       order:order,
       players:players,
       tiles:tiles,
       moves:moves,
+      standings:standings,
     }
+  }
+
+  static public function currentPlayer(state:State):Null<Player> {
+    if (!state.ready || Board.isOver(state)) {
+      return null;
+    }
+    if (state.moves.length == 0) {
+      return state.players[state.order[0]];
+    }
+    var move:Move = state.moves[state.moves.length];
+    var index:Int = state.order.indexOf(state.tiles[move.to].piece);
+    if (index == -1) {
+      return null;
+    }
+    do {
+      index++;
+      if (index == state.order.length) {
+        index = 0;
+      }
+    } while(state.standings.indexOf(index) > -1);
+    return state.players[index];
+  }
+
+  static public function isOver(state:State):Bool {
+    return (state.standings.length == state.order.length);
   }
 }
