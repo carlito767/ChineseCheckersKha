@@ -1,5 +1,6 @@
 typedef Translation = {
   var cancel:String;
+  var language:String;
   var newGame:String;
   var numberOfPlayers:String;
   var play:String;
@@ -20,6 +21,7 @@ class Translations {
     translation = switch(iso) {
       case 'fr': {
         cancel:'Annuler',
+        language:'Langue :',
         newGame:'Nouvelle Partie',
         numberOfPlayers:'Nombre de joueurs',
         play:'Jouer',
@@ -29,6 +31,7 @@ class Translations {
       }
       default: {
         cancel:'Cancel',
+        language:'Language:',
         newGame:'New Game',
         numberOfPlayers:'Number of players',
         play:'Play',

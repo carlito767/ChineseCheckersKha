@@ -81,26 +81,14 @@ class Game {
         case 'title':
           ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:0, h:0 });
 
-          var languages:Array<String> = ['en', 'fr'];
-          for (i in 0...languages.length) {
-            var id:String = languages[i];
-            if (ui.button({
-              text:id.toUpperCase(),
-              x:20 + (i * 50),
-              y:20,
-              w:40,
-              h:40,
-              selected:language == id,
-            }).hit) {
-              language = id;
-            }
-          }
-
           ui.label({ text:tr('title1'), x:350, y:50, w:0, h:0, title:true });
           ui.label({ text:tr('title2'), x:380, y:170, w:0, h:0, title:true });
 
-          if (ui.button({ text:tr('newGame'), x:430, y:385, w:200, h:50 }).hit) {
+          if (ui.button({ text:tr('newGame'), x:WIDTH - 300, y:350, w:300, h:50 }).hit) {
             screen.push('game_new');
+          }
+          if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH - 300, y:420, w:300, h:50 }).hit) {
+            language = (language == 'en') ? 'fr' : 'en';
           }
       }
     }
