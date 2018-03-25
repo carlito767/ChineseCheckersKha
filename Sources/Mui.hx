@@ -21,6 +21,7 @@ typedef MuiObject = {
   var y:Float;
   var w:Float;
   var h:Float;
+  @:optional var disabled:Bool;
 }
 
 class Mui {
@@ -105,12 +106,21 @@ class Mui {
     if (id == active && longPressDuration > LONG_PRESS_BEGIN) {
       longPressRatio = Math.min(longPressDuration / LONG_PRESS_END, 1.0);
     }
+    if (object.disabled == true) {
+      return {
+        hot:false,
+        active:false,
+        hit:false,
+        longPress:false,
+        longPressRatio:0.0,
+      }
+    }
     return {
       hot:(id == hot),
       active:(id == active),
       hit:(id == hit),
       longPress:(id == longPress),
-      longPressRatio:longPressRatio
+      longPressRatio:longPressRatio,
     }
   }
 }

@@ -26,7 +26,11 @@ class Game {
   }
   var screenState:String;
 
-  var modeIndex:Int = 0;
+  var modeIndex(default, set):Null<Int>;
+  function set_modeIndex(value) {
+    state = (value == null) ? null : Board.create(value);
+    return modeIndex = value;
+  }
   var state:Null<State>;
 
   public function new() {
@@ -49,13 +53,10 @@ class Game {
 
     switch screen {
       case 'play':
-        if (state == null) {
-          state = Board.create(modeIndex);
-        }
         ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
         ui.board({ state:state, x:0, y:0, w:WIDTH, h:HEIGHT });
         if (ui.button({ text:tr('quit'), x:680, y:20, w:100, h:40 }).hit) {
-          state = null;
+          modeIndex = null;
           screen = 'title';
         }
       case 'title':
@@ -95,7 +96,7 @@ class Game {
           if (ui.button({ text:tr('cancel'), x:dimensions.right - 210, y:dimensions.bottom - 40, w:100, h:40 }).hit) {
             screenState = '';
           }
-          if (ui.button({ text:tr('play'), x:dimensions.right - 100, y:dimensions.bottom - 40, w:100, h:40 }).hit) {
+          if (ui.button({ text:tr('play'), disabled:(modeIndex == null), x:dimensions.right - 100, y:dimensions.bottom - 40, w:100, h:40 }).hit) {
             screen = 'play';
           }
         }

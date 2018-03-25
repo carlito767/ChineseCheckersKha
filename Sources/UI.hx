@@ -138,7 +138,14 @@ class UI extends Mui {
     graphics.color = Color.fromBytes(0, 0, 0, 200);
     graphics.fillRect(object.x, object.y, object.w, object.h);
 
-    graphics.color = (object.selected == true) ? Color.Yellow : Color.White;
+    var color:Color = Color.White;
+    if (object.disabled == true) {
+      color = Color.fromBytes(128, 128, 128); // grey
+    }
+    else if (object.selected == true) {
+      color = Color.Yellow;
+    }
+    graphics.color = color;
     graphics.font = Assets.fonts.Wortellina;
     graphics.fontSize = 28;
     var textX = object.x + ((object.w - graphics.font.width(graphics.fontSize, object.text)) / 2);
