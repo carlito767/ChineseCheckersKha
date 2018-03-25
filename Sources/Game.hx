@@ -56,25 +56,21 @@ class Game {
     case 'play':
       ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
       ui.board({ state:state, x:0, y:0, w:WIDTH, h:HEIGHT });
-      if (ui.button({ text:tr('quit'), x:680, y:20, w:100, h:40 }).hit) {
-        modeIndex = null;
-        screen = 'title';
-      }
 
       switch screenState {
       case '':
-        var window:UIWindow = { x:250, y:200, w:300, h:200 };
+        var window:UIWindow = { x:250, y:220, w:300, h:160, title:tr('numberOfPlayers') };
         var dimensions:Dimensions = UI.dimensions(window);
         ui.window(window);
 
-        ui.label({ text:tr('numberOfPlayers'), x:dimensions.left, y:dimensions.top, w:dimensions.width, h:40 });
-
-        for (i in 0...ChineseCheckers.modes.length) {
+        var nb:Int = ChineseCheckers.modes.length;
+        var dx:Float = (dimensions.right - dimensions.left - (nb * 50) - ((nb - 2) * 10)) * 0.5;
+        for (i in 0...nb) {
           var mode:RawMode = ChineseCheckers.modes[i];
           if (ui.button({
             text:Std.string(mode.id),
-            x:dimensions.left + (i * 60),
-            y:dimensions.top + 50,
+            x:dimensions.left + dx + (i * 60),
+            y:dimensions.top + 35,
             w:40,
             h:40,
             selected:(modeIndex == i),
@@ -89,16 +85,21 @@ class Game {
       case 'play':
         state.ready = true;
       }
+
+      if (ui.button({ text:tr('quit'), x:680, y:20, w:100, h:40 }).hit) {
+        modeIndex = null;
+        screen = 'title';
+      }
     case 'title':
       ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:0, h:0 });
 
-      ui.label({ text:tr('title1'), x:350, y:50, w:0, h:0, title:true });
-      ui.label({ text:tr('title2'), x:380, y:170, w:0, h:0, title:true });
+      ui.label({ text:tr('title1'), x:350, y:50, w:0, h:0, titleScreen:true });
+      ui.label({ text:tr('title2'), x:380, y:170, w:0, h:0, titleScreen:true });
 
-      if (ui.button({ text:tr('newGame'), x:WIDTH - 300, y:350, w:300, h:50 }).hit) {
+      if (ui.button({ text:tr('newGame'), x:WIDTH - 300, y:350, w:310, h:50 }).hit) {
         screen = 'play';
       }
-      if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH - 300, y:420, w:300, h:50 }).hit) {
+      if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH - 300, y:420, w:310, h:50 }).hit) {
         language = (language == 'en') ? 'fr' : 'en';
       }
     }

@@ -51,11 +51,12 @@ typedef UIImage = {
 typedef UILabel = {
   > MuiObject,
   var text:String;
-  @:optional var title:Bool;
+  @:optional var titleScreen:Bool;
 }
 
 typedef UIWindow = {
   > MuiObject,
+  @:optional var title:String;
 }
 
 //
@@ -94,8 +95,13 @@ class UI extends Mui {
   function background<T:(MuiObject)>(object:T) {
     graphics.color = Color.fromBytes(0, 0, 0, 200);
     graphics.fillRect(object.x, object.y, object.w, object.h);
-  
-    graphics.color = Color.fromBytes(220, 20, 60); // crimson
+
+    if (object.disabled == true) {
+      graphics.color = Color.fromBytes(128, 128, 128); // gray
+    }
+    else {
+      graphics.color = Color.fromBytes(220, 20, 60); // crimson
+    }
     graphics.drawRect(object.x + 2, object.y + 2, object.w - 4, object.h - 4);
   }
 
@@ -200,7 +206,7 @@ class UI extends Mui {
     var eval:MuiEval = evaluate(object);
 
     graphics.color = Color.White;
-    if (object.title == true) {
+    if (object.titleScreen == true) {
       graphics.font = Assets.fonts.BatikGangster;
       graphics.fontSize = 100;
     }
@@ -221,6 +227,17 @@ class UI extends Mui {
     var eval:MuiEval = evaluate(object);
 
     background(object);
+    if (object.title != null) {
+      graphics.color = Color.Purple;
+      var title:MuiObject = { x:object.x + 4, y:object.y + 4, w:object.w - 8, h:30 };
+      graphics.fillRect(title.x, title.y, title.w, title.h);
+      graphics.color = Color.White;
+      graphics.font = Assets.fonts.Wortellina;
+      graphics.fontSize = 26;
+      var titleX = title.x + ((title.w - graphics.font.width(graphics.fontSize, object.title)) / 2);
+      var titleY = title.y + ((title.h - graphics.font.height(graphics.fontSize)) / 2);
+      graphics.drawString(object.title, titleX, titleY);
+    }
 
     return eval;
   }
