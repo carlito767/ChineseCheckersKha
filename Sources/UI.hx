@@ -53,10 +53,6 @@ typedef UILabel = {
   @:optional var title:Bool;
 }
 
-typedef UIShadow = {
-  > MuiObject,
-}
-
 typedef UIWindow = {
   > MuiObject,
 }
@@ -182,19 +178,6 @@ class UI extends Mui {
       graphics.fontSize = 28;
     }
     graphics.drawString(object.text, object.x, object.y);
-
-    return eval;
-  }
-
-  //
-  // Shadow
-  //
-
-  public function shadow(object:UIShadow):MuiEval {
-    var eval:MuiEval = evaluate(object);
-
-    graphics.color = Color.Transparent;
-    graphics.fillRect(object.x, object.y, object.w, object.h);
 
     return eval;
   }
