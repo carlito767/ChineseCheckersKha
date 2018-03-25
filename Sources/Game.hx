@@ -21,13 +21,13 @@ class Game {
 
   var screen(default, set):String;
   function set_screen(id) {
-    screenState = "";
+    screenState = '';
     return screen = id;
   }
   var screenState:String;
 
   var modeIndex:Int = 0;
-  var state:State;
+  var state:Null<State>;
 
   public function new() {
     language = 'en';
@@ -49,9 +49,13 @@ class Game {
 
     switch screen {
       case 'play':
+        if (state == null) {
+          state = Board.create(modeIndex);
+        }
         ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
         ui.board({ state:state, x:0, y:0, w:WIDTH, h:HEIGHT });
         if (ui.button({ text:tr('quit'), x:680, y:20, w:100, h:40 }).hit) {
+          state = null;
           screen = 'title';
         }
       case 'title':
@@ -60,10 +64,10 @@ class Game {
         ui.label({ text:tr('title1'), x:350, y:50, w:0, h:0, title:true });
         ui.label({ text:tr('title2'), x:380, y:170, w:0, h:0, title:true });
 
-        if (ui.button({ text:tr('newGame'), x:WIDTH - 300, y:350, w:300, h:50 }).hit && screenState == "") {
+        if (ui.button({ text:tr('newGame'), x:WIDTH - 300, y:350, w:300, h:50 }).hit && screenState == '') {
           screenState = 'newGame';
         }
-        if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH - 300, y:420, w:300, h:50 }).hit && screenState == "") {
+        if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH - 300, y:420, w:300, h:50 }).hit && screenState == '') {
           language = (language == 'en') ? 'fr' : 'en';
         }
 
@@ -72,7 +76,7 @@ class Game {
           var dimensions:Dimensions = UI.dimensions(window);
           ui.window(window);
 
-          ui.label({ text:tr("numberOfPlayers"), x:dimensions.left, y:dimensions.top, w:dimensions.width, h:40 });
+          ui.label({ text:tr('numberOfPlayers'), x:dimensions.left, y:dimensions.top, w:dimensions.width, h:40 });
 
           for (i in 0...ChineseCheckers.modes.length) {
             var mode:RawMode = ChineseCheckers.modes[i];
@@ -89,10 +93,9 @@ class Game {
           }
 
           if (ui.button({ text:tr('cancel'), x:dimensions.right - 210, y:dimensions.bottom - 40, w:100, h:40 }).hit) {
-            screenState = "";
+            screenState = '';
           }
-          if (ui.button({ text:tr("play"), x:dimensions.right - 100, y:dimensions.bottom - 40, w:100, h:40 }).hit) {
-            state = Board.create(modeIndex);
+          if (ui.button({ text:tr('play'), x:dimensions.right - 100, y:dimensions.bottom - 40, w:100, h:40 }).hit) {
             screen = 'play';
           }
         }
