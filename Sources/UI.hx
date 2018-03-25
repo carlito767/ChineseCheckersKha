@@ -90,6 +90,14 @@ class UI extends Mui {
     }
   }
 
+  function background<T:(MuiObject)>(object:T) {
+    graphics.color = Color.fromBytes(0, 0, 0, 200);
+    graphics.fillRect(object.x, object.y, object.w, object.h);
+  
+    graphics.color = Color.fromBytes(220, 20, 60); // crimson
+    graphics.drawRect(object.x + 2, object.y + 2, object.w - 4, object.h - 4);
+  }
+
   //
   // Board
   //
@@ -135,8 +143,7 @@ class UI extends Mui {
   public function button(object:UIButton):MuiEval {
     var eval:MuiEval = evaluate(object);
 
-    graphics.color = Color.fromBytes(0, 0, 0, 200);
-    graphics.fillRect(object.x, object.y, object.w, object.h);
+    background(object);
 
     var color:Color = Color.White;
     if (object.disabled == true) {
@@ -196,8 +203,7 @@ class UI extends Mui {
   public function window(object:UIWindow):MuiEval {
     var eval:MuiEval = evaluate(object);
 
-    graphics.color = Color.fromBytes(0, 0, 0, 200);
-    graphics.fillRect(object.x, object.y, object.w, object.h);
+    background(object);
 
     return eval;
   }
