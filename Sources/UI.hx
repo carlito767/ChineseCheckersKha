@@ -140,7 +140,7 @@ class UI extends Mui {
 
     var color:Color = Color.White;
     if (object.disabled == true) {
-      color = Color.fromBytes(128, 128, 128); // grey
+      color = Color.fromBytes(128, 128, 128); // gray
     }
     else if (object.selected == true) {
       color = Color.Yellow;

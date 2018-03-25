@@ -88,26 +88,30 @@ class ChineseCheckers {
 //
 
 class Board {
-  static public function create(modeIndex:Int):State {
-    // Size
+  static public function create(modeIndex:Null<Int>):State {
     var width:Int = ChineseCheckers.board[0].length;
     var height:Int = ChineseCheckers.board.length;
+    var order:Array<Int> = [];
+    var players:Map<Int, Player> = new Map<Int, Player>();
+    var tiles:Array<Tile> = [];
+    var moves:Array<Move> = [];
 
     // Players
-    var mode:RawMode = ChineseCheckers.modes[modeIndex];
-    var players:Map<Int, Player> = new Map<Int, Player>();
     var owners:Map<Int, Int> = new Map<Int, Int>();
-    for (id in mode.order) {
-      var player:RawPlayer = ChineseCheckers.players[id-1];
-      players[id] = {
-        id:id,
-        color:player.color,
-      };
-      owners[player.home] = id;
+    if (modeIndex != null) {
+      var mode:RawMode = ChineseCheckers.modes[modeIndex];
+      order = mode.order;
+      for (id in order) {
+        var player:RawPlayer = ChineseCheckers.players[id-1];
+        players[id] = {
+          id:id,
+          color:player.color,
+        };
+        owners[player.home] = id;
+      }
     }
 
     // Tiles
-    var tiles:Array<Tile> = [];
     for (y in 0...height) {
       var row:String = ChineseCheckers.board[y];
       for (x in 0...width) {
@@ -125,13 +129,10 @@ class Board {
       }
     }
 
-    // Moves
-    var moves:Array<Move> = [];
-
     return {
       width:width,
       height:height,
-      order:mode.order,
+      order:order,
       players:players,
       tiles:tiles,
       moves:moves,
