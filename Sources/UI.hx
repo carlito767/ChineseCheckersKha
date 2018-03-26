@@ -136,9 +136,9 @@ class UI extends Mui {
       // Position
       graphics.color = Color.White;
       graphics.fontSize = 38;
-      var centerX:Float = x + (sx - x - graphics.font.width(graphics.fontSize, Std.string(i))) * 0.5;
+      var centerX:Float = x + (sx - x - graphics.font.width(graphics.fontSize, Std.string(i+1))) * 0.5;
       var centerY:Float = y + dy + (h - graphics.font.height(graphics.fontSize)) * 0.5;
-      graphics.drawString(Std.string(i), centerX, centerY);
+      graphics.drawString(Std.string(i+1), centerX, centerY);
       // Player
       var player:Null<Player> = state.players[state.standings[i]];
       if (player != null) {
