@@ -114,36 +114,36 @@ class UI extends Mui {
     graphics.color = Color.Yellow;
     graphics.font = Assets.fonts.Wortellina;
     graphics.fontSize = 70;
-    var title:String = tr('standings');
-    var textX:Float = (Game.WIDTH - graphics.font.width(graphics.fontSize, title)) * 0.5;
-    var textY:Float = Game.HEIGHT * 0.05;
+    var title = tr('standings');
+    var textX = (Game.WIDTH - graphics.font.width(graphics.fontSize, title)) * 0.5;
+    var textY = Game.HEIGHT * 0.05;
     graphics.drawString(title, textX, textY);
 
-    var x:Float = Game.WIDTH * 0.2;
-    var y:Float = Game.HEIGHT * 0.2;
-    var w:Float = Game.WIDTH - 2 * x;
-    var h:Float = Game.HEIGHT * 0.1;
+    var x = Game.WIDTH * 0.2;
+    var y = Game.HEIGHT * 0.2;
+    var w = Game.WIDTH - 2 * x;
+    var h = Game.HEIGHT * 0.1;
     for (i in 0...state.standings.length) {
       // Slot
-      var dy:Float = i * Game.HEIGHT * 0.12;
+      var dy = i * Game.HEIGHT * 0.12;
       graphics.color = Color.Black;
       graphics.fillRect(x, y + dy, w, h);
       graphics.color = Color.fromBytes(220, 20, 60); // crimson
       graphics.drawRect(x + 2, y + dy + 2, w - 4, h - 4);
       // Separator
-      var sx:Float = Game.WIDTH * 0.3;
+      var sx = Game.WIDTH * 0.3;
       graphics.drawLine(sx, y + dy + 2, sx, y + dy + h - 2, 2);
       // Position
       graphics.color = Color.White;
       graphics.fontSize = 38;
-      var centerX:Float = x + (sx - x - graphics.font.width(graphics.fontSize, Std.string(i+1))) * 0.5;
-      var centerY:Float = y + dy + (h - graphics.font.height(graphics.fontSize)) * 0.5;
+      var centerX = x + (sx - x - graphics.font.width(graphics.fontSize, Std.string(i+1))) * 0.5;
+      var centerY = y + dy + (h - graphics.font.height(graphics.fontSize)) * 0.5;
       graphics.drawString(Std.string(i+1), centerX, centerY);
       // Player
       var player:Null<Player> = state.players[state.standings[i]];
       if (player != null) {
-        var px:Float = Game.WIDTH * 0.5;
-        var py:Float = y + dy + h * 0.5;
+        var px = Game.WIDTH * 0.5;
+        var py = y + dy + h * 0.5;
         graphics.color = player.color;
         graphics.fillCircle(px, py, radius);
         graphics.color = Color.White;
@@ -156,9 +156,9 @@ class UI extends Mui {
   // Board
   //
 
-  var radius:Int = 16;
-  var distanceX:Float = 16 * 1.25;
-  var distanceY:Float = 16 * 1.25 * 1.7;
+  var radius = 16;
+  var distanceX = 16 * 1.25;
+  var distanceY = 16 * 1.25 * 1.7;
 
   function screenCoordinates(object:UIBoard, tile:Tile):Coordinates {
     var boardWidth = ((object.state.width - 1) * distanceX) + (2 * radius);
@@ -182,8 +182,8 @@ class UI extends Mui {
   public function screenTile(board:UIBoard):Null<Tile> {
     for (tile in board.state.tiles) {
       var coordinates:Coordinates = screenCoordinates(board, tile);
-      var okX:Bool = (x >= coordinates.x - radius) && (x <= coordinates.x + radius);
-      var okY:Bool = (y >= coordinates.y - radius) && (y <= coordinates.y + radius);
+      var okX = (x >= coordinates.x - radius) && (x <= coordinates.x + radius);
+      var okY = (y >= coordinates.y - radius) && (y <= coordinates.y + radius);
       if (okX && okY) {
         return tile;
       }
@@ -222,9 +222,9 @@ class UI extends Mui {
       graphics.fillRect(window.x, window.y, window.w, window.h);
       graphics.color = Color.fromBytes(220, 20, 60); // crimson
       graphics.drawRect(window.x + 2, window.y + 2, window.w - 4, window.h - 4);
-      var x:Float = window.x + (window.w * 0.5);
-      var y:Float = window.y + (window.h * 0.5);
-      var radius:Float = Math.min(window.w, window.h) * 0.5 * 0.7;
+      var x = window.x + (window.w * 0.5);
+      var y = window.y + (window.h * 0.5);
+      var radius = Math.min(window.w, window.h) * 0.5 * 0.7;
       graphics.color = currentPlayer.color;
       graphics.fillCircle(x, y, radius);
     }

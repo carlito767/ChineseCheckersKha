@@ -16,9 +16,9 @@ import UI.UIBoard;
 import UI.UIWindow;
 
 class Game {
-  static public inline var TITLE:String = 'ChineseCheckersKha';
-  static public inline var WIDTH:Int = 800;
-  static public inline var HEIGHT:Int = 600;
+  static public inline var TITLE = 'ChineseCheckersKha';
+  static public inline var WIDTH = 800;
+  static public inline var HEIGHT = 600;
 
   var mouse:Mouse = new Mouse();
   var ui:UI = new UI();
@@ -105,8 +105,8 @@ class Game {
         var dimensions:Dimensions = UI.dimensions(window);
         ui.window(window);
 
-        var nb:Int = ChineseCheckers.sequences.length;
-        var dx:Float = (dimensions.right - dimensions.left - (nb * 50) - ((nb - 2) * 10)) * 0.5;
+        var nb = ChineseCheckers.sequences.length;
+        var dx = (dimensions.right - dimensions.left - (nb * 50) - ((nb - 2) * 10)) * 0.5;
         for (i in 0...nb) {
           var sequence:Sequence = ChineseCheckers.sequences[i];
           if (ui.button({

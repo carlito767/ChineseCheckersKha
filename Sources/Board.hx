@@ -117,11 +117,11 @@ class Board {
     var standings:Array<Int> = [];
 
     // Players
-    var owners:Map<Int, Int> = new Map<Int, Int>();
+    var owners = new Map<Int, Int>();
     if (sequenceIndex != null) {
       sequence = ChineseCheckers.sequences[sequenceIndex];
       for (id in sequence) {
-        var player:RawPlayer = ChineseCheckers.players[id-1];
+        var player = ChineseCheckers.players[id-1];
         players[id] = {
           id:id,
           color:player.color,
@@ -131,13 +131,13 @@ class Board {
     }
 
     // Tiles
-    var id:Int = 0;
+    var id = 0;
     for (y in 0...height) {
-      var row:String = ChineseCheckers.board[y];
+      var row = ChineseCheckers.board[y];
       for (x in 0...width) {
-        var value:String = row.charAt(x);
+        var value = row.charAt(x);
         if (value != ' ') {
-          var player:Null<Int> = Std.parseInt(value);
+          var player = Std.parseInt(value);
           tiles[++id] = {
             id:id,
             x:x + 1,
@@ -172,12 +172,12 @@ class Board {
     if (state.moves.length == 0) {
       return state.players[state.sequence[0]];
     }
-    var move:Move = state.moves[state.moves.length-1];
-    var index:Int = state.sequence.indexOf(state.tiles[move.to].piece);
+    var move = state.moves[state.moves.length-1];
+    var index = state.sequence.indexOf(state.tiles[move.to].piece);
     if (index == -1) {
       return null;
     }
-    var player:Null<Player>;
+    var player;
     do {
       index++;
       if (index == state.sequence.length) {
@@ -220,8 +220,8 @@ class Board {
   }
 
   static function jump(state:State, from:Tile, via:Tile):Null<Tile> {
-    var x:Int = via.x + (via.x - from.x);
-    var y:Int = via.y + (via.y - from.y);
+    var x = via.x + (via.x - from.x);
+    var y = via.y + (via.y - from.y);
     for (tile in state.tiles) {
       if (tile.x == x && tile.y == y) {
         return tile;
@@ -233,7 +233,7 @@ class Board {
   static function jumps(state:State, tile:Tile, tiles:Array<Tile>) {
     for (neighbor in neighbors(state, tile)) {
       if (neighbor.piece != null) {
-        var jumpTile:Null<Tile> = jump(state, tile, neighbor);
+        var jumpTile = jump(state, tile, neighbor);
         if (jumpTile != null && jumpTile.piece == null && tiles.indexOf(jumpTile) == -1) {
           tiles.push(jumpTile);
           jumps(state, jumpTile, tiles);
@@ -258,11 +258,11 @@ class Board {
     // Once a peg has reached his home, it may not leave it
     var currentPlayerId = currentPlayer(state).id;
     if (tile.owner == currentPlayerId) {
-      var i:Int = 0;      
+      var i = 0;
       while (i < moves.length) {
         var moveTile = moves[i];
         if (moveTile.owner != currentPlayerId) {
-            moves.splice(i, 1);
+          moves.splice(i, 1);
         }
         else {
           ++i;
@@ -286,7 +286,7 @@ class Board {
     state.moves.push({from:from.id, to:to.id});
 
     // Victory?
-    var victory:Bool = true;
+    var victory = true;
     for (tile in state.tiles) {
       if (tile.piece == to.piece && tile.owner != to.piece) {
         victory = false;
