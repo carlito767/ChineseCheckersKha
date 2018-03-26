@@ -285,8 +285,25 @@ class Board {
     from.piece = null;
     state.moves.push({from:from.id, to:to.id});
 
-    // TODO : victory
-    // TODO : standings
+    // Victory?
+    var victory:Bool = true;
+    for (tile in state.tiles) {
+      if (tile.piece == to.piece && tile.owner != to.piece) {
+        victory = false;
+        break;
+      }
+    }
+    if (victory) {
+      state.standings.push(to.piece);
+      if (state.standings.length == state.sequence.length-1) {
+        // Who is the great loser?
+        for (player in state.players) {
+          if (state.standings.indexOf(player.id) == -1) {
+            state.standings.push(player.id);
+          }
+        }
+      }
+    }
 
     return true;
   }
