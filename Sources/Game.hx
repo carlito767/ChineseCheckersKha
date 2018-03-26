@@ -5,12 +5,15 @@ import Board;
 import Board.ChineseCheckers;
 import Board.Sequence;
 import Board.State;
+import Board.Tile;
 import Mouse;
 import Mui.MuiEval;
 import Translations.language;
 import Translations.tr;
 import UI;
 import UI.Dimensions;
+import UI.UIBoard;
+import UI.UIWindow;
 
 class Game {
   static public inline var TITLE:String = 'ChineseCheckersKha';
