@@ -4,6 +4,7 @@ typedef Translation = {
   var numberOfPlayers:String;
   var play:String;
   var quit:String;
+  var standings:String;
   var title1:String;
   var title2:String;
 }
@@ -24,6 +25,7 @@ class Translations {
         numberOfPlayers:'Nombre de joueurs',
         play:'Jouer',
         quit:'Quitter',
+        standings:'Classement',
         title1:'Dames',
         title2:'Chinoises',
       }
@@ -33,6 +35,7 @@ class Translations {
         numberOfPlayers:'Number of players',
         play:'Play',
         quit:'Quit',
+        standings:'Standings',
         title1:'Chinese',
         title2:'Checkers',
       }

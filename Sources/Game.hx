@@ -52,6 +52,18 @@ class Game {
     ui.graphics = graphics;
 
     switch screen {
+    case 'title':
+      ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:0, h:0 });
+
+      ui.label({ text:tr('title1'), x:350, y:50, w:0, h:0, titleScreen:true });
+      ui.label({ text:tr('title2'), x:380, y:170, w:0, h:0, titleScreen:true });
+
+      if (ui.button({ text:tr('newGame'), x:WIDTH - 300, y:350, w:310, h:50 }).hit) {
+        screen = 'play';
+      }
+      if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH - 300, y:420, w:310, h:50 }).hit) {
+        language = (language == 'en') ? 'fr' : 'en';
+      }
     case 'play':
       ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
       var uiBoard:UIBoard = { state:state, selectedTile:selectedTile, x:0, y:0, w:WIDTH, h:HEIGHT };
@@ -64,7 +76,7 @@ class Game {
             if (selectedTile != null && Board.move(state, selectedTile, tile)) {
               selectedTile = null;
               if (Board.isOver(state)) {
-                // TODO : game over
+                screen = 'standings';
               }
             }
             else if ((selectedTile == null || selectedTile.id != tile.id) && Board.allowedMoves(state, tile).length > 0) {
@@ -109,18 +121,15 @@ class Game {
         sequenceIndex = null;
         screen = 'title';
       }
-    case 'title':
-      ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:0, h:0 });
-
-      ui.label({ text:tr('title1'), x:350, y:50, w:0, h:0, titleScreen:true });
-      ui.label({ text:tr('title2'), x:380, y:170, w:0, h:0, titleScreen:true });
-
-      if (ui.button({ text:tr('newGame'), x:WIDTH - 300, y:350, w:310, h:50 }).hit) {
-        screen = 'play';
-      }
-      if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH - 300, y:420, w:310, h:50 }).hit) {
-        language = (language == 'en') ? 'fr' : 'en';
-      }
+      case 'standings':
+        ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
+        ui.board({ state:state, selectedTile:selectedTile, x:0, y:0, w:WIDTH, h:HEIGHT });
+        ui.standings(state);
+        var dimensions:Dimensions = UI.dimensions();
+        if (ui.button({ text:tr('quit'), x:dimensions.right - 100, y:dimensions.bottom - 40, w:100, h:40 }).hit) {
+          sequenceIndex = null;
+          screen = 'title';
+        }
     }
 
     ui.end();

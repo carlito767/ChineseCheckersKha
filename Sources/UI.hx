@@ -12,6 +12,7 @@ import Game;
 import Mui;
 import Mui.MuiEval;
 import Mui.MuiObject;
+import Translations.tr;
 
 //
 // Components
@@ -104,6 +105,51 @@ class UI extends Mui {
       graphics.color = Color.fromBytes(220, 20, 60); // crimson
     }
     graphics.drawRect(object.x + 2, object.y + 2, object.w - 4, object.h - 4);
+  }
+
+  public function standings(state:State) {
+    graphics.color = Color.fromBytes(0, 0, 0, 200);
+    graphics.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+
+    graphics.color = Color.Yellow;
+    graphics.font = Assets.fonts.Wortellina;
+    graphics.fontSize = 70;
+    var title:String = tr('standings');
+    var textX:Float = (Game.WIDTH - graphics.font.width(graphics.fontSize, title)) * 0.5;
+    var textY:Float = Game.HEIGHT * 0.05;
+    graphics.drawString(title, textX, textY);
+
+    var x:Float = Game.WIDTH * 0.2;
+    var y:Float = Game.HEIGHT * 0.2;
+    var w:Float = Game.WIDTH - 2 * x;
+    var h:Float = Game.HEIGHT * 0.1;
+    for (i in 0...state.standings.length) {
+      // Slot
+      var dy:Float = i * Game.HEIGHT * 0.12;
+      graphics.color = Color.Black;
+      graphics.fillRect(x, y + dy, w, h);
+      graphics.color = Color.fromBytes(220, 20, 60); // crimson
+      graphics.drawRect(x + 2, y + dy + 2, w - 4, h - 4);
+      // Separator
+      var sx:Float = Game.WIDTH * 0.3;
+      graphics.drawLine(sx, y + dy + 2, sx, y + dy + h - 2, 2);
+      // Position
+      graphics.color = Color.White;
+      graphics.fontSize = 38;
+      var centerX:Float = x + (sx - x - graphics.font.width(graphics.fontSize, Std.string(i))) * 0.5;
+      var centerY:Float = y + dy + (h - graphics.font.height(graphics.fontSize)) * 0.5;
+      graphics.drawString(Std.string(i), centerX, centerY);
+      // Player
+      var player:Null<Player> = state.players[state.standings[i]];
+      if (player != null) {
+        var px:Float = Game.WIDTH * 0.5;
+        var py:Float = y + dy + h * 0.5;
+        graphics.color = player.color;
+        graphics.fillCircle(px, py, radius);
+        graphics.color = Color.White;
+        graphics.drawCircle(px, py, radius, 2);
+      }
+    }
   }
 
   //
