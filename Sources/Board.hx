@@ -307,6 +307,4 @@ class Board {
 
     return true;
   }
-
-  // TODO : cancel last move
 }

@@ -1,3 +1,15 @@
+// TODO: Loader
+// TODO: Full screen mode
+// TODO: Cancel last move
+// TODO: Saveslots
+// TODO: Formating functions
+// TODO: UI refresh
+// TODO: AI
+// TODO: Android target
+// TODO: Windows target
+// TODO: Debugging tools
+// TODO: Performance check (HTML5)
+
 #if kha_html5
 import js.html.CanvasElement;
 import js.Browser.document;
