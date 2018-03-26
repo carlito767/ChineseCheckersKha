@@ -67,7 +67,7 @@ class Game {
                 // TODO : game over
               }
             }
-            else if ((selectedTile == null || selectedTile.id != tile.id) && Board.allowedMoves(state, tile.id).length > 0) {
+            else if ((selectedTile == null || selectedTile.id != tile.id) && Board.allowedMoves(state, tile).length > 0) {
               selectedTile = tile;
             }
             else {

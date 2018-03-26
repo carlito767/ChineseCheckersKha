@@ -164,6 +164,9 @@ class UI extends Mui {
     // Selected Tile
     if (object.selectedTile != null) {
       drawSelection(object, object.selectedTile);
+      for (move in Board.allowedMoves(object.state, object.selectedTile)) {
+        drawSelection(object, move);
+      }
     }
 
     // Current player

@@ -28,7 +28,7 @@ typedef State = {
   var height:Int;
   var order:Array<Int>;
   var players:Map<Int, Player>;
-  var tiles:Array<Tile>;
+  var tiles:Map<Int, Tile>;
   var moves:Array<Move>;
   var standings:Array<Int>;
 }
@@ -95,7 +95,7 @@ class Board {
     var height:Int = ChineseCheckers.board.length;
     var order:Array<Int> = [];
     var players:Map<Int, Player> = new Map<Int, Player>();
-    var tiles:Array<Tile> = [];
+    var tiles:Map<Int, Tile> = new Map<Int, Tile>();
     var moves:Array<Move> = [];
     var standings:Array<Int> = [];
 
@@ -115,19 +115,20 @@ class Board {
     }
 
     // Tiles
+    var id:Int = 0;
     for (y in 0...height) {
       var row:String = ChineseCheckers.board[y];
       for (x in 0...width) {
         var value:String = row.charAt(x);
         if (value != ' ') {
           var player:Null<Int> = Std.parseInt(value);
-          tiles.push({
-            id:tiles.length + 1,
+          tiles[++id] = {
+            id:id,
             x:x + 1,
             y:y + 1,
             owner:(player != null) ? owners[player] : null,
             piece:(player != null && players[player] != null) ? player : null,
-          });
+          };
         } 
       }
     }
@@ -149,7 +150,7 @@ class Board {
   //
 
   static public function currentPlayer(state:State):Null<Player> {
-    if (!state.ready || Board.isOver(state)) {
+    if (!state.ready || isOver(state)) {
       return null;
     }
     if (state.moves.length == 0) {
@@ -177,9 +178,80 @@ class Board {
   // Allowed moves
   //
 
-  // TODO : allowedMoves
-  static public function allowedMoves(state:State, id:Int):Array<Int> {
-    var moves:Array<Int> = [ 0 ];
+  static function neighbors(state:State, tile:Tile):Array<Tile> {
+    //    (1) (2)
+    //      \ /
+    //  (3)- * -(4)
+    //      / \
+    //    (5) (6)
+    var tiles:Array<Tile> = [];
+    for (neighbor in state.tiles) {
+      if (
+        ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y - 1)) || // (1)
+        ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y - 1)) || // (2)
+        ((neighbor.x == tile.x - 2) && (neighbor.y == tile.y    )) || // (3)
+        ((neighbor.x == tile.x + 2) && (neighbor.y == tile.y    )) || // (4)
+        ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y + 1)) || // (5)
+        ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y + 1))    // (6)
+      ) {
+        tiles.push(neighbor);
+      }
+    }
+
+    return tiles;
+  }
+
+  static function jump(state:State, from:Tile, via:Tile):Null<Tile> {
+    var x:Int = via.x + (via.x - from.x);
+    var y:Int = via.y + (via.y - from.y);
+    for (tile in state.tiles) {
+      if (tile.x == x && tile.y == y) {
+        return tile;
+      }
+    }
+    return null;
+  }
+
+  static function jumps(state:State, tile:Tile, tiles:Array<Tile>) {
+    for (neighbor in neighbors(state, tile)) {
+      if (neighbor.piece != null) {
+        var jumpTile:Null<Tile> = jump(state, tile, neighbor);
+        if (jumpTile != null && jumpTile.piece == null && tiles.indexOf(jumpTile) == -1) {
+          tiles.push(jumpTile);
+          jumps(state, jumpTile, tiles);
+        }
+      }
+    }
+  }
+
+  static public function allowedMoves(state:State, tile:Tile):Array<Tile> {
+    var moves:Array<Tile> = [];
+    if (currentPlayer(state) == null || tile.piece != currentPlayer(state).id) {
+      return moves;
+    }
+
+    jumps(state, tile, moves);
+    for (neighbor in neighbors(state, tile)) {
+      if (neighbor.piece == null) {
+        moves.push(neighbor);
+      }
+    }
+
+    // Once a peg has reached his home, it may not leave it
+    var currentPlayerId = currentPlayer(state).id;
+    if (tile.owner == currentPlayerId) {
+      var i:Int = 0;      
+      while (i < moves.length) {
+        var moveTile = moves[i];
+        if (moveTile.owner != currentPlayerId) {
+            moves.splice(i, 1);
+        }
+        else {
+          ++i;
+        }
+      }
+    }
+
     return moves;
   }
 
