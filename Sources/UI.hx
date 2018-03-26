@@ -35,6 +35,7 @@ typedef Dimensions = {
 typedef UIBoard = {
   > MuiObject,
   var state:State;
+  var selectedTile:Null<Tile>;
 }
 
 typedef UIButton = {
@@ -126,6 +127,24 @@ class UI extends Mui {
     }
   }
 
+  function drawSelection(board:UIBoard, tile:Tile) {
+    var coordinates:Coordinates = screenCoordinates(board, tile);
+    graphics.color = Color.White;
+    graphics.drawCircle(coordinates.x, coordinates.y, radius * 1.15, 2);
+  }
+
+  public function screenTile(board:UIBoard):Null<Tile> {
+    for (tile in board.state.tiles) {
+      var coordinates:Coordinates = screenCoordinates(board, tile);
+      var okX:Bool = (x >= coordinates.x - radius) && (x <= coordinates.x + radius);
+      var okY:Bool = (y >= coordinates.y - radius) && (y <= coordinates.y + radius);
+      if (okX && okY) {
+        return tile;
+      }
+    }
+    return null;
+  }
+
   public function board(object:UIBoard):MuiEval {
     var eval:MuiEval = evaluate(object);
 
@@ -140,6 +159,11 @@ class UI extends Mui {
       }
       graphics.color = Color.Black;
       graphics.drawCircle(coordinates.x, coordinates.y, radius, 2);
+    }
+
+    // Selected Tile
+    if (object.selectedTile != null) {
+      drawSelection(object, object.selectedTile);
     }
 
     // Current player

@@ -144,6 +144,10 @@ class Board {
     }
   }
 
+  //
+  // Players
+  //
+
   static public function currentPlayer(state:State):Null<Player> {
     if (!state.ready || Board.isOver(state)) {
       return null;
@@ -167,5 +171,24 @@ class Board {
 
   static public function isOver(state:State):Bool {
     return (state.standings.length == state.order.length);
+  }
+
+  //
+  // Allowed moves
+  //
+
+  // TODO : allowedMoves
+  static public function allowedMoves(state:State, id:Int):Array<Int> {
+    var moves:Array<Int> = [ 0 ];
+    return moves;
+  }
+
+  //
+  // Movements
+  //
+
+  // TODO : move
+  static public function move(state:State, from:Int, to:Int):Bool {
+    return false;
   }
 }

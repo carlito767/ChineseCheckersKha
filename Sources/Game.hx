@@ -6,6 +6,7 @@ import Board.ChineseCheckers;
 import Board.RawMode;
 import Board.State;
 import Mouse;
+import Mui.MuiEval;
 import Translations.language;
 import Translations.tr;
 import UI;
@@ -24,9 +25,12 @@ class Game {
   var modeIndex(default, set):Null<Int>;
   function set_modeIndex(value) {
     state = Board.create(value);
+    selectedTile = null;
     return modeIndex = value;
   }
   var state:Null<State>;
+
+  var selectedTile:Null<Tile>;
 
   public function new() {
     language = 'en';
@@ -50,9 +54,32 @@ class Game {
     switch screen {
     case 'play':
       ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
-      ui.board({ state:state, x:0, y:0, w:WIDTH, h:HEIGHT });
+      var uiBoard:UIBoard = { state:state, selectedTile:selectedTile, x:0, y:0, w:WIDTH, h:HEIGHT };
+      var eval:MuiEval = ui.board(uiBoard);
 
-      if (!state.ready) {
+      if (state.ready) {
+        if (eval.hit && !Board.isOver(state)) {
+          var tile:Null<Tile> = ui.screenTile(uiBoard);
+          if (tile != null) {
+            if (selectedTile != null && Board.move(state, selectedTile.id, tile.id)) {
+              selectedTile = null;
+              if (Board.isOver(state)) {
+                // TODO : game over
+              }
+            }
+            else if ((selectedTile == null || selectedTile.id != tile.id) && Board.allowedMoves(state, tile.id).length > 0) {
+              selectedTile = tile;
+            }
+            else {
+              selectedTile = null;
+            }
+          }
+          else {
+            selectedTile = null;
+          }
+        }
+      }
+      else {
         var window:UIWindow = { x:250, y:220, w:300, h:160, title:tr('numberOfPlayers') };
         var dimensions:Dimensions = UI.dimensions(window);
         ui.window(window);
