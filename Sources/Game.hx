@@ -3,7 +3,7 @@ import kha.Framebuffer;
 
 import Board;
 import Board.ChineseCheckers;
-import Board.RawMode;
+import Board.Sequence;
 import Board.State;
 import Mouse;
 import Mui.MuiEval;
@@ -22,11 +22,11 @@ class Game {
 
   var screen:String;
 
-  var modeIndex(default, set):Null<Int>;
-  function set_modeIndex(value) {
+  var sequenceIndex(default, set):Null<Int>;
+  function set_sequenceIndex(value) {
     state = Board.create(value);
     selectedTile = null;
-    return modeIndex = value;
+    return sequenceIndex = value;
   }
   var state:Null<State>;
 
@@ -35,7 +35,7 @@ class Game {
   public function new() {
     language = 'en';
     screen = 'title';
-    modeIndex = null;
+    sequenceIndex = null;
   }
 
   public function update() {
@@ -84,29 +84,29 @@ class Game {
         var dimensions:Dimensions = UI.dimensions(window);
         ui.window(window);
 
-        var nb:Int = ChineseCheckers.modes.length;
+        var nb:Int = ChineseCheckers.sequences.length;
         var dx:Float = (dimensions.right - dimensions.left - (nb * 50) - ((nb - 2) * 10)) * 0.5;
         for (i in 0...nb) {
-          var mode:RawMode = ChineseCheckers.modes[i];
+          var sequence:Sequence = ChineseCheckers.sequences[i];
           if (ui.button({
-            text:Std.string(mode.id),
+            text:Std.string(sequence.length),
             x:dimensions.left + dx + (i * 60),
             y:dimensions.top + 35,
             w:40,
             h:40,
-            selected:(modeIndex == i),
+            selected:(sequenceIndex == i),
           }).hit) {
-            modeIndex = i;
+            sequenceIndex = i;
           }
         }
 
-        if (ui.button({ text:tr('play'), disabled:(modeIndex == null), x:dimensions.left, y:dimensions.bottom - 40, w:dimensions.width, h:40 }).hit) {
+        if (ui.button({ text:tr('play'), disabled:(sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - 40, w:dimensions.width, h:40 }).hit) {
           state.ready = true;
         }
       }
 
       if (ui.button({ text:tr('quit'), x:680, y:20, w:100, h:40 }).hit) {
-        modeIndex = null;
+        sequenceIndex = null;
         screen = 'title';
       }
     case 'title':

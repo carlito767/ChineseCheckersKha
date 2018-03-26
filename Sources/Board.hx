@@ -22,11 +22,13 @@ typedef Tile = {
   var piece:Null<Int>;
 }
 
+typedef Sequence = Array<Int>;
+
 typedef State = {
   var ready:Bool;
   var width:Int;
   var height:Int;
-  var order:Array<Int>;
+  var sequence:Sequence;
   var players:Map<Int, Player>;
   var tiles:Map<Int, Tile>;
   var moves:Array<Move>;
@@ -36,11 +38,6 @@ typedef State = {
 //
 // Raw Board
 //
-
-typedef RawMode = {
-  var id:String;
-  var order:Array<Int>;
-}
 
 typedef RawPlayer = {
   var home:Int;
@@ -61,8 +58,8 @@ class ChineseCheckers {
     { home:1, color:Color.fromBytes(  0, 128,   0) }, // green
   ];
 
-  static public var modes(default, null):Array<RawMode> = [
-    { id:"3", order:[ 1, 2, 3 ] },
+  static public var sequences(default, null):Array<Sequence> = [
+    [ 1, 2, 3 ],
   ];
 }
 #else
@@ -96,11 +93,11 @@ class ChineseCheckers {
     { home:3, color:Color.Yellow },
   ];
 
-  static public var modes(default, null):Array<RawMode> = [
-    { id:"2", order:[ 1, 4 ] },
-    { id:"3", order:[ 1, 3, 5 ] },
-    { id:"4", order:[ 1, 3, 4, 6 ] },
-    { id:"6", order:[ 1, 2, 3, 4, 5, 6 ] },
+  static public var sequences(default, null):Array<Sequence> = [
+    [ 1, 4 ],
+    [ 1, 3, 5 ],
+    [ 1, 3, 4, 6 ],
+    [ 1, 2, 3, 4, 5, 6 ],
   ];
 }
 #end
@@ -110,10 +107,10 @@ class ChineseCheckers {
 //
 
 class Board {
-  static public function create(modeIndex:Null<Int>):State {
+  static public function create(sequenceIndex:Null<Int>):State {
     var width:Int = ChineseCheckers.board[0].length;
     var height:Int = ChineseCheckers.board.length;
-    var order:Array<Int> = [];
+    var sequence:Sequence = [];
     var players:Map<Int, Player> = new Map<Int, Player>();
     var tiles:Map<Int, Tile> = new Map<Int, Tile>();
     var moves:Array<Move> = [];
@@ -121,10 +118,9 @@ class Board {
 
     // Players
     var owners:Map<Int, Int> = new Map<Int, Int>();
-    if (modeIndex != null) {
-      var mode:RawMode = ChineseCheckers.modes[modeIndex];
-      order = mode.order;
-      for (id in order) {
+    if (sequenceIndex != null) {
+      sequence = ChineseCheckers.sequences[sequenceIndex];
+      for (id in sequence) {
         var player:RawPlayer = ChineseCheckers.players[id-1];
         players[id] = {
           id:id,
@@ -157,7 +153,7 @@ class Board {
       ready:false,
       width:width,
       height:height,
-      order:order,
+      sequence:sequence,
       players:players,
       tiles:tiles,
       moves:moves,
@@ -174,26 +170,26 @@ class Board {
       return null;
     }
     if (state.moves.length == 0) {
-      return state.players[state.order[0]];
+      return state.players[state.sequence[0]];
     }
     var move:Move = state.moves[state.moves.length-1];
-    var index:Int = state.order.indexOf(state.tiles[move.to].piece);
+    var index:Int = state.sequence.indexOf(state.tiles[move.to].piece);
     if (index == -1) {
       return null;
     }
     var player:Null<Player>;
     do {
       index++;
-      if (index == state.order.length) {
+      if (index == state.sequence.length) {
         index = 0;
       }
-      player = state.players[state.order[index]];
+      player = state.players[state.sequence[index]];
     } while(state.standings.indexOf(player.id) > -1);
     return player;
   }
 
   static public function isOver(state:State):Bool {
-    return (state.standings.length == state.order.length);
+    return (state.standings.length == state.sequence.length);
   }
 
   //
