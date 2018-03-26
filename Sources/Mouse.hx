@@ -6,7 +6,7 @@ class Mouse {
   public function new() {
     var mouse:kha.input.Mouse = kha.input.Mouse.get();
     if (mouse != null) {
-      mouse.notify(onMouseDown, onMouseUp, onMouseMove, onMouseWheel);
+      mouse.notify(onMouseDown, onMouseUp, onMouseMove, null);
     }
   }
 
@@ -29,9 +29,5 @@ class Mouse {
   function onMouseMove(x:Int, y:Int, movementX:Int, movementY:Int) {
     this.x = x;
     this.y = y;
-  }
-
-  function onMouseWheel(delta:Int) {
-    // TODO: onMouseWheel
   }
 }
