@@ -65,6 +65,12 @@ class Game {
         language = (language == 'en') ? 'fr' : 'en';
       }
     case 'play':
+      // Auto start if there is only one sequence
+      if (sequenceIndex == null && ChineseCheckers.sequences.length == 1) {
+        sequenceIndex = 0;
+        state.ready = true;
+      }
+
       ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
       var uiBoard:UIBoard = { state:state, selectedTile:selectedTile, x:0, y:0, w:WIDTH, h:HEIGHT };
       var eval:MuiEval = ui.board(uiBoard);
