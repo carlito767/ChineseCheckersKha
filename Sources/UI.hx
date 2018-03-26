@@ -308,7 +308,7 @@ class UI extends Mui {
       graphics.font = Assets.fonts.Wortellina;
       graphics.fontSize = 26;
       var titleX = title.x + ((title.w - graphics.font.width(graphics.fontSize, object.title)) * 0.5);
-      var titleY = title.y + ((title.h - graphics.font.height(graphics.fontSize)) 0.5);
+      var titleY = title.y + ((title.h - graphics.font.height(graphics.fontSize)) * 0.5);
       graphics.drawString(object.title, titleX, titleY);
     }
 
