@@ -61,7 +61,7 @@ class Game {
         if (eval.hit && !Board.isOver(state)) {
           var tile:Null<Tile> = ui.screenTile(uiBoard);
           if (tile != null) {
-            if (selectedTile != null && Board.move(state, selectedTile.id, tile.id)) {
+            if (selectedTile != null && Board.move(state, selectedTile, tile)) {
               selectedTile = null;
               if (Board.isOver(state)) {
                 // TODO : game over

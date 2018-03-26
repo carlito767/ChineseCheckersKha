@@ -156,18 +156,20 @@ class Board {
     if (state.moves.length == 0) {
       return state.players[state.order[0]];
     }
-    var move:Move = state.moves[state.moves.length];
+    var move:Move = state.moves[state.moves.length-1];
     var index:Int = state.order.indexOf(state.tiles[move.to].piece);
     if (index == -1) {
       return null;
     }
+    var player:Null<Player>;
     do {
       index++;
       if (index == state.order.length) {
         index = 0;
       }
-    } while(state.standings.indexOf(index) > -1);
-    return state.players[index];
+      player = state.players[state.order[index]];
+    } while(state.standings.indexOf(player.id) > -1);
+    return player;
   }
 
   static public function isOver(state:State):Bool {
@@ -259,8 +261,19 @@ class Board {
   // Movements
   //
 
-  // TODO : move
-  static public function move(state:State, from:Int, to:Int):Bool {
-    return false;
+  static public function move(state:State, from:Tile, to:Tile):Bool {
+    if (allowedMoves(state, from).indexOf(to) == -1) {
+      return false;
+    }
+    to.piece = from.piece;
+    from.piece = null;
+    state.moves.push({from:from.id, to:to.id});
+
+    // TODO : victory
+    // TODO : standings
+
+    return true;
   }
+
+  // TODO : cancel last move
 }
