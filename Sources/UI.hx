@@ -251,8 +251,8 @@ class UI extends Mui {
     graphics.color = color;
     graphics.font = Assets.fonts.Wortellina;
     graphics.fontSize = 28;
-    var textX = object.x + ((object.w - graphics.font.width(graphics.fontSize, object.text)) / 2);
-    var textY = object.y + ((object.h - graphics.font.height(graphics.fontSize)) / 2);
+    var textX = object.x + ((object.w - graphics.font.width(graphics.fontSize, object.text)) * 0.5);
+    var textY = object.y + ((object.h - graphics.font.height(graphics.fontSize)) * 0.5);
     graphics.drawString(object.text, textX, textY);
 
     return eval;
@@ -307,8 +307,8 @@ class UI extends Mui {
       graphics.color = Color.White;
       graphics.font = Assets.fonts.Wortellina;
       graphics.fontSize = 26;
-      var titleX = title.x + ((title.w - graphics.font.width(graphics.fontSize, object.title)) / 2);
-      var titleY = title.y + ((title.h - graphics.font.height(graphics.fontSize)) / 2);
+      var titleX = title.x + ((title.w - graphics.font.width(graphics.fontSize, object.title)) * 0.5);
+      var titleY = title.y + ((title.h - graphics.font.height(graphics.fontSize)) 0.5);
       graphics.drawString(object.title, titleX, titleY);
     }
 
