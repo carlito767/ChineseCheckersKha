@@ -49,10 +49,10 @@ class Game {
     var y = mouse.y * 1.0;
     var select = mouse.leftClick;
 
-    var graphics = framebuffer.g2;
-    graphics.begin();
+    var g = framebuffer.g2;
+    g.begin();
     ui.begin(x, y, select);
-    ui.graphics = graphics;
+    ui.g = g;
 
     switch screen {
     case 'title':
@@ -142,6 +142,6 @@ class Game {
     }
 
     ui.end();
-    graphics.end();
+    g.end();
   }
 }

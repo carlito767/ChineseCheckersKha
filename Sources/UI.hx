@@ -66,7 +66,7 @@ typedef UIWindow = {
 //
 
 class UI extends Mui {
-  public var graphics:Graphics;
+  public var g:Graphics;
 
   public function new() {
     super();
@@ -95,29 +95,29 @@ class UI extends Mui {
   }
 
   function background<T:(MuiObject)>(object:T) {
-    graphics.color = Color.fromBytes(0, 0, 0, 200);
-    graphics.fillRect(object.x, object.y, object.w, object.h);
+    g.color = Color.fromBytes(0, 0, 0, 200);
+    g.fillRect(object.x, object.y, object.w, object.h);
 
     if (object.disabled == true) {
-      graphics.color = Color.fromBytes(128, 128, 128); // gray
+      g.color = Color.fromBytes(128, 128, 128); // gray
     }
     else {
-      graphics.color = Color.fromBytes(220, 20, 60); // crimson
+      g.color = Color.fromBytes(220, 20, 60); // crimson
     }
-    graphics.drawRect(object.x + 2, object.y + 2, object.w - 4, object.h - 4);
+    g.drawRect(object.x + 2, object.y + 2, object.w - 4, object.h - 4);
   }
 
   public function standings(state:State) {
-    graphics.color = Color.fromBytes(0, 0, 0, 200);
-    graphics.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
+    g.color = Color.fromBytes(0, 0, 0, 200);
+    g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 
-    graphics.color = Color.Yellow;
-    graphics.font = Assets.fonts.Wortellina;
-    graphics.fontSize = 70;
+    g.color = Color.Yellow;
+    g.font = Assets.fonts.Wortellina;
+    g.fontSize = 70;
     var title = tr('standings');
-    var textX = (Game.WIDTH - graphics.font.width(graphics.fontSize, title)) * 0.5;
+    var textX = (Game.WIDTH - g.font.width(g.fontSize, title)) * 0.5;
     var textY = Game.HEIGHT * 0.05;
-    graphics.drawString(title, textX, textY);
+    g.drawString(title, textX, textY);
 
     var x = Game.WIDTH * 0.2;
     var y = Game.HEIGHT * 0.2;
@@ -126,28 +126,28 @@ class UI extends Mui {
     for (i in 0...state.standings.length) {
       // Slot
       var dy = i * Game.HEIGHT * 0.12;
-      graphics.color = Color.Black;
-      graphics.fillRect(x, y + dy, w, h);
-      graphics.color = Color.fromBytes(220, 20, 60); // crimson
-      graphics.drawRect(x + 2, y + dy + 2, w - 4, h - 4);
+      g.color = Color.Black;
+      g.fillRect(x, y + dy, w, h);
+      g.color = Color.fromBytes(220, 20, 60); // crimson
+      g.drawRect(x + 2, y + dy + 2, w - 4, h - 4);
       // Separator
       var sx = Game.WIDTH * 0.3;
-      graphics.drawLine(sx, y + dy + 2, sx, y + dy + h - 2, 2);
+      g.drawLine(sx, y + dy + 2, sx, y + dy + h - 2, 2);
       // Position
-      graphics.color = Color.White;
-      graphics.fontSize = 38;
-      var centerX = x + (sx - x - graphics.font.width(graphics.fontSize, Std.string(i+1))) * 0.5;
-      var centerY = y + dy + (h - graphics.font.height(graphics.fontSize)) * 0.5;
-      graphics.drawString(Std.string(i+1), centerX, centerY);
+      g.color = Color.White;
+      g.fontSize = 38;
+      var centerX = x + (sx - x - g.font.width(g.fontSize, Std.string(i+1))) * 0.5;
+      var centerY = y + dy + (h - g.font.height(g.fontSize)) * 0.5;
+      g.drawString(Std.string(i+1), centerX, centerY);
       // Player
       var player:Null<Player> = state.players[state.standings[i]];
       if (player != null) {
         var px = Game.WIDTH * 0.5;
         var py = y + dy + h * 0.5;
-        graphics.color = player.color;
-        graphics.fillCircle(px, py, radius);
-        graphics.color = Color.White;
-        graphics.drawCircle(px, py, radius, 2);
+        g.color = player.color;
+        g.fillCircle(px, py, radius);
+        g.color = Color.White;
+        g.drawCircle(px, py, radius, 2);
       }
     }
   }
@@ -175,8 +175,8 @@ class UI extends Mui {
 
   function drawSelection(board:UIBoard, tile:Tile) {
     var coordinates:Coordinates = screenCoordinates(board, tile);
-    graphics.color = Color.White;
-    graphics.drawCircle(coordinates.x, coordinates.y, radius * 1.15, 2);
+    g.color = Color.White;
+    g.drawCircle(coordinates.x, coordinates.y, radius * 1.15, 2);
   }
 
   public function screenTile(board:UIBoard):Null<Tile> {
@@ -200,11 +200,11 @@ class UI extends Mui {
     for (tile in object.state.tiles) {
       var coordinates:Coordinates = screenCoordinates(object, tile);
       if (tile.piece != null) {
-        graphics.color = object.state.players[tile.piece].color;
-        graphics.fillCircle(coordinates.x, coordinates.y, radius);
+        g.color = object.state.players[tile.piece].color;
+        g.fillCircle(coordinates.x, coordinates.y, radius);
       }
-      graphics.color = Color.Black;
-      graphics.drawCircle(coordinates.x, coordinates.y, radius, 2);
+      g.color = Color.Black;
+      g.drawCircle(coordinates.x, coordinates.y, radius, 2);
     }
 
     // Selected Tile
@@ -218,15 +218,15 @@ class UI extends Mui {
     // Current player
     if (currentPlayer != null) {
       var window:MuiObject = {x:20, y:20, w:100, h:100};
-      graphics.color = Color.fromBytes(0, 0, 0, 50);
-      graphics.fillRect(window.x, window.y, window.w, window.h);
-      graphics.color = Color.fromBytes(220, 20, 60); // crimson
-      graphics.drawRect(window.x + 2, window.y + 2, window.w - 4, window.h - 4);
+      g.color = Color.fromBytes(0, 0, 0, 50);
+      g.fillRect(window.x, window.y, window.w, window.h);
+      g.color = Color.fromBytes(220, 20, 60); // crimson
+      g.drawRect(window.x + 2, window.y + 2, window.w - 4, window.h - 4);
       var x = window.x + (window.w * 0.5);
       var y = window.y + (window.h * 0.5);
       var radius = Math.min(window.w, window.h) * 0.5 * 0.7;
-      graphics.color = currentPlayer.color;
-      graphics.fillCircle(x, y, radius);
+      g.color = currentPlayer.color;
+      g.fillCircle(x, y, radius);
     }
 
     return eval;
@@ -248,12 +248,12 @@ class UI extends Mui {
     else if (object.selected == true) {
       color = Color.Yellow;
     }
-    graphics.color = color;
-    graphics.font = Assets.fonts.Wortellina;
-    graphics.fontSize = 28;
-    var textX = object.x + ((object.w - graphics.font.width(graphics.fontSize, object.text)) * 0.5);
-    var textY = object.y + ((object.h - graphics.font.height(graphics.fontSize)) * 0.5);
-    graphics.drawString(object.text, textX, textY);
+    g.color = color;
+    g.font = Assets.fonts.Wortellina;
+    g.fontSize = 28;
+    var textX = object.x + ((object.w - g.font.width(g.fontSize, object.text)) * 0.5);
+    var textY = object.y + ((object.h - g.font.height(g.fontSize)) * 0.5);
+    g.drawString(object.text, textX, textY);
 
     return eval;
   }
@@ -265,8 +265,8 @@ class UI extends Mui {
   public function image(object:UIImage):MuiEval {
     var eval:MuiEval = evaluate(object);
 
-    graphics.color = Color.White;
-    graphics.drawImage(object.image, object.x, object.y);
+    g.color = Color.White;
+    g.drawImage(object.image, object.x, object.y);
 
     return eval;
   }
@@ -278,16 +278,16 @@ class UI extends Mui {
   public function label(object:UILabel):MuiEval {
     var eval:MuiEval = evaluate(object);
 
-    graphics.color = Color.White;
+    g.color = Color.White;
     if (object.titleScreen == true) {
-      graphics.font = Assets.fonts.BatikGangster;
-      graphics.fontSize = 100;
+      g.font = Assets.fonts.BatikGangster;
+      g.fontSize = 100;
     }
     else {
-      graphics.font = Assets.fonts.Wortellina;
-      graphics.fontSize = 28;
+      g.font = Assets.fonts.Wortellina;
+      g.fontSize = 28;
     }
-    graphics.drawString(object.text, object.x, object.y);
+    g.drawString(object.text, object.x, object.y);
 
     return eval;
   }
@@ -301,15 +301,15 @@ class UI extends Mui {
 
     background(object);
     if (object.title != null) {
-      graphics.color = Color.Purple;
+      g.color = Color.Purple;
       var title:MuiObject = { x:object.x + 4, y:object.y + 4, w:object.w - 8, h:30 };
-      graphics.fillRect(title.x, title.y, title.w, title.h);
-      graphics.color = Color.White;
-      graphics.font = Assets.fonts.Wortellina;
-      graphics.fontSize = 26;
-      var titleX = title.x + ((title.w - graphics.font.width(graphics.fontSize, object.title)) * 0.5);
-      var titleY = title.y + ((title.h - graphics.font.height(graphics.fontSize)) * 0.5);
-      graphics.drawString(object.title, titleX, titleY);
+      g.fillRect(title.x, title.y, title.w, title.h);
+      g.color = Color.White;
+      g.font = Assets.fonts.Wortellina;
+      g.fontSize = 26;
+      var titleX = title.x + ((title.w - g.font.width(g.fontSize, object.title)) * 0.5);
+      var titleY = title.y + ((title.h - g.font.height(g.fontSize)) * 0.5);
+      g.drawString(object.title, titleX, titleY);
     }
 
     return eval;
