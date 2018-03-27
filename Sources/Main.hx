@@ -1,9 +1,10 @@
-// TODO: Full screen mode
+// TODO: Scaling and full screen mode
 // TODO: Cancel last move
 // TODO: Saveslots
-// TODO: Formating functions
+// TODO: UI formatting functions
 // TODO: UI refresh
 // TODO: AI
+// TODO: Online
 // TODO: Android target
 // TODO: Windows target
 // TODO: Debugging tools
