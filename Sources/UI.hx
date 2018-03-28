@@ -50,10 +50,9 @@ typedef UIImage = {
   var image:Image;
 }
 
-typedef UILabel = {
+typedef UITitle = {
   > MuiObject,
   var text:String;
-  @:optional var titleScreen:Bool;
 }
 
 typedef UIWindow = {
@@ -272,21 +271,15 @@ class UI extends Mui {
   }
 
   //
-  // Label
+  // Title
   //
 
-  public function label(object:UILabel):MuiEval {
+  public function title(object:UITitle):MuiEval {
     var eval:MuiEval = evaluate(object);
 
     g.color = Color.White;
-    if (object.titleScreen == true) {
-      g.font = Assets.fonts.BatikGangster;
-      g.fontSize = 100;
-    }
-    else {
-      g.font = Assets.fonts.Wortellina;
-      g.fontSize = 28;
-    }
+    g.font = Assets.fonts.BatikGangster;
+    g.fontSize = 100;
     g.drawString(object.text, object.x, object.y);
 
     return eval;

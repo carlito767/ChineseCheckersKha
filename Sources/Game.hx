@@ -58,8 +58,8 @@ class Game {
     case 'title':
       ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:0, h:0 });
 
-      ui.label({ text:tr('title1'), x:350, y:50, w:0, h:0, titleScreen:true });
-      ui.label({ text:tr('title2'), x:380, y:170, w:0, h:0, titleScreen:true });
+      ui.title({ text:tr('title1'), x:350, y:50, w:0, h:0 });
+      ui.title({ text:tr('title2'), x:380, y:170, w:0, h:0 });
 
       if (ui.button({ text:tr('newGame'), x:WIDTH - 300, y:350, w:310, h:50 }).hit) {
         screen = 'play';
