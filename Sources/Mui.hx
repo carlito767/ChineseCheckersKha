@@ -94,6 +94,16 @@ class Mui {
   }
 
   public function evaluate<T:(MuiObject)>(object:T):MuiEval {
+    if (object.disabled == true) {
+      return {
+        hot:false,
+        active:false,
+        hit:false,
+        longPress:false,
+        longPressRatio:0.0,
+      }
+    }
+
     var id:MuiId = ++idCounter;
 
     // Next frame
@@ -106,15 +116,7 @@ class Mui {
     if (id == active && longPressDuration > LONG_PRESS_BEGIN) {
       longPressRatio = Math.min(longPressDuration / LONG_PRESS_END, 1.0);
     }
-    if (object.disabled == true) {
-      return {
-        hot:false,
-        active:false,
-        hit:false,
-        longPress:false,
-        longPressRatio:0.0,
-      }
-    }
+
     return {
       hot:(id == hot),
       active:(id == active),
