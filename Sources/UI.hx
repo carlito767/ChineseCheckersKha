@@ -4,6 +4,7 @@ import kha.Font;
 import kha.Image;
 import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
+import kha.System;
 
 import Board.Player;
 import Board.Tile;
@@ -73,8 +74,6 @@ typedef UIWindow = {
 //
 
 class UI extends Mui {
-  static inline var WINDOW_TITLE_SIZE = 40;
-
   public var g:Graphics;
 
   public function new() {
@@ -86,7 +85,7 @@ class UI extends Mui {
   //
 
   static public function dimensions(window:UIWindow):Dimensions {
-    var dy = (window.title == null) ? 0 : WINDOW_TITLE_SIZE;
+    var dy = (window.title == null) ? 0 : System.windowHeight() * 0.07;
     var margin = window.w * 0.05;
     var width = window.w - margin * 2;
     var height = window.h - dy - margin * 2;
@@ -280,12 +279,13 @@ class UI extends Mui {
 
     background(object);
     if (object.title != null) {
-      var margin = WINDOW_TITLE_SIZE * 0.15;
-      var title:MuiObject = { x:object.x + margin, y:object.y + margin, w:object.w - margin * 2, h:WINDOW_TITLE_SIZE - margin * 2 };
+      var wh = System.windowHeight() * 0.07;
+      var margin = wh * 0.15;
+      var title:MuiObject = { x:object.x + margin, y:object.y + margin, w:object.w - margin * 2, h:wh - margin * 2 };
       g.color = Color.Purple;
       g.fillRect(title.x, title.y, title.w, title.h);
       g.font = Assets.fonts.Wortellina;
-      g.fontSize = Std.int(WINDOW_TITLE_SIZE * 0.7);
+      g.fontSize = Std.int(wh * 0.7);
       var coordinates = centerText(object.title, title);
       g.color = Color.White;
       g.drawString(object.title, coordinates.x, coordinates.y);
