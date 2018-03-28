@@ -80,8 +80,8 @@ class Game {
       var radius = 16;
       var distanceX = radius * 1.25;
       var distanceY = radius * 1.25 * 1.7;
-      var boardWidth = ((state.width - 1) * distanceX) + (2 * radius);
-      var boardHeight = ((state.height - 1) * distanceY) + (2 * radius);
+      var boardWidth = (state.width - 1) * distanceX + radius * 2;
+      var boardHeight = (state.height - 1) * distanceY + radius * 2;
       var dx = (WIDTH - boardWidth) * 0.5;
       var dy = (HEIGHT - boardHeight) * 0.5;
       var currentPlayer:Null<Player> = null;
@@ -144,7 +144,7 @@ class Game {
           if (ui.button({
             text:Std.string(sequence.length),
             x:dimensions.left + dx + (i * 60),
-            y:dimensions.top + 35,
+            y:dimensions.top,
             w:40,
             h:40,
             selected:(sequenceIndex == i),

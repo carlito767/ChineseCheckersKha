@@ -73,6 +73,8 @@ typedef UIWindow = {
 //
 
 class UI extends Mui {
+  static inline var WINDOW_TITLE_SIZE = 40;
+
   public var g:Graphics;
 
   public function new() {
@@ -84,12 +86,13 @@ class UI extends Mui {
   //
 
   static public function dimensions(window:UIWindow):Dimensions {
+    var dy = (window.title == null) ? 0 : WINDOW_TITLE_SIZE;
     var margin = window.w * 0.05;
-    var width = window.w - 2 * margin;
-    var height = window.h - 2 * margin;
+    var width = window.w - margin * 2;
+    var height = window.h - dy - margin * 2;
     var left = window.x + margin;
     var right = left + width;
-    var top = window.y + margin;
+    var top = window.y + dy + margin;
     var bottom = top + height;
     return {
       margin:margin,
@@ -157,10 +160,9 @@ class UI extends Mui {
     }
     g.color = color;
     g.font = Assets.fonts.Wortellina;
-    g.fontSize = 28;
-    var textX = object.x + ((object.w - g.font.width(g.fontSize, object.text)) * 0.5);
-    var textY = object.y + ((object.h - g.font.height(g.fontSize)) * 0.5);
-    g.drawString(object.text, textX, textY);
+    g.fontSize = Std.int(object.h * 0.7);
+    var coordinates = centerText(object.text, object);
+    g.drawString(object.text, coordinates.x, coordinates.y);
 
     return eval;
   }
@@ -207,18 +209,17 @@ class UI extends Mui {
     var sw = object.w * 0.2;
     g.drawLine(object.x + sw, object.y + 2, object.x + sw, object.y + object.h - 2, 2);
     // Rank
-    g.color = Color.White;
     var coordinates = centerText(object.rank, { x:object.x, y:object.y, w:sw, h:object.h });
+    g.color = Color.White;
     g.drawString(object.rank, coordinates.x, coordinates.y);
     // Player
     if (object.player != null) {
-      var px = object.x + object.w * 0.5;
-      var py = object.y + object.h * 0.5;
+      var coordinates = center(object);
       var radius = Math.min(object.w, object.h) * 0.5 * 0.7;
       g.color = object.player.color;
-      g.fillCircle(px, py, radius);
+      g.fillCircle(coordinates.x, coordinates.y, radius);
       g.color = Color.White;
-      g.drawCircle(px, py, radius, 2);
+      g.drawCircle(coordinates.x, coordinates.y, radius, 2);
     }
 
     return eval;
@@ -279,15 +280,15 @@ class UI extends Mui {
 
     background(object);
     if (object.title != null) {
+      var margin = WINDOW_TITLE_SIZE * 0.15;
+      var title:MuiObject = { x:object.x + margin, y:object.y + margin, w:object.w - margin * 2, h:WINDOW_TITLE_SIZE - margin * 2 };
       g.color = Color.Purple;
-      var title:MuiObject = { x:object.x + 4, y:object.y + 4, w:object.w - 8, h:30 };
       g.fillRect(title.x, title.y, title.w, title.h);
-      g.color = Color.White;
       g.font = Assets.fonts.Wortellina;
-      g.fontSize = 26;
-      var titleX = title.x + ((title.w - g.font.width(g.fontSize, object.title)) * 0.5);
-      var titleY = title.y + ((title.h - g.font.height(g.fontSize)) * 0.5);
-      g.drawString(object.title, titleX, titleY);
+      g.fontSize = Std.int(WINDOW_TITLE_SIZE * 0.7);
+      var coordinates = centerText(object.title, title);
+      g.color = Color.White;
+      g.drawString(object.title, coordinates.x, coordinates.y);
     }
 
     return eval;

@@ -1,7 +1,6 @@
 // TODO: Scaling and full screen mode
 // TODO: Cancel last move
 // TODO: Saveslots
-// TODO: UI formatting functions
 // TODO: UI refresh
 // TODO: AI
 // TODO: Online
