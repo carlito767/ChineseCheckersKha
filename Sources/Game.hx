@@ -123,15 +123,16 @@ class Game {
           var dimensions:Dimensions = UI.dimensions(window);
           ui.window(window);
 
-          var h = dimensions.height * 0.15;
-          for (i in 0...state.standings.length) {
+          var nb = state.standings.length;
+          var h = (dimensions.height - (nb - 1) * dimensions.margin) / nb;
+          var dy = (dimensions.height + dimensions.margin) / nb;
+          for (i in 0...nb) {
             var player:Null<Player> = state.players[state.standings[i]];
-            var dy = h * 1.1 * i;
             ui.rank({
               rank:Std.string(i+1),
               player:player,
               x:dimensions.left,
-              y:dimensions.top + dy,
+              y:dimensions.top + dy * i,
               w:dimensions.width,
               h:h,
             });
