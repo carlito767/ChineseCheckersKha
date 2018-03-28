@@ -119,16 +119,22 @@ class Game {
 
       if (state.ready) {
         if (Board.isOver(state)) {
-          var window:UIWindow = { x:0, y:0, w:WIDTH, h:HEIGHT, title:tr('standings') };
+          var window:UIWindow = { x:WIDTH * 0.2, y:HEIGHT * 0.1, w:WIDTH * 0.6, h:HEIGHT * 0.8, title:tr('standings') };
+          var dimensions:Dimensions = UI.dimensions(window);
           ui.window(window);
-          var x = WIDTH * 0.2;
-          var y = HEIGHT * 0.2;
-          var w = WIDTH - 2 * x;
-          var h = HEIGHT * 0.1;
+
+          var h = dimensions.height * 0.15;
           for (i in 0...state.standings.length) {
-            var dy = i * HEIGHT * 0.12;
             var player:Null<Player> = state.players[state.standings[i]];
-            ui.rank({ x:x, y:y + dy, w:w, h:h, rank:Std.string(i+1), player:player });
+            var dy = h * 1.1 * i;
+            ui.rank({
+              rank:Std.string(i+1),
+              player:player,
+              x:dimensions.left,
+              y:dimensions.top + dy,
+              w:dimensions.width,
+              h:h,
+            });
           }
         }
       }
@@ -143,11 +149,11 @@ class Game {
           var sequence:Sequence = ChineseCheckers.sequences[i];
           if (ui.button({
             text:Std.string(sequence.length),
+            selected:(sequenceIndex == i),
             x:dimensions.left + dx + (i * 60),
             y:dimensions.top,
             w:40,
             h:40,
-            selected:(sequenceIndex == i),
           }).hit) {
             sequenceIndex = i;
           }
