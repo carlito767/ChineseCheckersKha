@@ -174,7 +174,7 @@ class UI extends Mui {
     var eval:MuiEval = evaluate(object);
 
     g.color = Color.White;
-    g.drawImage(object.image, object.x, object.y);
+    g.drawScaledImage(object.image, object.x, object.y, System.windowWidth(), System.windowHeight());
 
     return eval;
   }

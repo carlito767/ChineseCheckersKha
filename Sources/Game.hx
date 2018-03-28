@@ -58,13 +58,13 @@ class Game {
     case 'title':
       ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:0, h:0 });
 
-      ui.title({ text:tr('title1'), x:350, y:50, w:0, h:0 });
-      ui.title({ text:tr('title2'), x:380, y:170, w:0, h:0 });
+      ui.title({ text:tr('title1'), x:WIDTH * 0.45, y:HEIGHT * 0.13, w:0, h:0 });
+      ui.title({ text:tr('title2'), x:WIDTH * 0.48, y:HEIGHT * 0.3, w:0, h:0 });
 
-      if (ui.button({ text:tr('newGame'), x:WIDTH - 300, y:350, w:310, h:50 }).hit) {
+      if (ui.button({ text:tr('newGame'), x:WIDTH * 0.63, y:HEIGHT * 0.58, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
         screen = 'play';
       }
-      if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH - 300, y:420, w:310, h:50 }).hit) {
+      if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH * 0.63, y:HEIGHT * 0.7, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
         language = (language == 'en') ? 'fr' : 'en';
       }
     case 'play':
