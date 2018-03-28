@@ -12,7 +12,6 @@ import Game;
 import Mui;
 import Mui.MuiEval;
 import Mui.MuiObject;
-import Translations.tr;
 
 //
 // Components
@@ -50,6 +49,12 @@ typedef UIImage = {
   var image:Image;
 }
 
+typedef UIRank = {
+  > MuiObject,
+  var rank:String;
+  @:optional var player:Player;
+}
+
 typedef UITitle = {
   > MuiObject,
   var text:String;
@@ -71,10 +76,11 @@ class UI extends Mui {
     super();
   }
 
-  static public function dimensions(?window:UIWindow):Dimensions {
-    if (window == null) {
-      window = { x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT };
-    }
+  //
+  // Formatting
+  //
+
+  static public function dimensions(window:UIWindow):Dimensions {
     var margin = window.w * 0.05;
     var width = window.w - 2 * margin;
     var height = window.h - 2 * margin;
@@ -93,6 +99,19 @@ class UI extends Mui {
     }
   }
 
+  function centerText(text:String, object:MuiObject):Coordinates {
+    var w = g.font.width(g.fontSize, Std.string(text));
+    var h = g.font.height(g.fontSize);
+    return {
+      x:object.x + (object.w - w) * 0.5,
+      y:object.y + (object.h - h) * 0.5,
+    }
+  }
+
+  //
+  // Background
+  //
+
   function background<T:(MuiObject)>(object:T) {
     g.color = Color.fromBytes(0, 0, 0, 200);
     g.fillRect(object.x, object.y, object.w, object.h);
@@ -104,51 +123,6 @@ class UI extends Mui {
       g.color = Color.fromBytes(220, 20, 60); // crimson
     }
     g.drawRect(object.x + 2, object.y + 2, object.w - 4, object.h - 4);
-  }
-
-  public function standings(state:State) {
-    g.color = Color.fromBytes(0, 0, 0, 200);
-    g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
-
-    g.color = Color.Yellow;
-    g.font = Assets.fonts.Wortellina;
-    g.fontSize = 70;
-    var title = tr('standings');
-    var textX = (Game.WIDTH - g.font.width(g.fontSize, title)) * 0.5;
-    var textY = Game.HEIGHT * 0.05;
-    g.drawString(title, textX, textY);
-
-    var x = Game.WIDTH * 0.2;
-    var y = Game.HEIGHT * 0.2;
-    var w = Game.WIDTH - 2 * x;
-    var h = Game.HEIGHT * 0.1;
-    for (i in 0...state.standings.length) {
-      // Slot
-      var dy = i * Game.HEIGHT * 0.12;
-      g.color = Color.Black;
-      g.fillRect(x, y + dy, w, h);
-      g.color = Color.fromBytes(220, 20, 60); // crimson
-      g.drawRect(x + 2, y + dy + 2, w - 4, h - 4);
-      // Separator
-      var sx = Game.WIDTH * 0.3;
-      g.drawLine(sx, y + dy + 2, sx, y + dy + h - 2, 2);
-      // Position
-      g.color = Color.White;
-      g.fontSize = 38;
-      var centerX = x + (sx - x - g.font.width(g.fontSize, Std.string(i+1))) * 0.5;
-      var centerY = y + dy + (h - g.font.height(g.fontSize)) * 0.5;
-      g.drawString(Std.string(i+1), centerX, centerY);
-      // Player
-      var player:Null<Player> = state.players[state.standings[i]];
-      if (player != null) {
-        var px = Game.WIDTH * 0.5;
-        var py = y + dy + h * 0.5;
-        g.color = player.color;
-        g.fillCircle(px, py, radius);
-        g.color = Color.White;
-        g.drawCircle(px, py, radius, 2);
-      }
-    }
   }
 
   //
@@ -266,6 +240,35 @@ class UI extends Mui {
 
     g.color = Color.White;
     g.drawImage(object.image, object.x, object.y);
+
+    return eval;
+  }
+
+  //
+  // Rank
+  //
+
+  public function rank(object:UIRank):MuiEval {
+    var eval:MuiEval = evaluate(object);
+
+    // Slot
+    background(object);
+    // Separator
+    var sw = object.w * 0.2;
+    g.drawLine(object.x + sw, object.y + 2, object.x + sw, object.y + object.h - 2, 2);
+    // Rank
+    g.color = Color.White;
+    var coordinates = centerText(object.rank, { x:object.x, y:object.y, w:sw, h:object.h });
+    g.drawString(object.rank, coordinates.x, coordinates.y);
+    // Player
+    if (object.player != null) {
+      var px = object.x + object.w * 0.5;
+      var py = object.y + object.h * 0.5;
+      g.color = object.player.color;
+      g.fillCircle(px, py, radius);
+      g.color = Color.White;
+      g.drawCircle(px, py, radius, 2);
+    }
 
     return eval;
   }

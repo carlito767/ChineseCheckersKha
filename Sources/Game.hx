@@ -3,9 +3,10 @@ import kha.Framebuffer;
 
 import Board;
 import Board.ChineseCheckers;
+import Board.Player;
+import Board.Tile;
 import Board.Sequence;
 import Board.State;
-import Board.Tile;
 import Mouse;
 import Mui.MuiEval;
 import Translations.language;
@@ -80,7 +81,17 @@ class Game {
 
       if (state.ready) {
         if (Board.isOver(state)) {
-          ui.standings(state);
+          var window:UIWindow = { x:0, y:0, w:WIDTH, h:HEIGHT, title:tr('standings') };
+          ui.window(window);
+          var x = WIDTH * 0.2;
+          var y = HEIGHT * 0.2;
+          var w = WIDTH - 2 * x;
+          var h = HEIGHT * 0.1;
+          for (i in 0...state.standings.length) {
+            var dy = i * HEIGHT * 0.12;
+            var player:Null<Player> = state.players[state.standings[i]];
+            ui.rank({ x:x, y:y + dy, w:w, h:h, rank:Std.string(i+1), player:player });
+          }
         }
         else if (eval.hit) {
           var tile:Null<Tile> = ui.screenTile(uiBoard);
