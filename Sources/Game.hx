@@ -13,7 +13,6 @@ import Translations.language;
 import Translations.tr;
 import UI;
 import UI.Dimensions;
-import UI.UIBoard;
 import UI.UIWindow;
 
 class Game {
@@ -76,8 +75,47 @@ class Game {
       }
 
       ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
-      var uiBoard:UIBoard = { state:state, selectedTile:selectedTile, x:0, y:0, w:WIDTH, h:HEIGHT };
-      var eval:MuiEval = ui.board(uiBoard);
+
+      // Board
+      var radius = 16;
+      var distanceX = radius * 1.25;
+      var distanceY = radius * 1.25 * 1.7;
+      var boardWidth = ((state.width - 1) * distanceX) + (2 * radius);
+      var boardHeight = ((state.height - 1) * distanceY) + (2 * radius);
+      var dx = (WIDTH - boardWidth) * 0.5;
+      var dy = (HEIGHT - boardHeight) * 0.5;
+      var currentPlayer:Null<Player> = null;
+      var moves:Array<Tile> = [];
+      if (state != null) {
+        currentPlayer = Board.currentPlayer(state);
+        if (selectedTile != null) {
+          moves = Board.allowedMoves(state, selectedTile);
+        }
+      }
+      for (tile in state.tiles) {
+        var tx = dx + (tile.x - 1) * distanceX;
+        var ty = dy + (tile.y - 1) * distanceY;
+        var allowedMove = (moves.indexOf(tile) > -1);
+        var selected = (selectedTile == tile);
+        var player = (tile.piece == null) ? null : state.players[tile.piece];
+        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:allowedMove || selected, player:player }).hit) {
+          if (allowedMove) {
+            Board.move(state, selectedTile, tile);
+            selectedTile = null;
+          }
+          if (!selected && Board.allowedMoves(state, tile).length > 0) {
+            selectedTile = tile;
+          }
+          else {
+            selectedTile = null;
+          }
+        }
+      }
+
+      // Current player
+      if (currentPlayer != null) {
+        ui.player({ x:20, y:20, w:100, h:100, player:currentPlayer });
+      }
 
       if (state.ready) {
         if (Board.isOver(state)) {
@@ -91,23 +129,6 @@ class Game {
             var dy = i * HEIGHT * 0.12;
             var player:Null<Player> = state.players[state.standings[i]];
             ui.rank({ x:x, y:y + dy, w:w, h:h, rank:Std.string(i+1), player:player });
-          }
-        }
-        else if (eval.hit) {
-          var tile:Null<Tile> = ui.screenTile(uiBoard);
-          if (tile != null) {
-            if (selectedTile != null && Board.move(state, selectedTile, tile)) {
-              selectedTile = null;
-            }
-            else if ((selectedTile == null || selectedTile.id != tile.id) && Board.allowedMoves(state, tile).length > 0) {
-              selectedTile = tile;
-            }
-            else {
-              selectedTile = null;
-            }
-          }
-          else {
-            selectedTile = null;
           }
         }
       }

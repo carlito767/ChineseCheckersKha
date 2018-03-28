@@ -6,7 +6,6 @@ import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
 
 import Board.Player;
-import Board.State;
 import Board.Tile;
 import Mui;
 import Mui.MuiEval;
@@ -31,12 +30,6 @@ typedef Dimensions = {
   var bottom:Float;
 }
 
-typedef UIBoard = {
-  > MuiObject,
-  var state:State;
-  var selectedTile:Null<Tile>;
-}
-
 typedef UIButton = {
   > MuiObject,
   var text:String;
@@ -48,9 +41,20 @@ typedef UIImage = {
   var image:Image;
 }
 
+typedef UIPlayer = {
+  > MuiObject,
+  var player:Player;
+}
+
 typedef UIRank = {
   > MuiObject,
   var rank:String;
+  @:optional var player:Player;
+}
+
+typedef UITile = {
+  > MuiObject,
+  var emphasis:Bool;
   @:optional var player:Player;
 }
 
@@ -98,6 +102,13 @@ class UI extends Mui {
     }
   }
 
+  function center(object:MuiObject):Coordinates {
+    return {
+      x:object.x + object.w * 0.5,
+      y:object.y + object.h * 0.5,
+    }
+  }
+
   function centerText(text:String, object:MuiObject):Coordinates {
     var w = g.font.width(g.fontSize, Std.string(text));
     var h = g.font.height(g.fontSize);
@@ -111,8 +122,12 @@ class UI extends Mui {
   // Background
   //
 
-  function background<T:(MuiObject)>(object:T) {
-    g.color = Color.fromBytes(0, 0, 0, 200);
+  function background<T:(MuiObject)>(object:T, ?color:Color) {
+    if (color == null) {
+      color = Color.fromBytes(0, 0, 0, 200);
+    }
+
+    g.color = color;
     g.fillRect(object.x, object.y, object.w, object.h);
 
     if (object.disabled == true) {
@@ -122,86 +137,6 @@ class UI extends Mui {
       g.color = Color.fromBytes(220, 20, 60); // crimson
     }
     g.drawRect(object.x + 2, object.y + 2, object.w - 4, object.h - 4);
-  }
-
-  //
-  // Board
-  //
-
-  var radius = 16;
-  var distanceX = 16 * 1.25;
-  var distanceY = 16 * 1.25 * 1.7;
-
-  function screenCoordinates(object:UIBoard, tile:Tile):Coordinates {
-    var boardWidth = ((object.state.width - 1) * distanceX) + (2 * radius);
-    var boardHeight = ((object.state.height - 1) * distanceY) + (2 * radius);
-    var x = (object.w - boardWidth) * 0.5;
-    var y = (object.h - boardHeight) * 0.5;
-    var dx = radius + ((tile.x - 1) * distanceX);
-    var dy = radius + ((tile.y - 1) * distanceY);
-    return {
-      x:x + dx,
-      y:y + dy,
-    }
-  }
-
-  function drawSelection(board:UIBoard, tile:Tile) {
-    var coordinates:Coordinates = screenCoordinates(board, tile);
-    g.color = Color.White;
-    g.drawCircle(coordinates.x, coordinates.y, radius * 1.15, 2);
-  }
-
-  public function screenTile(board:UIBoard):Null<Tile> {
-    for (tile in board.state.tiles) {
-      var coordinates:Coordinates = screenCoordinates(board, tile);
-      var okX = (x >= coordinates.x - radius) && (x <= coordinates.x + radius);
-      var okY = (y >= coordinates.y - radius) && (y <= coordinates.y + radius);
-      if (okX && okY) {
-        return tile;
-      }
-    }
-    return null;
-  }
-
-  public function board(object:UIBoard):MuiEval {
-    var eval:MuiEval = evaluate(object);
-
-    var currentPlayer:Null<Player> = Board.currentPlayer(object.state);
-
-    // Tiles
-    for (tile in object.state.tiles) {
-      var coordinates:Coordinates = screenCoordinates(object, tile);
-      if (tile.piece != null) {
-        g.color = object.state.players[tile.piece].color;
-        g.fillCircle(coordinates.x, coordinates.y, radius);
-      }
-      g.color = Color.Black;
-      g.drawCircle(coordinates.x, coordinates.y, radius, 2);
-    }
-
-    // Selected Tile
-    if (object.selectedTile != null) {
-      drawSelection(object, object.selectedTile);
-      for (move in Board.allowedMoves(object.state, object.selectedTile)) {
-        drawSelection(object, move);
-      }
-    }
-
-    // Current player
-    if (currentPlayer != null) {
-      var window:MuiObject = {x:20, y:20, w:100, h:100};
-      g.color = Color.fromBytes(0, 0, 0, 50);
-      g.fillRect(window.x, window.y, window.w, window.h);
-      g.color = Color.fromBytes(220, 20, 60); // crimson
-      g.drawRect(window.x + 2, window.y + 2, window.w - 4, window.h - 4);
-      var x = window.x + (window.w * 0.5);
-      var y = window.y + (window.h * 0.5);
-      var radius = Math.min(window.w, window.h) * 0.5 * 0.7;
-      g.color = currentPlayer.color;
-      g.fillCircle(x, y, radius);
-    }
-
-    return eval;
   }
 
   //
@@ -244,6 +179,22 @@ class UI extends Mui {
   }
 
   //
+  // Player
+  //
+
+  public function player(object:UIPlayer):MuiEval {
+    var eval:MuiEval = evaluate(object);
+
+      background(object, Color.fromBytes(0, 0, 0, 50));
+      var coordinates = center(object);
+      var radius = Math.min(object.w, object.h) * 0.5 * 0.7;
+      g.color = object.player.color;
+      g.fillCircle(coordinates.x, coordinates.y, radius);
+
+    return eval;
+  }
+
+  //
   // Rank
   //
 
@@ -263,11 +214,43 @@ class UI extends Mui {
     if (object.player != null) {
       var px = object.x + object.w * 0.5;
       var py = object.y + object.h * 0.5;
+      var radius = Math.min(object.w, object.h) * 0.5 * 0.7;
       g.color = object.player.color;
       g.fillCircle(px, py, radius);
       g.color = Color.White;
       g.drawCircle(px, py, radius, 2);
     }
+
+    return eval;
+  }
+
+  //
+  // Tile
+  //
+
+  public function tile(object:UITile):MuiEval {
+    var eval:MuiEval = evaluate(object);
+
+    var radius = object.h * 0.5;
+    var cx = object.x + radius;
+    var cy = object.y + radius;
+
+    if (object.player != null) {
+      g.color = object.player.color;
+      g.fillCircle(cx, cy, radius);
+    }
+    g.color = Color.Black;
+    g.drawCircle(cx, cy, radius, 2);
+
+    if (object.emphasis) {
+      g.color = Color.White;
+      g.drawCircle(cx, cy, radius * 1.15, 2);
+    }
+
+    #if debug
+    g.color = Color.Green;
+    g.drawRect(object.x, object.y, object.w, object.h);
+    #end
 
     return eval;
   }
