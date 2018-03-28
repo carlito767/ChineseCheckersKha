@@ -264,7 +264,7 @@ class UI extends Mui {
 
     g.color = Color.White;
     g.font = Assets.fonts.BatikGangster;
-    g.fontSize = 100;
+    g.fontSize = Std.int(System.windowHeight() * 0.167);
     g.drawString(object.text, object.x, object.y);
 
     return eval;

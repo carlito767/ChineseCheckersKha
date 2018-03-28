@@ -77,7 +77,7 @@ class Game {
       ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
 
       // Board
-      var radius = 16;
+      var radius = HEIGHT * 0.027;
       var distanceX = radius * 1.25;
       var distanceY = radius * 1.25 * 1.7;
       var boardWidth = (state.width - 1) * distanceX + radius * 2;
@@ -114,7 +114,7 @@ class Game {
 
       // Current player
       if (currentPlayer != null) {
-        ui.player({ x:20, y:20, w:100, h:100, player:currentPlayer });
+        ui.player({ x:WIDTH * 0.025, y:WIDTH * 0.025, w:WIDTH * 0.125, h:WIDTH * 0.125, player:currentPlayer });
       }
 
       if (state.ready) {
@@ -161,12 +161,12 @@ class Game {
           }
         }
 
-        if (ui.button({ text:tr('play'), disabled:(sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - 40, w:dimensions.width, h:40 }).hit) {
+        if (ui.button({ text:tr('play'), disabled:(sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - HEIGHT * 0.067, w:dimensions.width, h:HEIGHT * 0.067 }).hit) {
           state.ready = true;
         }
       }
 
-      if (ui.button({ text:tr('quit'), x:680, y:20, w:100, h:40 }).hit) {
+      if (ui.button({ text:tr('quit'), x:WIDTH * 0.85, y:WIDTH * 0.025, w:WIDTH * 0.125, h:HEIGHT * 0.067 }).hit) {
         sequenceIndex = null;
         screen = 'title';
       }
