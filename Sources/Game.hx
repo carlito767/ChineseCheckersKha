@@ -139,21 +139,22 @@ class Game {
         }
       }
       else {
-        var window:UIWindow = { x:250, y:220, w:300, h:160, title:tr('numberOfPlayers') };
+        var window:UIWindow = { x:WIDTH * 0.3, y:HEIGHT * 0.33, w:WIDTH * 0.4, h:HEIGHT * 0.34, title:tr('numberOfPlayers') };
         var dimensions:Dimensions = UI.dimensions(window);
         ui.window(window);
 
         var nb = ChineseCheckers.sequences.length;
-        var dx = (dimensions.right - dimensions.left - (nb * 50) - ((nb - 2) * 10)) * 0.5;
+        var w = (dimensions.width - (nb - 1) * dimensions.margin) / nb;
+        var dx = (dimensions.width + dimensions.margin) / nb;
         for (i in 0...nb) {
           var sequence:Sequence = ChineseCheckers.sequences[i];
           if (ui.button({
             text:Std.string(sequence.length),
             selected:(sequenceIndex == i),
-            x:dimensions.left + dx + (i * 60),
+            x:dimensions.left + dx * i,
             y:dimensions.top,
-            w:40,
-            h:40,
+            w:w,
+            h:w,
           }).hit) {
             sequenceIndex = i;
           }
