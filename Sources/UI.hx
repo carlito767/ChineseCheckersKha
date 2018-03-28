@@ -8,6 +8,8 @@ import kha.System;
 
 import Board.Player;
 import Board.Tile;
+import Game.HEIGHT;
+import Game.WIDTH;
 import Mui;
 import Mui.MuiEval;
 import Mui.MuiObject;
@@ -174,7 +176,7 @@ class UI extends Mui {
     var eval:MuiEval = evaluate(object);
 
     g.color = Color.White;
-    g.drawScaledImage(object.image, object.x, object.y, System.windowWidth(), System.windowHeight());
+    g.drawImage(object.image, object.x, object.y);
 
     return eval;
   }
@@ -264,7 +266,7 @@ class UI extends Mui {
 
     g.color = Color.White;
     g.font = Assets.fonts.BatikGangster;
-    g.fontSize = Std.int(System.windowHeight() * 0.167);
+    g.fontSize = Std.int(HEIGHT * 0.167);
     g.drawString(object.text, object.x, object.y);
 
     return eval;
