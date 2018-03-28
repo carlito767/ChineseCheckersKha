@@ -79,14 +79,14 @@ class Game {
       var eval:MuiEval = ui.board(uiBoard);
 
       if (state.ready) {
-        if (eval.hit && !Board.isOver(state)) {
+        if (Board.isOver(state)) {
+          ui.standings(state);
+        }
+        else if (eval.hit) {
           var tile:Null<Tile> = ui.screenTile(uiBoard);
           if (tile != null) {
             if (selectedTile != null && Board.move(state, selectedTile, tile)) {
               selectedTile = null;
-              if (Board.isOver(state)) {
-                screen = 'standings';
-              }
             }
             else if ((selectedTile == null || selectedTile.id != tile.id) && Board.allowedMoves(state, tile).length > 0) {
               selectedTile = tile;
@@ -130,15 +130,6 @@ class Game {
         sequenceIndex = null;
         screen = 'title';
       }
-      case 'standings':
-        ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
-        ui.board({ state:state, selectedTile:selectedTile, x:0, y:0, w:WIDTH, h:HEIGHT });
-        ui.standings(state);
-        var dimensions:Dimensions = UI.dimensions();
-        if (ui.button({ text:tr('quit'), x:dimensions.right - 100, y:dimensions.bottom - 40, w:100, h:40 }).hit) {
-          sequenceIndex = null;
-          screen = 'title';
-        }
     }
 
     ui.end();
