@@ -1,13 +1,11 @@
+// TODO: Debugging tools (including "cancel last move")
 // TODO: Scaling and full screen mode
-// TODO: Cancel last move
 // TODO: Saveslots
 // TODO: UI refresh
-// TODO: AI
-// TODO: Online
 // TODO: Android target
 // TODO: Windows target
-// TODO: Debugging tools
-// TODO: Performance check (HTML5)
+// TODO: AI
+// TODO: Online
 
 #if kha_html5
 import js.html.CanvasElement;
