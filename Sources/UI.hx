@@ -9,6 +9,7 @@ import Board.Player;
 import Board.Tile;
 import Mui;
 import Mui.MuiEval;
+import Mui.MuiInput;
 import Mui.MuiObject;
 import Scaling;
 import Scaling.ScalingData;
@@ -82,16 +83,16 @@ class UI extends Mui {
     super();
   }
 
-  // TODO: should be done in begin() function
-  public function scale(graphics:Graphics, gameWidth:Int, gameHeight) {
+  public function preRender(graphics:Graphics, gameWidth:Int, gameHeight:Int, input:MuiInput) {
     g = graphics;
     sd = Scaling.scaling(gameWidth, gameHeight);
     g.scissor(Std.int(sd.dx), Std.int(sd.dy), Std.int(gameWidth * sd.scale), Std.int(gameHeight * sd.scale));
+    begin(input);
   }
 
-  override function end() {
+  public function postRender() {
+    end();
     g.disableScissor();
-    super.end();
   }
 
   override function evaluate<T:(MuiObject)>(object:T):MuiEval {

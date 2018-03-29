@@ -56,12 +56,11 @@ class Game {
 
     var g = framebuffer.g2;
     g.begin();
-    ui.begin(x, y, select);
-    ui.scale(g, WIDTH, HEIGHT);
+    ui.preRender(g, WIDTH, HEIGHT, { x:x, y:y, select:select });
 
     renderScreen();
 
-    ui.end();
+    ui.postRender();
     g.end();
   }
 

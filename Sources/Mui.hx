@@ -16,6 +16,12 @@ typedef MuiEval = {
 
 typedef MuiId = Int;
 
+typedef MuiInput = {
+  var x:Float;
+  var y:Float;
+  var select:Bool;
+}
+
 typedef MuiObject = {
   var x:Float;
   var y:Float;
@@ -49,10 +55,10 @@ class Mui {
   var y:Float = 0.0;
   var select:Bool = false;
 
-  public function begin(inputX:Float, inputY:Float, inputSelect) {
-    x = inputX;
-    y = inputY;
-    select = inputSelect;
+  public function begin(input:MuiInput) {
+    x = input.x;
+    y = input.y;
+    select = input.select;
 
     idCounter = 0;
     next = null;
