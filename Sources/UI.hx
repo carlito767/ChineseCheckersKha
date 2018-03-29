@@ -160,7 +160,7 @@ class UI extends Mui {
       color = Color.Yellow;
     }
     g.color = color;
-    g.font = Assets.fonts.Wortellina;
+    g.font = Assets.fonts.StickRice;
     g.fontSize = Std.int(object.h * 0.7);
     var coordinates = centerText(object.text, object);
     g.drawString(object.text, coordinates.x, coordinates.y);
@@ -286,7 +286,7 @@ class UI extends Mui {
       var title:MuiObject = { x:object.x + margin, y:object.y + margin, w:object.w - margin * 2, h:wh - margin * 2 };
       g.color = Color.Purple;
       g.fillRect(title.x, title.y, title.w, title.h);
-      g.font = Assets.fonts.Wortellina;
+      g.font = Assets.fonts.StickRice;
       g.fontSize = Std.int(wh * 0.7);
       var coordinates = centerText(object.title, title);
       g.color = Color.White;

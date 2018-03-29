@@ -28,5 +28,5 @@ git clone --recursive https://github.com/carlito767/ChineseCheckersKha.git
 ## Credits
 
 * [Batik Gangster](http://www.fontspace.com/gunarta/batik-gangster) by [Gunarta](http://www.fontspace.com/gunarta) is [Freeware](https://en.wikipedia.org/wiki/Freeware)
-* [Wortellina](http://www.fontspace.com/gunarta/wortellina) by [Gunarta](http://www.fontspace.com/gunarta) is in [Public Domain](https://en.wikipedia.org/wiki/Public_domain)
+* [StickRice](http://www.fontspace.com/fontden/stickrice) by [fontden](http://www.fontspace.com/fontden) is [Freeware](https://en.wikipedia.org/wiki/Freeware)
 * [Chinese New Year Greeting Card Design with Lantern and Dragon Picture](http://allpicts.in/chinese-new-year-card-design-with-lantern-and-dragon-picture/) by [Allpicts.in](http://allpicts.in/) is free
