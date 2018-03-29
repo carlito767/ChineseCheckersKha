@@ -1,5 +1,6 @@
 import kha.Assets;
 import kha.Framebuffer;
+import kha.input.KeyCode;
 
 import Board;
 import Board.ChineseCheckers;
@@ -41,6 +42,10 @@ class Game {
   }
 
   public function update() {
+    if (Input.keyPressed(KeyCode.Space)) {
+      Main.DEVMODE = !Main.DEVMODE;
+      trace('Developer Mode: ${Main.DEVMODE}');
+    }
   }
 
   public function render(framebuffer:Framebuffer) {

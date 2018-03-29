@@ -168,10 +168,10 @@ class UI extends Mui {
     var coordinates = centerText(object.text, object);
     g.drawString(object.text, coordinates.x, coordinates.y);
 
-    #if debug
-    g.color = Color.Green;
-    g.drawRect(coordinates.x, coordinates.y, g.font.width(g.fontSize, object.text), g.font.height(g.fontSize));
-    #end
+    if (Main.DEVMODE) {
+      g.color = Color.Green;
+      g.drawRect(coordinates.x, coordinates.y, g.font.width(g.fontSize, object.text), g.font.height(g.fontSize));
+    }
 
     return eval;
   }
@@ -257,10 +257,10 @@ class UI extends Mui {
       g.drawCircle(cx, cy, radius * 1.15, 2);
     }
 
-    #if debug
-    g.color = Color.Green;
-    g.drawRect(object.x, object.y, object.w, object.h);
-    #end
+    if (Main.DEVMODE) {
+      g.color = Color.Green;
+      g.drawRect(object.x, object.y, object.w, object.h);
+    }
 
     return eval;
   }
