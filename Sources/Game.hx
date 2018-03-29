@@ -53,6 +53,13 @@ class Game {
     ui.begin(x, y, select);
     ui.g = g;
 
+    renderScreen();
+
+    ui.end();
+    g.end();
+  }
+
+  function renderScreen() {
     switch screen {
     case 'title':
       ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:0, h:0 });
@@ -170,8 +177,5 @@ class Game {
         screen = 'title';
       }
     }
-
-    ui.end();
-    g.end();
   }
 }
