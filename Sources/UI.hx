@@ -165,6 +165,11 @@ class UI extends Mui {
     var coordinates = centerText(object.text, object);
     g.drawString(object.text, coordinates.x, coordinates.y);
 
+    #if debug
+    g.color = Color.Green;
+    g.drawRect(coordinates.x, coordinates.y, g.font.width(g.fontSize, object.text), g.font.height(g.fontSize));
+    #end
+
     return eval;
   }
 
@@ -188,11 +193,11 @@ class UI extends Mui {
   public function player(object:UIPlayer):MuiEval {
     var eval:MuiEval = evaluate(object);
 
-      background(object, Color.fromBytes(0, 0, 0, 50));
-      var coordinates = center(object);
-      var radius = Math.min(object.w, object.h) * 0.5 * 0.7;
-      g.color = object.player.color;
-      g.fillCircle(coordinates.x, coordinates.y, radius);
+    background(object, Color.fromBytes(0, 0, 0, 50));
+    var coordinates = center(object);
+    var radius = Math.min(object.w, object.h) * 0.5 * 0.7;
+    g.color = object.player.color;
+    g.fillCircle(coordinates.x, coordinates.y, radius);
 
     return eval;
   }
