@@ -46,6 +46,7 @@ class Game {
       Main.DEVMODE = !Main.DEVMODE;
       trace('Developer Mode: ${Main.DEVMODE}');
     }
+    updateScreen();
   }
 
   public function render(framebuffer:Framebuffer) {
@@ -62,6 +63,27 @@ class Game {
 
     ui.end();
     g.end();
+  }
+
+  function updateScreen() {
+    if (!Main.DEVMODE) {
+      return;
+    }
+
+    switch screen {
+    case 'title':
+    case 'play':
+      if (Input.keyPressed(KeyCode.Backspace)) {
+        if (state.ready && !Board.isOver(state)) {
+          if (selectedTile == null) {
+            Board.cancelLastMove(state);
+          }
+          else {
+            selectedTile = null;
+          }
+        }
+      }
+    }
   }
 
   function renderScreen() {

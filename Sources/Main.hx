@@ -1,4 +1,3 @@
-// TODO: Debugging tools (including "cancel last move")
 // TODO: Scaling and full screen mode
 // TODO: Saveslots
 // TODO: UI refresh

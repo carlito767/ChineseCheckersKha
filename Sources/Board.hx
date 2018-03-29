@@ -307,4 +307,20 @@ class Board {
 
     return true;
   }
+
+  static public function cancelLastMove(state:State) {
+    if (state.moves.length == 0) {
+      return;
+    }
+
+    var move = state.moves.pop();
+    var from = state.tiles[move.from];
+    var to = state.tiles[move.to];
+    from.piece = to.piece;
+    to.piece = null;
+
+    if (state.standings.length > 0 && state.standings[state.standings.length] == to.piece) {
+      state.standings.pop();
+    }
+  }
 }
