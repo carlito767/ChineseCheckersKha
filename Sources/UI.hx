@@ -87,7 +87,7 @@ class UI extends Mui {
   //
 
   static public function dimensions(window:UIWindow):Dimensions {
-    var dy = (window.title == null) ? 0 : System.windowHeight() * 0.07;
+    var dy = (window.title == null) ? 0 : HEIGHT * 0.07;
     var margin = window.w * 0.05;
     var width = window.w - margin * 2;
     var height = window.h - dy - margin * 2;
@@ -281,7 +281,7 @@ class UI extends Mui {
 
     background(object);
     if (object.title != null) {
-      var wh = System.windowHeight() * 0.07;
+      var wh = HEIGHT * 0.07;
       var margin = wh * 0.15;
       var title:MuiObject = { x:object.x + margin, y:object.y + margin, w:object.w - margin * 2, h:wh - margin * 2 };
       g.color = Color.Purple;
