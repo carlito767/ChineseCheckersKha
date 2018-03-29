@@ -7,7 +7,7 @@ import Board.Player;
 import Board.Tile;
 import Board.Sequence;
 import Board.State;
-import Mouse;
+import Input;
 import Translations.language;
 import Translations.tr;
 import UI;
@@ -19,7 +19,6 @@ class Game {
   static public inline var WIDTH = 800;
   static public inline var HEIGHT = 600;
 
-  var mouse:Mouse = new Mouse();
   var ui:UI = new UI(WIDTH, HEIGHT);
 
   var screen:String;
@@ -35,6 +34,7 @@ class Game {
   var selectedTile:Null<Tile>;
 
   public function new() {
+    Input.init();
     language = 'en';
     screen = 'title';
     sequenceIndex = null;
@@ -44,9 +44,9 @@ class Game {
   }
 
   public function render(framebuffer:Framebuffer) {
-    var x = mouse.x * 1.0;
-    var y = mouse.y * 1.0;
-    var select = mouse.leftClick;
+    var x = Input.mouse.x;
+    var y = Input.mouse.y;
+    var select = (Input.mouse.buttons[0] == true);
 
     var g = framebuffer.g2;
     g.begin();
