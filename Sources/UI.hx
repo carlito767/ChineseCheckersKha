@@ -8,8 +8,6 @@ import kha.System;
 
 import Board.Player;
 import Board.Tile;
-import Game.HEIGHT;
-import Game.WIDTH;
 import Mui;
 import Mui.MuiEval;
 import Mui.MuiObject;
@@ -78,8 +76,13 @@ typedef UIWindow = {
 class UI extends Mui {
   public var g:Graphics;
 
-  public function new() {
+  static var WIDTH:Int;
+  static var HEIGHT:Int;
+
+  public function new(width:Int, height:Int) {
     super();
+    WIDTH = width;
+    HEIGHT = height;
   }
 
   //
@@ -181,7 +184,7 @@ class UI extends Mui {
     var eval:MuiEval = evaluate(object);
 
     g.color = Color.White;
-    g.drawImage(object.image, object.x, object.y);
+    g.drawScaledImage(object.image, object.x, object.y, WIDTH, HEIGHT);
 
     return eval;
   }

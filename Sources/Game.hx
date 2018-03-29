@@ -20,7 +20,7 @@ class Game {
   static public inline var HEIGHT = 600;
 
   var mouse:Mouse = new Mouse();
-  var ui:UI = new UI();
+  var ui:UI = new UI(WIDTH, HEIGHT);
 
   var screen:String;
 
