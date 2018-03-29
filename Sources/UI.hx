@@ -4,13 +4,14 @@ import kha.Font;
 import kha.Image;
 import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
-import kha.System;
 
 import Board.Player;
 import Board.Tile;
 import Mui;
 import Mui.MuiEval;
 import Mui.MuiObject;
+import Scaling;
+import Scaling.ScalingData;
 
 //
 // Components
@@ -74,15 +75,28 @@ typedef UIWindow = {
 //
 
 class UI extends Mui {
-  public var g:Graphics;
+  var g:Graphics;
+  var sd:ScalingData;
 
-  static var WIDTH:Int;
-  static var HEIGHT:Int;
-
-  public function new(width:Int, height:Int) {
+  public function new() {
     super();
-    WIDTH = width;
-    HEIGHT = height;
+  }
+
+  // TODO: should be done in begin() function
+  public function scale(graphics:Graphics, gameWidth:Int, gameHeight) {
+    g = graphics;
+    sd = Scaling.scaling(gameWidth, gameHeight);
+    g.scissor(Std.int(sd.dx), Std.int(sd.dy), Std.int(gameWidth * sd.scale), Std.int(gameHeight * sd.scale));
+  }
+
+  override function end() {
+    g.disableScissor();
+    super.end();
+  }
+
+  override function evaluate<T:(MuiObject)>(object:T):MuiEval {
+    Scaling.scaleObject(sd, object);
+    return super.evaluate(object);
   }
 
   //
@@ -90,7 +104,7 @@ class UI extends Mui {
   //
 
   static public function dimensions(window:UIWindow):Dimensions {
-    var dy = (window.title == null) ? 0 : HEIGHT * 0.07;
+    var dy = (window.title == null) ? 0 : window.h * 0.2;
     var margin = window.w * 0.05;
     var width = window.w - margin * 2;
     var height = window.h - dy - margin * 2;
@@ -184,7 +198,7 @@ class UI extends Mui {
     var eval:MuiEval = evaluate(object);
 
     g.color = Color.White;
-    g.drawScaledImage(object.image, object.x, object.y, WIDTH, HEIGHT);
+    g.drawScaledImage(object.image, object.x, object.y, object.w, object.h);
 
     return eval;
   }
@@ -274,7 +288,7 @@ class UI extends Mui {
 
     g.color = Color.White;
     g.font = Assets.fonts.BatikGangster;
-    g.fontSize = Std.int(HEIGHT * 0.167);
+    g.fontSize = Std.int(object.h);
     g.drawString(object.text, object.x, object.y);
 
     return eval;
@@ -289,13 +303,13 @@ class UI extends Mui {
 
     background(object);
     if (object.title != null) {
-      var wh = HEIGHT * 0.07;
-      var margin = wh * 0.15;
-      var title:MuiObject = { x:object.x + margin, y:object.y + margin, w:object.w - margin * 2, h:wh - margin * 2 };
+      var h = object.h * 0.2;
+      var margin = h * 0.15;
+      var title:MuiObject = { x:object.x + margin, y:object.y + margin, w:object.w - margin * 2, h:h - margin * 2 };
       g.color = Color.Purple;
       g.fillRect(title.x, title.y, title.w, title.h);
       g.font = Assets.fonts.StickRice;
-      g.fontSize = Std.int(wh * 0.7);
+      g.fontSize = Std.int(h * 0.7);
       var coordinates = centerText(object.title, title);
       g.color = Color.White;
       g.drawString(object.title, coordinates.x, coordinates.y);

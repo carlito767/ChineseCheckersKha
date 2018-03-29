@@ -20,7 +20,7 @@ class Game {
   static public inline var WIDTH = 800;
   static public inline var HEIGHT = 600;
 
-  var ui:UI = new UI(WIDTH, HEIGHT);
+  var ui:UI = new UI();
 
   var screen:String;
 
@@ -57,7 +57,7 @@ class Game {
     var g = framebuffer.g2;
     g.begin();
     ui.begin(x, y, select);
-    ui.g = g;
+    ui.scale(g, WIDTH, HEIGHT);
 
     renderScreen();
 
@@ -89,10 +89,10 @@ class Game {
   function renderScreen() {
     switch screen {
     case 'title':
-      ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:0, h:0 });
+      ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:WIDTH, h:HEIGHT, disabled:true });
 
-      ui.title({ text:tr('title1'), x:WIDTH * 0.45, y:HEIGHT * 0.13, w:0, h:0 });
-      ui.title({ text:tr('title2'), x:WIDTH * 0.48, y:HEIGHT * 0.3, w:0, h:0 });
+      ui.title({ text:tr('title1'), x:WIDTH * 0.45, y:HEIGHT * 0.13, w:0, h:HEIGHT * 0.167, disabled:true });
+      ui.title({ text:tr('title2'), x:WIDTH * 0.48, y:HEIGHT * 0.3, w:0, h:HEIGHT * 0.167, disabled:true });
 
       if (ui.button({ text:tr('newGame'), x:WIDTH * 0.63, y:HEIGHT * 0.58, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
         screen = 'play';
@@ -107,7 +107,7 @@ class Game {
         state.ready = true;
       }
 
-      ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:0, h:0 });
+      ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:WIDTH, h:HEIGHT, disabled:true });
 
       // Board
       var radius = HEIGHT * 0.027;
