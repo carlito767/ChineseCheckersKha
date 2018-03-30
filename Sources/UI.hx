@@ -76,6 +76,8 @@ typedef UIWindow = {
 //
 
 class UI extends Mui {
+  static public var showBoundsRectangles = false;
+
   var g:Graphics;
   var sd:ScalingData;
 
@@ -183,7 +185,7 @@ class UI extends Mui {
     var coordinates = centerText(object.text, object);
     g.drawString(object.text, coordinates.x, coordinates.y);
 
-    if (Main.DEVMODE) {
+    if (showBoundsRectangles) {
       g.color = Color.Green;
       g.drawRect(coordinates.x, coordinates.y, g.font.width(g.fontSize, object.text), g.font.height(g.fontSize));
     }
@@ -272,7 +274,7 @@ class UI extends Mui {
       g.drawCircle(cx, cy, radius * 1.15, 2);
     }
 
-    if (Main.DEVMODE) {
+    if (showBoundsRectangles) {
       g.color = Color.Green;
       g.drawRect(object.x, object.y, object.w, object.h);
     }

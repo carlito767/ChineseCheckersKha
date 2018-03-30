@@ -16,9 +16,6 @@ import Game;
 import Loader;
 
 class Main {
-  // Developer Mode
-  static public var DEVMODE = false;
-
   static public function main() {
     // https://github.com/Kode/Kha/issues/94
     #if kha_html5

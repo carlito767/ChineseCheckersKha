@@ -42,10 +42,6 @@ class Game {
   }
 
   public function update() {
-    if (Input.keyPressed(KeyCode.Space)) {
-      Main.DEVMODE = !Main.DEVMODE;
-      trace('Developer Mode: ${Main.DEVMODE}');
-    }
     updateScreen();
   }
 
@@ -65,8 +61,12 @@ class Game {
   }
 
   function updateScreen() {
-    if (!Main.DEVMODE) {
-      return;
+    #if kha_html5
+    if (Input.keyPressed(KeyCode.L)) {
+      language = (language == 'en') ? 'fr' : 'en';
+    }
+    else if (Input.keyPressed(KeyCode.Decimal)) {
+      UI.showBoundsRectangles = !UI.showBoundsRectangles;
     }
 
     switch screen {
@@ -83,6 +83,7 @@ class Game {
         }
       }
     }
+    #end
   }
 
   function renderScreen() {
