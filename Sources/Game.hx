@@ -46,16 +46,13 @@ class Game {
   }
 
   public function render(framebuffer:Framebuffer) {
+    var g = framebuffer.g2;
     var x = Input.mouse.x;
     var y = Input.mouse.y;
     var select = (Input.mouse.buttons[0] == true);
-
-    var g = framebuffer.g2;
     g.begin();
     ui.preRender(g, WIDTH, HEIGHT, { x:x, y:y, select:select });
-
     renderScreen();
-
     ui.postRender();
     g.end();
   }
