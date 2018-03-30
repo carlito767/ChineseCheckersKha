@@ -1,4 +1,3 @@
-// TODO: Full screen mode
 // TODO: Saveslots
 // TODO: UI refresh
 // TODO: Android target
@@ -21,9 +20,16 @@ class Main {
   static public var DEVMODE = false;
 
   static public function main() {
+    // https://github.com/Kode/Kha/issues/94
     #if kha_html5
+    document.documentElement.style.padding = '0';
+    document.documentElement.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.margin = '0';
+    var canvas = cast(document.getElementById('khanvas'), CanvasElement);
+    canvas.style.display = 'block';
+
     var resize = function() {
-      var canvas = cast(document.getElementById('khanvas'), CanvasElement);
       canvas.width = Std.int(window.innerWidth * window.devicePixelRatio);
       canvas.height = Std.int(window.innerHeight * window.devicePixelRatio);
       canvas.style.width = document.documentElement.clientWidth + 'px';
