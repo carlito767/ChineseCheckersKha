@@ -24,7 +24,7 @@ class Main {
     document.body.style.padding = '0';
     document.body.style.margin = '0';
     var canvas = cast(document.getElementById('khanvas'), CanvasElement);
-    canvas.style.display = 'block';
+    canvas.style.verticalAlign = 'middle';
 
     var resize = function() {
       canvas.width = Std.int(window.innerWidth * window.devicePixelRatio);
