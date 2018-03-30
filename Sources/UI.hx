@@ -4,6 +4,7 @@ import kha.Font;
 import kha.Image;
 import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
+import kha.System;
 
 import Board.Player;
 import Board.Tile;
@@ -11,12 +12,6 @@ import Mui;
 import Mui.MuiEval;
 import Mui.MuiInput;
 import Mui.MuiObject;
-import Scaling;
-import Scaling.ScalingData;
-
-//
-// Components
-//
 
 typedef Coordinates = {
   var x:Float;
@@ -32,6 +27,16 @@ typedef Dimensions = {
   var top:Float;
   var bottom:Float;
 }
+
+typedef Scaling = {
+  var scale:Float;
+  var dx:Float;
+  var dy:Float;
+}
+
+//
+// Components
+//
 
 typedef UIButton = {
   > MuiObject,
@@ -79,7 +84,7 @@ class UI extends Mui {
   static public var showBoundsRectangles = false;
 
   var g:Graphics;
-  var sd:ScalingData;
+  var scaling:Scaling;
 
   public function new() {
     super();
@@ -87,8 +92,8 @@ class UI extends Mui {
 
   public function preRender(graphics:Graphics, gameWidth:Int, gameHeight:Int, input:MuiInput) {
     g = graphics;
-    sd = Scaling.scaling(gameWidth, gameHeight);
-    g.scissor(Std.int(sd.dx), Std.int(sd.dy), Std.int(gameWidth * sd.scale), Std.int(gameHeight * sd.scale));
+    scale(gameWidth, gameHeight);
+    g.scissor(Std.int(scaling.dx), Std.int(scaling.dy), Std.int(gameWidth * scaling.scale), Std.int(gameHeight * scaling.scale));
     begin(input);
   }
 
@@ -98,8 +103,35 @@ class UI extends Mui {
   }
 
   override function evaluate<T:(MuiObject)>(object:T):MuiEval {
-    Scaling.scaleObject(sd, object);
+    scaleObject(object);
     return super.evaluate(object);
+  }
+
+  //
+  // Scaling
+  //
+
+  function scale(gameWidth:Int, gameHeight:Int) {
+    var width = System.windowWidth();
+    var height = System.windowHeight();
+
+    var gameAspectRatio = gameWidth / gameHeight;
+    var screenAspectRatio = width / height;
+    var scaleHorizontal = width / gameWidth;
+    var scaleVertical = height / gameHeight;
+
+    var scale = (gameAspectRatio > screenAspectRatio) ? scaleHorizontal : scaleVertical;
+    var dx = (width - (gameWidth * scale)) * 0.5;
+    var dy = (height - (gameHeight * scale)) * 0.5;
+
+    scaling = { scale:scale, dx:dx, dy:dy };
+  }
+
+  function scaleObject(object:MuiObject) {
+    object.x = object.x * scaling.scale + scaling.dx;
+    object.y = object.y * scaling.scale + scaling.dy;
+    object.w = object.w * scaling.scale;
+    object.h = object.h * scaling.scale;
   }
 
   //
