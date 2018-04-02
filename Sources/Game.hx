@@ -9,16 +9,25 @@ import Board.Tile;
 import Board.Sequence;
 import Board.State;
 import Input;
+import Storage;
+import Storage.StorageData;
 import Translations.language;
 import Translations.tr;
 import UI;
 import UI.Dimensions;
 import UI.UIWindow;
 
+typedef Settings = {
+  > StorageData,
+  var language:String;
+}
+
 class Game {
   static public inline var TITLE = 'ChineseCheckersKha';
   static public inline var WIDTH = 800;
   static public inline var HEIGHT = 600;
+
+  var settings:Settings;
 
   var ui:UI = new UI();
 
@@ -35,8 +44,8 @@ class Game {
   var selectedTile:Null<Tile>;
 
   public function new() {
+    loadSettings();
     Input.init();
-    language = 'en';
     screen = 'title';
     sequenceIndex = null;
   }
@@ -57,10 +66,32 @@ class Game {
     g.end();
   }
 
+  //
+  // Settings
+  //
+
+  function loadSettings() {
+    settings = Storage.read('settings', {
+      version:1,
+      language:'en',
+    });
+    language = settings.language;
+  }
+
+  function saveSettings() {
+    settings.language = language;
+    Storage.save('settings', settings);
+  }
+
+  //
+  // Update
+  //
+
   function updateScreen() {
     #if kha_html5
     if (Input.keyPressed(KeyCode.L)) {
       language = (language == 'en') ? 'fr' : 'en';
+      saveSettings();
     }
     else if (Input.keyPressed(KeyCode.Decimal)) {
       UI.showBoundsRectangles = !UI.showBoundsRectangles;
@@ -83,6 +114,10 @@ class Game {
     #end
   }
 
+  //
+  // Render
+  //
+
   function renderScreen() {
     switch screen {
     case 'title':
@@ -96,6 +131,7 @@ class Game {
       }
       if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH * 0.63, y:HEIGHT * 0.7, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
         language = (language == 'en') ? 'fr' : 'en';
+        saveSettings();
       }
     case 'play':
       // Auto start if there is only one sequence
