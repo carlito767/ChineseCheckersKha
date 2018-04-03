@@ -1,9 +1,5 @@
-// TODO: Saveslots
 // TODO: UI refresh
-// TODO: Android target
-// TODO: Windows target
 // TODO: AI
-// TODO: Online
 
 #if kha_html5
 import js.html.CanvasElement;
