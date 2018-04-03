@@ -47,25 +47,6 @@ typedef RawPlayer = {
   var color:Color;
 }
 
-#if debug
-class ChineseCheckers {
-  static public var board(default, null):Array<String> = [
-    '  2  ',
-    ' * * ',
-    '1 * 3',
-  ];
-
-  static public var players(default, null):Array<RawPlayer> = [
-    { home:2, color:Color.Black },
-    { home:3, color:Color.Red },
-    { home:1, color:Color.fromBytes(  0, 128,   0) }, // green
-  ];
-
-  static public var sequences(default, null):Array<Sequence> = [
-    [ 1, 2, 3 ],
-  ];
-}
-#else
 class ChineseCheckers {
   static public var board(default, null):Array<String> = [
     '            4            ',
@@ -103,7 +84,6 @@ class ChineseCheckers {
     [ 1, 2, 3, 4, 5, 6 ],
   ];
 }
-#end
 
 //
 // Board
