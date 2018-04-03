@@ -9,21 +9,19 @@ Chinese Checkers game in [Haxe](https://haxe.org/) with [Kha](http://kha.tech/)
 git clone --recursive https://github.com/carlito767/ChineseCheckersKha.git
 ```
 * Install [Node.js](https://nodejs.org/) (minimum version: 8.9) and add it to PATH
-* Build the game:
+* Build the game, using command prompt in game folder:
 
-**HTML5**
->Using command prompt in game folder, build the HTML5 target:
->```
->node Kha/make html5
->```
-* Launch the game:
+```
+node Kha/make html5
+```
 
-**HTML5**
->Using command prompt in game folder, run local http server:
->```
->node Kha/make --server
->```
->Then launch a web browser at this address: http://localhost:8080/
+* Launch the game, using command prompt in game folder:
+
+```
+node Kha/make --server
+```
+
+* Launch a web browser at this address: http://localhost:8080/
 
 ## Credits
 
