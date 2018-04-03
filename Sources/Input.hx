@@ -31,6 +31,10 @@ class Input {
   // Keyboard
   //
 
+  static public function keyDown(key:KeyCode):Bool {
+    return (keyboard.keys[key] == true);
+  }
+
   static public function keyPressed(key:KeyCode, ?repeat:Bool = false):Bool {
     if (!repeat && keyboard.read[key] == true) {
       return false;

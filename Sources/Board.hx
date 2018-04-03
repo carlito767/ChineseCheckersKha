@@ -1,5 +1,7 @@
 import kha.Color;
 
+import Storage.StorageData;
+
 //
 // State
 //
@@ -25,6 +27,7 @@ typedef Tile = {
 typedef Sequence = Array<Int>;
 
 typedef State = {
+  > StorageData,
   var ready:Bool;
   var width:Int;
   var height:Int;
@@ -107,6 +110,8 @@ class ChineseCheckers {
 //
 
 class Board {
+  static inline var VERSION = 1;
+
   static public function create(sequenceIndex:Null<Int>):State {
     var width:Int = ChineseCheckers.board[0].length;
     var height:Int = ChineseCheckers.board.length;
@@ -150,6 +155,7 @@ class Board {
     }
 
     return {
+      version:VERSION,
       ready:false,
       width:width,
       height:height,

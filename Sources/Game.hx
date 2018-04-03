@@ -80,7 +80,7 @@ class Game {
 
   function saveSettings() {
     settings.language = language;
-    Storage.save('settings', settings);
+    Storage.write('settings', settings);
   }
 
   //
@@ -95,6 +95,34 @@ class Game {
     }
     else if (Input.keyPressed(KeyCode.Decimal)) {
       UI.showBoundsRectangles = !UI.showBoundsRectangles;
+    }
+    else if (Input.keyPressed(KeyCode.Numpad1) || Input.keyPressed(KeyCode.Numpad2) || Input.keyPressed(KeyCode.Numpad3)) {
+      var save = 1;
+      if (Input.keyDown(KeyCode.Numpad2)) {
+        save = 2;
+      }
+      else if (Input.keyDown(KeyCode.Numpad3)) {
+        save = 3;
+      }
+      var filename = 'gamesave$save';
+
+      if (Input.keyDown(KeyCode.Control)) {
+        // Quick Save
+        if (state != null && state.ready == true) {
+          trace('Quick Save $save');
+          Storage.write(filename, state);
+        }
+      }
+      else {
+        // Quick Load
+        var gamesave:State = Storage.read(filename);
+        if (gamesave != null && gamesave.ready == true) {
+          trace('Quick Load $save');
+          state = gamesave;
+          screen = 'play';
+          return;
+        }
+      }
     }
 
     switch screen {
