@@ -162,12 +162,6 @@ class Game {
         saveSettings();
       }
     case 'play':
-      // Auto start if there is only one sequence
-      if (sequenceIndex == null && ChineseCheckers.sequences.length == 1) {
-        sequenceIndex = 0;
-        state.ready = true;
-      }
-
       ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:WIDTH, h:HEIGHT, disabled:true });
 
       // Board
