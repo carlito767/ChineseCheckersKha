@@ -2,6 +2,7 @@ import kha.Assets;
 import kha.Framebuffer;
 import kha.input.KeyCode;
 
+import AI;
 import Board;
 import Board.ChineseCheckers;
 import Board.Player;
@@ -46,6 +47,8 @@ class Game {
 
   // 0: None
   // 1: Id
+  // 2: Position
+  // 3: Distance from goal
   var tileInfo:Int = 0;
 
   public function new() {
@@ -103,7 +106,7 @@ class Game {
     }
     else if (Input.keyPressed(KeyCode.Numpad0)) {
       tileInfo++;
-      if (tileInfo > 1) {
+      if (tileInfo > 3) {
         tileInfo = 0;
       }
     }
@@ -210,6 +213,11 @@ class Game {
         var info = switch tileInfo {
           case 1:
             Std.string(tile.id);
+          case 2:
+            'x:${tile.x}, y:${tile.y}';
+          case 3:
+            var distance = AI.distance(state, tile);
+            (distance == 0) ? '' : Std.string(distance);
           default:
             null;
         }

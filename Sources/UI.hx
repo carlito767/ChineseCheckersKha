@@ -315,7 +315,7 @@ class UI extends Mui {
       var color = (object.player == null) ? Color.Black : object.player.color;
       g.color = Color.fromBytes(255 - color.Rb, 255 - color.Gb, 255 - color.Bb);
       g.font = Assets.fonts.StickRice;
-      g.fontSize = Std.int(object.h * 0.7);
+      g.fontSize = (object.info.length <= 3) ? Std.int((object.h * 0.7)) : Std.int((object.h * 0.3));
       var coordinates = centerText(object.info, object);
       g.drawString(object.info, coordinates.x, coordinates.y);
     }
