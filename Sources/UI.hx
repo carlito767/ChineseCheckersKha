@@ -303,7 +303,7 @@ class UI extends Mui {
     }
     else if (object.emphasis == Selected || object.emphasis == AllowedMove) {
       g.color = Color.White;
-      g.drawCircle(cx, cy, radius * 1.15, 2);
+      g.drawCircle(cx, cy, radius, 3);
     }
 
     if (showBoundsRectangles) {
