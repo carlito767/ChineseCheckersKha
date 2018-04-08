@@ -1,11 +1,54 @@
+import Board;
+import Board.Move;
 import Board.Player;
 import Board.Tile;
 import Board.State;
 
 class AI {
-  static public function evaluate(state:State, player:Player):Int {
-    // TODO: evaluate
-    return 0;
+  static public function search(state:State, ?depth:Int = 1):Null<Move> {
+    var currentPlayer = Board.currentPlayer(state);
+    if (currentPlayer == null) {
+      return null;
+    }
+
+    var bestEvaluation:Null<Int> = null;
+    var bestMoves:Array<Move> = [];
+    for (tile in state.tiles) {
+      if (tile.piece == currentPlayer.id) {
+        var moves = Board.allowedMoves(state, tile);
+        for (move in moves) {
+          Board.move(state, tile, move);
+          var evaluation = evaluate(state, currentPlayer);
+          if (bestEvaluation == null || bestEvaluation > evaluation) {
+            bestEvaluation = evaluation;
+            bestMoves = [{ from:tile.id, to:move.id }];
+          }
+          else if (bestEvaluation == evaluation) {
+            bestMoves.push({ from:tile.id, to:move.id });
+          }
+          Board.cancelLastMove(state);
+        }
+      }
+    }
+    trace('bestEvaluation:$bestEvaluation');
+    trace('bestMoves:$bestMoves');
+    if (bestMoves.length == 0) {
+      return null;
+    }
+    var i = Math.floor(Math.random() * bestMoves.length);
+    var bestMove = bestMoves[i];
+    trace('bestMove:$bestMove');
+    return bestMove;
+  }
+
+  static function evaluate(state:State, player:Player):Int {
+    var note = 0;
+    for (tile in state.tiles) {
+      if (tile.piece == player.id) {
+        note += distance(state, tile);
+      }
+    }
+    return note;
   }
 
   static public function distance(state:State, tile:Tile):Int {

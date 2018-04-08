@@ -97,7 +97,12 @@ class Game {
 
   function updateScreen() {
     #if kha_html5
-    if (Input.keyPressed(KeyCode.L)) {
+    if (Input.keyPressed(KeyCode.A)) {
+      if (state != null && state.ready == true) {
+        AI.search(state);
+      }
+    }
+    else if (Input.keyPressed(KeyCode.L)) {
       language = (language == 'en') ? 'fr' : 'en';
       saveSettings();
     }
