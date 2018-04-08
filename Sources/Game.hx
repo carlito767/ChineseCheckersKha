@@ -125,7 +125,7 @@ class Game {
       }
       var filename = 'gamesave$save';
 
-      if (Input.keyDown(KeyCode.Control)) {
+      if (Input.keyDown(KeyCode.Alt)) {
         // Quick Save
         if (state != null && state.ready == true) {
           trace('Quick Save $save');
