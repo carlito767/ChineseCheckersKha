@@ -42,37 +42,25 @@ class AI {
   }
 
   static function evaluate(state:State, player:Player):Int {
+    var used:Array<Int> = [];
     var note = 0;
     for (tile in state.tiles) {
-      if (tile.piece == player.id) {
-        note += distance(state, tile);
+      if (tile.piece == player.id && tile.owner != player.id) {
+        for (goal in state.tiles) {
+          if (goal.owner == player.id && goal.piece != player.id && used.indexOf(goal.id) == -1) {
+            used.push(goal.id);
+            note += distance(tile, goal);
+            break;
+          }
+        }
       }
     }
     return note;
   }
 
-  static public function distance(state:State, tile:Tile):Int {
-    if (tile.piece == null || tile.piece == tile.owner) {
-      return 0;
-    }
-    var goal:Null<Int> = switch tile.piece {
-      case 1: 1;
-      case 2: 23;
-      case 3: 111;
-      case 4: 121;
-      case 5: 99;
-      case 6: 11;
-      default: null;
-    }
-    if (goal == null) {
-      return 0;
-    }
-    var destination = state.tiles[goal];
-    if (destination == null) {
-      return 0;
-    }
-    var dx = Math.abs(destination.x - tile.x);
-    var dy = Math.abs(destination.y - tile.y);
+  static function distance(from:Tile, to:Tile):Int {
+    var dx = Math.abs(to.x - from.x);
+    var dy = Math.abs(to.y - from.y);
     if (dy > dx) {
       return Std.int(dy);
     }

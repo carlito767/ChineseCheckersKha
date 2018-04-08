@@ -48,7 +48,6 @@ class Game {
   // 0: None
   // 1: Id
   // 2: Position
-  // 3: Distance from goal
   var tileInfo:Int = 0;
 
   public function new() {
@@ -220,9 +219,6 @@ class Game {
             Std.string(tile.id);
           case 2:
             'x:${tile.x}, y:${tile.y}';
-          case 3:
-            var distance = AI.distance(state, tile);
-            (distance == 0) ? '' : Std.string(distance);
           default:
             null;
         }
