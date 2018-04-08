@@ -60,10 +60,16 @@ typedef UIRank = {
   @:optional var player:Player;
 }
 
+enum UITileEmphasis {
+  None;
+  Selectable;
+  Selected;
+  AllowedMove;
+}
+
 typedef UITile = {
   > MuiObject,
-  var movable:Bool;
-  var emphasis:Bool;
+  var emphasis:UITileEmphasis;
   @:optional var player:Player;
   @:optional var info:String;
 }
@@ -286,7 +292,8 @@ class UI extends Mui {
     }
     g.color = Color.Black;
     g.drawCircle(cx, cy, radius, 2);
-    if (object.movable == true) {
+
+    if (object.emphasis == Selectable) {
       var color = Color.White;
       var duration = 2;
       var delta = ((System.time % duration) + 1) / duration;
@@ -294,8 +301,7 @@ class UI extends Mui {
       g.color = Color.fromBytes(color.Rb, color.Gb, color.Bb, Std.int(alpha * 255));
       g.drawCircle(cx, cy, radius, 3);
     }
-
-    if (object.emphasis) {
+    else if (object.emphasis == Selected || object.emphasis == AllowedMove) {
       g.color = Color.White;
       g.drawCircle(cx, cy, radius * 1.15, 2);
     }

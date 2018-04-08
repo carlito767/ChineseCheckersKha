@@ -15,6 +15,7 @@ import Translations.language;
 import Translations.tr;
 import UI;
 import UI.Dimensions;
+import UI.UITileEmphasis;
 import UI.UIWindow;
 
 typedef Settings = {
@@ -195,6 +196,16 @@ class Game {
         var ty = dy + (tile.y - 1) * distanceY;
         var allowedMove = (moves.indexOf(tile) > -1);
         var selected = (selectedTile == tile);
+        var emphasis:UITileEmphasis = None;
+        if (selected) {
+          emphasis = Selected;
+        }
+        else if (allowedMove) {
+          emphasis = AllowedMove;
+        }
+        else if (selectedTile == null && Board.allowedMoves(state, tile).length > 0) {
+          emphasis = Selectable;
+        }
         var player = (tile.piece == null) ? null : state.players[tile.piece];
         var info = switch tileInfo {
           case 1:
@@ -202,7 +213,7 @@ class Game {
           default:
             null;
         }
-        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, movable:(selectedTile == null) && Board.allowedMoves(state, tile).length > 0,emphasis:allowedMove || selected, player:player, info:info }).hit) {
+        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, info:info }).hit) {
           if (allowedMove) {
             Board.move(state, selectedTile, tile);
             selectedTile = null;
