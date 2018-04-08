@@ -62,6 +62,7 @@ typedef UIRank = {
 
 typedef UITile = {
   > MuiObject,
+  var movable:Bool;
   var emphasis:Bool;
   @:optional var player:Player;
   @:optional var info:String;
@@ -240,22 +241,6 @@ class UI extends Mui {
   }
 
   //
-  // Player
-  //
-
-  public function player(object:UIPlayer):MuiEval {
-    var eval:MuiEval = evaluate(object);
-
-    background(object, Color.fromBytes(0, 0, 0, 50));
-    var coordinates = center(object);
-    var radius = Math.min(object.w, object.h) * 0.5 * 0.7;
-    g.color = object.player.color;
-    g.fillCircle(coordinates.x, coordinates.y, radius);
-
-    return eval;
-  }
-
-  //
   // Rank
   //
 
@@ -301,6 +286,14 @@ class UI extends Mui {
     }
     g.color = Color.Black;
     g.drawCircle(cx, cy, radius, 2);
+    if (object.movable == true) {
+      var color = Color.White;
+      var duration = 2;
+      var delta = ((System.time % duration) + 1) / duration;
+      var alpha = 0.5 + 0.5 * Math.cos(delta * 2 * Math.PI);
+      g.color = Color.fromBytes(color.Rb, color.Gb, color.Bb, Std.int(alpha * 255));
+      g.drawCircle(cx, cy, radius, 3);
+    }
 
     if (object.emphasis) {
       g.color = Color.White;

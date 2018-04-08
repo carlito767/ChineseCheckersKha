@@ -202,7 +202,7 @@ class Game {
           default:
             null;
         }
-        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:allowedMove || selected, player:player, info:info }).hit) {
+        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, movable:(selectedTile == null) && Board.allowedMoves(state, tile).length > 0,emphasis:allowedMove || selected, player:player, info:info }).hit) {
           if (allowedMove) {
             Board.move(state, selectedTile, tile);
             selectedTile = null;
@@ -214,11 +214,6 @@ class Game {
             selectedTile = null;
           }
         }
-      }
-
-      // Current player
-      if (currentPlayer != null) {
-        ui.player({ x:WIDTH * 0.025, y:WIDTH * 0.025, w:WIDTH * 0.125, h:WIDTH * 0.125, player:currentPlayer });
       }
 
       if (state.ready) {
