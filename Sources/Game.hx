@@ -110,7 +110,7 @@ class Game {
     }
     else if (Input.keyPressed(KeyCode.Numpad0)) {
       tileInfo++;
-      if (tileInfo > 3) {
+      if (tileInfo > 2) {
         tileInfo = 0;
       }
     }
