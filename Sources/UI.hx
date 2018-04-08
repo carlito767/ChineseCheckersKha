@@ -290,20 +290,24 @@ class UI extends Mui {
       g.color = object.player.color;
       g.fillCircle(cx, cy, radius);
     }
-    g.color = Color.Black;
-    g.drawCircle(cx, cy, radius, 2);
 
     if (object.emphasis == Selectable) {
-      var color = Color.White;
-      var duration = 2;
+      g.color = Color.Black;
+      g.drawCircle(cx, cy, radius, radius * 0.1);
+      var duration = 2.5;
       var delta = ((System.time % duration) + 1) / duration;
       var alpha = 0.5 + 0.5 * Math.cos(delta * 2 * Math.PI);
+      var color = Color.White;
       g.color = Color.fromBytes(color.Rb, color.Gb, color.Bb, Std.int(alpha * 255));
-      g.drawCircle(cx, cy, radius, 3);
+      g.drawCircle(cx, cy, radius * 1.1, radius * 0.1);
     }
     else if (object.emphasis == Selected || object.emphasis == AllowedMove) {
       g.color = Color.White;
-      g.drawCircle(cx, cy, radius, 3);
+      g.drawCircle(cx, cy, radius * 1.1, radius * 0.1);
+    }
+    else {
+      g.color = Color.Black;
+      g.drawCircle(cx, cy, radius, radius * 0.1);
     }
 
     if (showBoundsRectangles) {
