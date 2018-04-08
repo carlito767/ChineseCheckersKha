@@ -43,6 +43,10 @@ class Game {
 
   var selectedTile:Null<Tile>;
 
+  // 0: None
+  // 1: Id
+  var tileInfo:Int = 0;
+
   public function new() {
     loadSettings();
     Input.init();
@@ -95,6 +99,12 @@ class Game {
     }
     else if (Input.keyPressed(KeyCode.Decimal)) {
       UI.showBoundsRectangles = !UI.showBoundsRectangles;
+    }
+    else if (Input.keyPressed(KeyCode.Numpad0)) {
+      tileInfo++;
+      if (tileInfo > 1) {
+        tileInfo = 0;
+      }
     }
     else if (Input.keyPressed(KeyCode.Numpad1) || Input.keyPressed(KeyCode.Numpad2) || Input.keyPressed(KeyCode.Numpad3)) {
       var save = 1;
@@ -186,7 +196,13 @@ class Game {
         var allowedMove = (moves.indexOf(tile) > -1);
         var selected = (selectedTile == tile);
         var player = (tile.piece == null) ? null : state.players[tile.piece];
-        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:allowedMove || selected, player:player }).hit) {
+        var info = switch tileInfo {
+          case 1:
+            Std.string(tile.id);
+          default:
+            null;
+        }
+        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:allowedMove || selected, player:player, info:info }).hit) {
           if (allowedMove) {
             Board.move(state, selectedTile, tile);
             selectedTile = null;

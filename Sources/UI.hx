@@ -64,6 +64,7 @@ typedef UITile = {
   > MuiObject,
   var emphasis:Bool;
   @:optional var player:Player;
+  @:optional var info:String;
 }
 
 typedef UITitle = {
@@ -311,6 +312,14 @@ class UI extends Mui {
       g.drawRect(object.x, object.y, object.w, object.h);
     }
 
+    if (object.info != null) {
+      var color = (object.player == null) ? Color.Black : object.player.color;
+      g.color = Color.fromBytes(255 - color.Rb, 255 - color.Gb, 255 - color.Bb);
+      g.font = Assets.fonts.StickRice;
+      g.fontSize = Std.int(object.h * 0.7);
+      var coordinates = centerText(object.info, object);
+      g.drawString(object.info, coordinates.x, coordinates.y);
+    }
     return eval;
   }
 
