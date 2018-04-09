@@ -294,9 +294,9 @@ class UI extends Mui {
     if (object.emphasis == Selectable) {
       g.color = Color.Black;
       g.drawCircle(cx, cy, radius, radius * 0.1);
-      var duration = 2.5;
+      var duration = 2;
       var delta = ((System.time % duration) + 1) / duration;
-      var alpha = 0.5 + 0.5 * Math.cos(delta * 2 * Math.PI);
+      var alpha = 0.7 + 0.3 * Math.cos(delta * 2 * Math.PI);
       var color = Color.White;
       g.color = Color.fromBytes(color.Rb, color.Gb, color.Bb, Std.int(alpha * 255));
       g.drawCircle(cx, cy, radius * 1.1, radius * 0.1);
