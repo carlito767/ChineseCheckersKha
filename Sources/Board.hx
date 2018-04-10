@@ -228,9 +228,9 @@ class Board {
     }
   }
 
-  static public function allowedMoves(state:State, tile:Tile):Array<Tile> {
+  static public function allowedMoves(state:State, tile:Null<Tile>):Array<Tile> {
     var moves:Array<Tile> = [];
-    if (currentPlayer(state) == null || tile.piece != currentPlayer(state).id) {
+    if (tile == null || currentPlayer(state) == null || tile.piece != currentPlayer(state).id) {
       return moves;
     }
 

@@ -41,7 +41,7 @@ class Game {
     selectedTile = null;
     return sequenceIndex = value;
   }
-  var state:Null<State>;
+  var state:State;
 
   var selectedTile:Null<Tile>;
 
@@ -97,7 +97,7 @@ class Game {
   function updateScreen() {
     #if kha_html5
     if (Input.keyPressed(KeyCode.A)) {
-      if (state != null && state.ready == true) {
+      if (state.ready == true) {
         AI.search(state);
       }
     }
@@ -126,7 +126,7 @@ class Game {
 
       if (Input.keyDown(KeyCode.Alt)) {
         // Quick Save
-        if (state != null && state.ready == true) {
+        if (state.ready == true) {
           trace('Quick Save $save');
           Storage.write(filename, state);
         }
@@ -190,14 +190,7 @@ class Game {
       var boardHeight = (state.height - 1) * distanceY + radius * 2;
       var dx = (WIDTH - boardWidth) * 0.5;
       var dy = (HEIGHT - boardHeight) * 0.5;
-      var currentPlayer:Null<Player> = null;
-      var moves:Array<Tile> = [];
-      if (state != null) {
-        currentPlayer = Board.currentPlayer(state);
-        if (selectedTile != null) {
-          moves = Board.allowedMoves(state, selectedTile);
-        }
-      }
+      var moves = Board.allowedMoves(state, selectedTile);
       for (tile in state.tiles) {
         var tx = dx + (tile.x - 1) * distanceX;
         var ty = dy + (tile.y - 1) * distanceY;
