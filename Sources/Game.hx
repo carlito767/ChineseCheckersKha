@@ -10,6 +10,7 @@ import Board.Tile;
 import Board.Sequence;
 import Board.State;
 import Input;
+import Sequencer;
 import Storage;
 import Storage.StorageData;
 import Translations.language;
@@ -28,6 +29,8 @@ class Game {
   static public inline var TITLE = 'ChineseCheckersKha';
   static public inline var WIDTH = 800;
   static public inline var HEIGHT = 600;
+
+  var sequencer:Sequencer = new Sequencer();
 
   var settings:Settings;
 
@@ -55,6 +58,7 @@ class Game {
   }
 
   public function update() {
+    sequencer.update();
     updateScreen();
   }
 
