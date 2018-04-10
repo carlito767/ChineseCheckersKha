@@ -70,8 +70,8 @@ enum UITileEmphasis {
 typedef UITile = {
   > MuiObject,
   var emphasis:UITileEmphasis;
+  @:optional var id:String;
   @:optional var player:Player;
-  @:optional var info:String;
 }
 
 typedef UITitle = {
@@ -315,13 +315,13 @@ class UI extends Mui {
       g.drawRect(object.x, object.y, object.w, object.h);
     }
 
-    if (object.info != null) {
+    if (object.id != null) {
       var color = (object.player == null) ? Color.Black : object.player.color;
       g.color = Color.fromBytes(255 - color.Rb, 255 - color.Gb, 255 - color.Bb);
       g.font = Assets.fonts.StickRice;
-      g.fontSize = (object.info.length <= 3) ? Std.int((object.h * 0.7)) : Std.int((object.h * 0.3));
-      var coordinates = centerText(object.info, object);
-      g.drawString(object.info, coordinates.x, coordinates.y);
+      g.fontSize = Std.int(object.h * 0.7);
+      var coordinates = centerText(object.id, object);
+      g.drawString(object.id, coordinates.x, coordinates.y);
     }
     return eval;
   }

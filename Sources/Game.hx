@@ -45,10 +45,7 @@ class Game {
 
   var selectedTile:Null<Tile>;
 
-  // 0: None
-  // 1: Id
-  // 2: Position
-  var tileInfo:Int = 0;
+  var showTileId:Bool = false;
 
   public function new() {
     loadSettings();
@@ -103,10 +100,7 @@ class Game {
       UI.showBoundsRectangles = !UI.showBoundsRectangles;
     }
     else if (Input.keyPressed(KeyCode.Numpad0)) {
-      tileInfo++;
-      if (tileInfo > 2) {
-        tileInfo = 0;
-      }
+      showTileId = !showTileId;
     }
     else if (Input.keyPressed(KeyCode.Numpad1) || Input.keyPressed(KeyCode.Numpad2) || Input.keyPressed(KeyCode.Numpad3)) {
       var save = 1;
@@ -200,15 +194,7 @@ class Game {
           emphasis = Selectable;
         }
         var player = (tile.piece == null) ? null : state.players[tile.piece];
-        var info = switch tileInfo {
-          case 1:
-            Std.string(tile.id);
-          case 2:
-            'x:${tile.x}, y:${tile.y}';
-          default:
-            null;
-        }
-        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, info:info }).hit) {
+        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(showTileId) ? Std.string(tile.id) : null }).hit) {
           if (allowedMove) {
             Board.move(state, selectedTile, tile);
             selectedTile = null;
