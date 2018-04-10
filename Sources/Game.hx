@@ -95,13 +95,7 @@ class Game {
   //
 
   function updateScreen() {
-    #if kha_html5
-    if (Input.keyPressed(KeyCode.A)) {
-      if (state.ready == true) {
-        AI.search(state);
-      }
-    }
-    else if (Input.keyPressed(KeyCode.L)) {
+    if (Input.keyPressed(KeyCode.L)) {
       language = (language == 'en') ? 'fr' : 'en';
       saveSettings();
     }
@@ -157,7 +151,6 @@ class Game {
         }
       }
     }
-    #end
   }
 
   //
@@ -248,6 +241,11 @@ class Game {
               w:dimensions.width,
               h:h,
             });
+          }
+        }
+        else {
+          if (ui.button({ text:tr('ai'), x:WIDTH * 0.025, y:WIDTH * 0.025, w:WIDTH * 0.125, h:HEIGHT * 0.067 }).hit) {
+            AI.search(state);
           }
         }
       }
