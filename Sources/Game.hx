@@ -127,7 +127,7 @@ class Game {
       }
       else {
         // Quick Load
-        var gamesave:State = Storage.read(filename);
+        var gamesave:Null<State> = Storage.read(filename);
         if (gamesave != null && gamesave.ready == true) {
           trace('Quick Load $save');
           state = gamesave;
