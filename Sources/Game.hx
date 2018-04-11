@@ -30,7 +30,7 @@ class Game {
   static public inline var WIDTH = 800;
   static public inline var HEIGHT = 600;
 
-  var sequencer:Sequencer = new Sequencer();
+  var sequencer:Sequencer<Game> = new Sequencer();
 
   var settings:Settings;
 
@@ -58,7 +58,7 @@ class Game {
   }
 
   public function update() {
-    sequencer.update();
+    sequencer.update(this);
     updateScreen();
   }
 
@@ -89,6 +89,23 @@ class Game {
   function saveSettings() {
     settings.language = language;
     Storage.write('settings', settings);
+  }
+
+  //
+  // Sequencing
+  //
+
+  @:allow(Game)
+  function selectTile(game:Game, id:Int):Bool {
+    var tile = game.state.tiles[id];
+    game.selectedTile = tile;
+    return true;
+  }
+
+  @:allow(Game)
+  function unselectTile(game:Game, ?nothing:Dynamic):Bool {
+    game.selectedTile = null;
+    return true;
   }
 
   //
@@ -235,7 +252,12 @@ class Game {
         }
         else {
           if (ui.button({ text:tr('ai'), x:WIDTH * 0.025, y:WIDTH * 0.025, w:WIDTH * 0.125, h:HEIGHT * 0.067 }).hit) {
-            AI.search(state);
+            var move = AI.search(state);
+            if (move != null) {
+              sequencer.push(selectTile, move.from, 1);
+              sequencer.push(selectTile, move.to, 1);
+              sequencer.push(unselectTile, null, 1);
+            }
           }
         }
       }
