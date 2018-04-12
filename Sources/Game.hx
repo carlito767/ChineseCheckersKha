@@ -30,6 +30,8 @@ class Game {
   static public inline var WIDTH = 800;
   static public inline var HEIGHT = 600;
 
+  var aiMode:Bool = false;
+
   var sequencer:Sequencer<Game> = new Sequencer();
 
   var settings:Settings;
@@ -40,6 +42,7 @@ class Game {
 
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
+    aiMode = false;
     state = Board.create(value);
     selectedTile = null;
     return sequenceIndex = value;
@@ -98,13 +101,13 @@ class Game {
   @:allow(Game)
   function selectTile(game:Game, id:Int):Bool {
     var tile = game.state.tiles[id];
-    game.selectedTile = tile;
-    return true;
-  }
-
-  @:allow(Game)
-  function unselectTile(game:Game, ?nothing:Dynamic):Bool {
-    game.selectedTile = null;
+    if (game.selectedTile == null) {
+      game.selectedTile = tile;
+    }
+    else {
+      Board.move(game.state, game.selectedTile, tile);
+      game.selectedTile = null;
+    }
     return true;
   }
 
@@ -116,6 +119,9 @@ class Game {
     if (Input.keyPressed(KeyCode.L)) {
       language = (language == 'en') ? 'fr' : 'en';
       saveSettings();
+    }
+    else if (Input.keyPressed(KeyCode.S)) {
+      trace('state:$state');
     }
     else if (Input.keyPressed(KeyCode.Decimal)) {
       UI.showBoundsRectangles = !UI.showBoundsRectangles;
@@ -145,6 +151,7 @@ class Game {
         var gamesave:Null<State> = Storage.read(filename);
         if (gamesave != null && gamesave.ready == true) {
           trace('Quick Load $save');
+          aiMode = false;
           state = gamesave;
           screen = 'play';
           return;
@@ -208,14 +215,14 @@ class Game {
         if (selected) {
           emphasis = Selected;
         }
-        else if (allowedMove) {
+        else if (!aiMode && allowedMove) {
           emphasis = AllowedMove;
         }
-        else if (selectedTile == null && Board.allowedMoves(state, tile).length > 0) {
+        else if (!aiMode && selectedTile == null && Board.allowedMoves(state, tile).length > 0) {
           emphasis = Selectable;
         }
         var player = (tile.piece == null) ? null : state.players[tile.piece];
-        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(showTileId) ? Std.string(tile.id) : null }).hit) {
+        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(showTileId) ? Std.string(tile.id) : null, disabled:aiMode }).hit) {
           if (allowedMove) {
             Board.move(state, selectedTile, tile);
             selectedTile = null;
@@ -252,11 +259,14 @@ class Game {
         }
         else {
           if (ui.button({ text:tr('ai'), x:WIDTH * 0.025, y:WIDTH * 0.025, w:WIDTH * 0.125, h:HEIGHT * 0.067 }).hit) {
+            aiMode = !aiMode;
+            trace('AI Mode: $aiMode');
+          }
+          if (aiMode && !sequencer.busy()) {
             var move = AI.search(state);
             if (move != null) {
               sequencer.push(selectTile, move.from, 1);
               sequencer.push(selectTile, move.to, 1);
-              sequencer.push(unselectTile, null, 1);
             }
           }
         }
