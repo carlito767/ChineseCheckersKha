@@ -15,9 +15,10 @@ class AI {
     var bestMoves:Array<Move> = [];
     for (tile in state.tiles) {
       if (tile.piece == currentPlayer.id) {
-        var moves = Board.allowedMoves(state, tile);
+        Board.selectTile(state, tile);
+        var moves = Board.allowedMoves(state);
         for (move in moves) {
-          Board.move(state, tile, move);
+          Board.selectTile(state, move);
           var evaluation = evaluate(state, currentPlayer);
           if (bestEvaluation == null || bestEvaluation > evaluation) {
             bestEvaluation = evaluation;

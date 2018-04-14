@@ -33,6 +33,7 @@ typedef State = {
   var tiles:Map<Int, Tile>;
   var moves:Array<Move>;
   var standings:Array<Int>;
+  var selectedTile:Null<Tile>;
 }
 
 //
@@ -87,7 +88,11 @@ class ChineseCheckers {
 //
 
 class Board {
-  static public function create(sequenceIndex:Null<Int>):State {
+  static public function sequences():Array<Sequence> {
+    return ChineseCheckers.sequences;
+  }
+
+  static public function create(?sequenceIndex:Int):State {
     var width:Int = ChineseCheckers.board[0].length;
     var height:Int = ChineseCheckers.board.length;
     var sequence:Sequence = [];
@@ -95,6 +100,7 @@ class Board {
     var tiles:Map<Int, Tile> = new Map<Int, Tile>();
     var moves:Array<Move> = [];
     var standings:Array<Int> = [];
+    var selectedTile:Null<Tile> = null;
 
     // Players
     var owners = new Map<Int, Int>();
@@ -138,6 +144,7 @@ class Board {
       tiles:tiles,
       moves:moves,
       standings:standings,
+      selectedTile:selectedTile,
     }
   }
 
@@ -222,11 +229,8 @@ class Board {
     }
   }
 
-  static public function allowedMoves(state:State, tile:Null<Tile>):Array<Tile> {
+  static function allowedMovesForTile(state:State, tile:Tile) {
     var moves:Array<Tile> = [];
-    if (tile == null || currentPlayer(state) == null || tile.piece != currentPlayer(state).id) {
-      return moves;
-    }
 
     jumps(state, tile, moves);
     for (neighbor in neighbors(state, tile)) {
@@ -236,12 +240,11 @@ class Board {
     }
 
     // Once a peg has reached his home, it may not leave it
-    var currentPlayerId = currentPlayer(state).id;
-    if (tile.owner == currentPlayerId) {
+    if (tile.piece == tile.owner) {
       var i = 0;
       while (i < moves.length) {
         var moveTile = moves[i];
-        if (moveTile.owner != currentPlayerId) {
+        if (moveTile.owner != tile.owner) {
           moves.splice(i, 1);
         }
         else {
@@ -253,17 +256,56 @@ class Board {
     return moves;
   }
 
+  static public function allowedMoves(state:State):Array<Tile> {
+    var moves:Array<Tile> = [];
+    if (!state.ready || isOver(state)) {
+      return moves;
+    }
+
+    if (state.selectedTile == null) {
+      var player = currentPlayer(state); 
+      for (tile in state.tiles) {
+        if (tile.piece == player.id) {
+          if (allowedMovesForTile(state, tile).length > 0) {
+            moves.push(tile);
+          }
+        }
+      }
+      return moves;
+    }
+
+    return allowedMovesForTile(state, state.selectedTile);
+  }
+
   //
   // Movements
   //
 
-  static public function move(state:State, from:Tile, to:Tile):Bool {
-    if (allowedMoves(state, from).indexOf(to) == -1) {
-      return false;
+  static public function selectTile(state:State, ?tile:Tile) {
+    if (tile == null || tile == state.selectedTile) {
+      state.selectedTile = null;
+      return;
     }
+
+    if (state.selectedTile == null) {
+      state.selectedTile = tile;
+      return;
+    }
+
+    // Move
+    var from = state.selectedTile;
+    var to = tile;
+    if (allowedMoves(state).indexOf(to) == -1) {
+      if (allowedMovesForTile(state, to).length > 0) {
+        state.selectedTile = to;
+      }
+      return;
+    }
+
     to.piece = from.piece;
     from.piece = null;
     state.moves.push({from:from.id, to:to.id});
+    state.selectedTile = null;
 
     // Victory?
     var victory = true;
@@ -284,11 +326,18 @@ class Board {
         }
       }
     }
-
-    return true;
   }
 
   static public function cancelLastMove(state:State) {
+    if (!state.ready || isOver(state)) {
+      return;
+    }
+
+    if (state.selectedTile != null) {
+      state.selectedTile = null;
+      return;
+    }
+
     if (state.moves.length == 0) {
       return;
     }

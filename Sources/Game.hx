@@ -4,7 +4,6 @@ import kha.input.KeyCode;
 
 import AI;
 import Board;
-import Board.ChineseCheckers;
 import Board.Player;
 import Board.Tile;
 import Board.Sequence;
@@ -30,7 +29,7 @@ class Game {
 
   var aiMode:Bool = false;
 
-  var sequencer:Sequencer<Game> = new Sequencer();
+  var sequencer:Sequencer<State> = new Sequencer();
 
   var settings:Settings;
 
@@ -42,12 +41,9 @@ class Game {
   function set_sequenceIndex(value) {
     aiMode = false;
     state = Board.create(value);
-    selectedTile = null;
     return sequenceIndex = value;
   }
   var state:State;
-
-  var selectedTile:Null<Tile>;
 
   var showTileId:Bool = false;
 
@@ -59,7 +55,7 @@ class Game {
   }
 
   public function update() {
-    sequencer.update(this);
+    sequencer.update(state);
     updateScreen();
   }
 
@@ -95,16 +91,8 @@ class Game {
   // Sequencing
   //
 
-  @:allow(Game)
-  function selectTile(game:Game, id:Int):Bool {
-    var tile = game.state.tiles[id];
-    if (game.selectedTile == null) {
-      game.selectedTile = tile;
-    }
-    else {
-      Board.move(game.state, game.selectedTile, tile);
-      game.selectedTile = null;
-    }
+  function selectTile(state:State, id:Int):Bool {
+    Board.selectTile(state, state.tiles[id]);
     return true;
   }
 
@@ -138,7 +126,7 @@ class Game {
 
       if (Input.keyDown(KeyCode.Alt)) {
         // Quick Save
-        if (state.ready == true) {
+        if (state.ready) {
           trace('Quick Save $save');
           Storage.write(filename, state);
         }
@@ -146,7 +134,7 @@ class Game {
       else {
         // Quick Load
         var gamesave:Null<State> = Storage.read(filename);
-        if (gamesave != null && gamesave.ready == true) {
+        if (gamesave != null) {
           trace('Quick Load $save');
           aiMode = false;
           state = gamesave;
@@ -160,14 +148,7 @@ class Game {
     case 'title':
     case 'play':
       if (Input.keyPressed(KeyCode.Backspace)) {
-        if (state.ready && !Board.isOver(state)) {
-          if (selectedTile == null) {
-            Board.cancelLastMove(state);
-          }
-          else {
-            selectedTile = null;
-          }
-        }
+        Board.cancelLastMove(state);
       }
     }
   }
@@ -202,34 +183,22 @@ class Game {
       var boardHeight = (state.height - 1) * distanceY + radius * 2;
       var dx = (WIDTH - boardWidth) * 0.5;
       var dy = (HEIGHT - boardHeight) * 0.5;
-      var moves = Board.allowedMoves(state, selectedTile);
+      var moves = Board.allowedMoves(state);
       for (tile in state.tiles) {
         var tx = dx + (tile.x - 1) * distanceX;
         var ty = dy + (tile.y - 1) * distanceY;
-        var allowedMove = (moves.indexOf(tile) > -1);
-        var selected = (selectedTile == tile);
+        var selectable = (moves.indexOf(tile) > -1);
+        var selected = (state.selectedTile == tile);
         var emphasis:UITileEmphasis = None;
-        if (selected) {
+        if (!aiMode && selectable) {
+          emphasis = (state.selectedTile == null) ? Selectable : AllowedMove;
+        }
+        else if (selected) {
           emphasis = Selected;
-        }
-        else if (!aiMode && allowedMove) {
-          emphasis = AllowedMove;
-        }
-        else if (!aiMode && selectedTile == null && Board.allowedMoves(state, tile).length > 0) {
-          emphasis = Selectable;
         }
         var player = (tile.piece == null) ? null : state.players[tile.piece];
         if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(showTileId) ? Std.string(tile.id) : null, disabled:aiMode }).hit) {
-          if (allowedMove) {
-            Board.move(state, selectedTile, tile);
-            selectedTile = null;
-          }
-          if (!selected && Board.allowedMoves(state, tile).length > 0) {
-            selectedTile = tile;
-          }
-          else {
-            selectedTile = null;
-          }
+          Board.selectTile(state, tile);
         }
       }
 
@@ -273,11 +242,12 @@ class Game {
         var dimensions:Dimensions = UI.dimensions(window);
         ui.window(window);
 
-        var nb = ChineseCheckers.sequences.length;
+        var sequences = Board.sequences();
+        var nb = sequences.length;
         var w = (dimensions.width - (nb - 1) * dimensions.margin) / nb;
         var dx = (dimensions.width + dimensions.margin) / nb;
         for (i in 0...nb) {
-          var sequence:Sequence = ChineseCheckers.sequences[i];
+          var sequence:Sequence = sequences[i];
           if (ui.button({
             text:Std.string(sequence.length),
             selected:(sequenceIndex == i),
