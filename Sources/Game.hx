@@ -12,7 +12,6 @@ import Board.State;
 import Input;
 import Sequencer;
 import Storage;
-import Storage.StorageData;
 import Translations.language;
 import Translations.tr;
 import UI;
@@ -21,7 +20,6 @@ import UI.UITileEmphasis;
 import UI.UIWindow;
 
 typedef Settings = {
-  > StorageData,
   var language:String;
 }
 
@@ -83,7 +81,6 @@ class Game {
 
   function loadSettings() {
     settings = Storage.read('settings', {
-      version:1,
       language:'en',
     });
     language = settings.language;
