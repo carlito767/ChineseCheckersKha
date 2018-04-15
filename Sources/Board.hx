@@ -1,8 +1,14 @@
 import kha.Color;
 
 typedef Gamesave = {
-  > State,
   var version:Int;
+  var width:Int;
+  var height:Int;
+  var sequence:Sequence;
+  var players:Map<Int, Player>;
+  var tiles:Map<Int, Tile>;
+  var moves:Array<Move>;
+  var standings:Array<Int>;
 }
 
 //
@@ -94,7 +100,7 @@ class ChineseCheckers {
 //
 
 class Board {
-  static inline var GAMESAVE_VERSION = 3;
+  static inline var GAMESAVE_VERSION = 4;
 
   static public function sequences():Array<Sequence> {
     return ChineseCheckers.sequences;
@@ -160,7 +166,9 @@ class Board {
   }
 
   static public function start(state:State) {
+    state.selectedTile = null;
     updateCurrentPlayer(state);
+    updateAllowedMoves(state);
   }
 
   static public function isOver(state:State):Bool {
@@ -188,31 +196,23 @@ class Board {
       tiles:gamesave.tiles,
       moves:gamesave.moves,
       standings:gamesave.standings,
-      selectedTile:gamesave.selectedTile,
 
-      // Since version 2
+      selectedTile:null,
       currentPlayer:null,
-
-      // Since version 3
       allowedMoves:[],
     };
 
     switch (gamesave.version) {
     case 1:
-      trace('Gamesave: convert from version 1 to version $GAMESAVE_VERSION');
-      updateCurrentPlayer(state);
-      updateAllowedMoves(state);
     case 2:
-      trace('Gamesave: convert from version 2 to version $GAMESAVE_VERSION');
-      state.currentPlayer = gamesave.currentPlayer;
-      updateAllowedMoves(state);
+    case 3:
     case GAMESAVE_VERSION:
-      state.currentPlayer = gamesave.currentPlayer;
-      state.allowedMoves = gamesave.allowedMoves;
     default:
       trace('Gamesave: unknown version');
       return null;
     }
+
+    start(state);
 
     return state;
   }
@@ -227,9 +227,6 @@ class Board {
       tiles:state.tiles,
       moves:state.moves,
       standings:state.standings,
-      currentPlayer:state.currentPlayer,
-      selectedTile:state.selectedTile,
-      allowedMoves:state.allowedMoves,
     };
   }
 
