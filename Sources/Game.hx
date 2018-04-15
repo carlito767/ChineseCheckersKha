@@ -19,6 +19,7 @@ import UI.UITileEmphasis;
 import UI.UIWindow;
 
 typedef Settings = {
+  var version:Int;
   var language:String;
 }
 
@@ -73,25 +74,39 @@ class Game {
   // Settings
   //
 
-  function checkSettings(settings:Settings) {
-    var defaults:Settings = { language:'en' };
+  static inline var SETTINGS_VERSION = 1;
+
+  function checkSettings(settings:Null<Settings>):Settings {
+    var defaults:Settings = { version:SETTINGS_VERSION, language:'en' };
+
+    if (settings == null) {
+      return defaults;
+    }
+
+    switch (settings.version) {
+    case SETTINGS_VERSION:
+    default:
+      trace('Settings: unknown version');
+      return defaults;
+    }
+
     for (field in Reflect.fields(defaults)) {
       if (!Reflect.hasField(settings, field)) {
-        trace('Failed loading settings: Missing field \'$field\'.\nsettings:$settings');
-        settings = defaults;
-        return;
+        trace('Settings: Missing field "$field"');
+        return defaults;
       }
     }
+
+    return settings;
   }
 
   function loadSettings() {
-    var settings:Settings = Storage.read('settings');
-    checkSettings(settings);
+    var settings:Settings = checkSettings(Storage.read('settings'));
     language = settings.language;
   }
 
   function saveSettings() {
-    var settings:Settings = { language:language };
+    var settings:Settings = { version:SETTINGS_VERSION, language:language };
     Storage.write('settings', settings);
   }
 
