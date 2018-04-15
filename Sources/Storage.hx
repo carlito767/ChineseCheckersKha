@@ -4,8 +4,8 @@ class Storage {
     return file.readObject();
   }
 
-  static public function write(filename:String, data:Dynamic) {
+  static public function write(filename:String, object:Dynamic) {
     var file = kha.Storage.namedFile(filename);
-    file.writeObject(data);
+    file.writeObject(object);
   }
 }
