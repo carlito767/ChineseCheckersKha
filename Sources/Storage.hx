@@ -1,14 +1,10 @@
 class Storage {
-  static public function read<T>(filename:String, ?defaults:T):Null<T> {
+  static public function read(filename:String):Dynamic {
     var file = kha.Storage.namedFile(filename);
-    var data:Null<T> = file.readObject();
-    if (data == null && defaults != null) {
-      return defaults;
-    }
-    return data;
+    return file.readObject();
   }
 
-  static public function write<T>(filename:String, data:T) {
+  static public function write(filename:String, data:Dynamic) {
     var file = kha.Storage.namedFile(filename);
     file.writeObject(data);
   }

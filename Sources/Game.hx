@@ -31,8 +31,6 @@ class Game {
 
   var sequencer:Sequencer<State> = new Sequencer();
 
-  var settings:Settings;
-
   var ui:UI = new UI();
 
   var screen:String;
@@ -75,15 +73,25 @@ class Game {
   // Settings
   //
 
+  function checkSettings(settings:Settings) {
+    var defaults:Settings = { language:'en' };
+    for (field in Reflect.fields(defaults)) {
+      if (!Reflect.hasField(settings, field)) {
+        trace('Failed loading settings: Missing field \'$field\'.\nsettings:$settings');
+        settings = defaults;
+        return;
+      }
+    }
+  }
+
   function loadSettings() {
-    settings = Storage.read('settings', {
-      language:'en',
-    });
+    var settings:Settings = Storage.read('settings');
+    checkSettings(settings);
     language = settings.language;
   }
 
   function saveSettings() {
-    settings.language = language;
+    var settings:Settings = { language:language };
     Storage.write('settings', settings);
   }
 
