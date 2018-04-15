@@ -213,7 +213,7 @@ class Game {
         var selectable = (moves.indexOf(tile) > -1);
         var selected = (state.selectedTile == tile);
         var emphasis:UITileEmphasis = None;
-        if (!aiMode && selectable) {
+        if (!sequencer.busy() && selectable) {
           emphasis = (state.selectedTile == null) ? Selectable : AllowedMove;
         }
         else if (selected) {
