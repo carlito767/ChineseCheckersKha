@@ -1,5 +1,10 @@
 import kha.Color;
 
+typedef Gamesave = {
+  > State,
+  var version:Int;
+}
+
 //
 // State
 //
@@ -88,6 +93,8 @@ class ChineseCheckers {
 //
 
 class Board {
+  static inline var GAMESAVE_VERSION = 1;
+
   static public function sequences():Array<Sequence> {
     return ChineseCheckers.sequences;
   }
@@ -146,6 +153,46 @@ class Board {
       standings:standings,
       selectedTile:selectedTile,
     }
+  }
+
+  static public function load(gamesave:Null<Gamesave>):Null<State> {
+    if (gamesave == null) {
+      return null;
+    }
+
+    switch (gamesave.version) {
+    case GAMESAVE_VERSION:
+    default:
+      trace('Gamesave: unknown version');
+      return null;
+    }
+
+    return {
+      ready:gamesave.ready,
+      width:gamesave.width,
+      height:gamesave.height,
+      sequence:gamesave.sequence,
+      players:gamesave.players,
+      tiles:gamesave.tiles,
+      moves:gamesave.moves,
+      standings:gamesave.standings,
+      selectedTile:gamesave.selectedTile,
+    };
+  }
+
+  static public function save(state:State):Gamesave {
+    return {
+      version:GAMESAVE_VERSION,
+      ready:state.ready,
+      width:state.width,
+      height:state.height,
+      sequence:state.sequence,
+      players:state.players,
+      tiles:state.tiles,
+      moves:state.moves,
+      standings:state.standings,
+      selectedTile:state.selectedTile,
+    };
   }
 
   //

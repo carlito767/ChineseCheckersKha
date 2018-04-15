@@ -92,7 +92,7 @@ class Game {
 
     for (field in Reflect.fields(defaults)) {
       if (!Reflect.hasField(settings, field)) {
-        trace('Settings: Missing field "$field"');
+        trace('Settings: missing field "$field"');
         return defaults;
       }
     }
@@ -151,12 +151,12 @@ class Game {
         // Quick Save
         if (state.ready) {
           trace('Quick Save $save');
-          Storage.write(filename, state);
+          Storage.write(filename, Board.save(state));
         }
       }
       else {
         // Quick Load
-        var gamesave:Null<State> = Storage.read(filename);
+        var gamesave:Null<State> = Board.load(Storage.read(filename));
         if (gamesave != null) {
           trace('Quick Load $save');
           aiMode = false;
