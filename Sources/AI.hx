@@ -6,7 +6,7 @@ import Board.State;
 
 class AI {
   static public function search(state:State, ?depth:Int = 1):Null<Move> {
-    var currentPlayer = Board.currentPlayer(state);
+    var currentPlayer = state.currentPlayer;
     if (currentPlayer == null) {
       return null;
     }

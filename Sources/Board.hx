@@ -30,7 +30,6 @@ typedef Tile = {
 typedef Sequence = Array<Int>;
 
 typedef State = {
-  var ready:Bool;
   var width:Int;
   var height:Int;
   var sequence:Sequence;
@@ -38,6 +37,7 @@ typedef State = {
   var tiles:Map<Int, Tile>;
   var moves:Array<Move>;
   var standings:Array<Int>;
+  var currentPlayer:Null<Player>;
   var selectedTile:Null<Tile>;
 }
 
@@ -93,7 +93,7 @@ class ChineseCheckers {
 //
 
 class Board {
-  static inline var GAMESAVE_VERSION = 1;
+  static inline var GAMESAVE_VERSION = 2;
 
   static public function sequences():Array<Sequence> {
     return ChineseCheckers.sequences;
@@ -107,6 +107,7 @@ class Board {
     var tiles:Map<Int, Tile> = new Map<Int, Tile>();
     var moves:Array<Move> = [];
     var standings:Array<Int> = [];
+    var currentPlayer:Null<Player> = null;
     var selectedTile:Null<Tile> = null;
 
     // Players
@@ -143,7 +144,6 @@ class Board {
     }
 
     return {
-      ready:false,
       width:width,
       height:height,
       sequence:sequence,
@@ -151,24 +151,33 @@ class Board {
       tiles:tiles,
       moves:moves,
       standings:standings,
+      currentPlayer:currentPlayer,
       selectedTile:selectedTile,
     }
   }
+
+  static public function start(state:State) {
+    updateCurrentPlayer(state);
+  }
+
+  static public function isOver(state:State):Bool {
+    return (state.standings.length > 0 && state.standings.length == state.sequence.length);
+  }
+
+  static public function isRunning(state:State):Bool {
+    return (state.currentPlayer != null);
+  }
+
+  //
+  // Gamesave
+  //
 
   static public function load(gamesave:Null<Gamesave>):Null<State> {
     if (gamesave == null) {
       return null;
     }
 
-    switch (gamesave.version) {
-    case GAMESAVE_VERSION:
-    default:
-      trace('Gamesave: unknown version');
-      return null;
-    }
-
-    return {
-      ready:gamesave.ready,
+    var state:State = {
       width:gamesave.width,
       height:gamesave.height,
       sequence:gamesave.sequence,
@@ -177,13 +186,27 @@ class Board {
       moves:gamesave.moves,
       standings:gamesave.standings,
       selectedTile:gamesave.selectedTile,
+
+      // Since version 2
+      currentPlayer:null,
     };
+
+    switch (gamesave.version) {
+    case 1:
+      updateCurrentPlayer(state);
+    case GAMESAVE_VERSION:
+      state.currentPlayer = gamesave.currentPlayer;
+    default:
+      trace('Gamesave: unknown version');
+      return null;
+    }
+
+    return state;
   }
 
   static public function save(state:State):Gamesave {
     return {
       version:GAMESAVE_VERSION,
-      ready:state.ready,
       width:state.width,
       height:state.height,
       sequence:state.sequence,
@@ -191,39 +214,9 @@ class Board {
       tiles:state.tiles,
       moves:state.moves,
       standings:state.standings,
+      currentPlayer:state.currentPlayer,
       selectedTile:state.selectedTile,
     };
-  }
-
-  //
-  // Players
-  //
-
-  static public function currentPlayer(state:State):Null<Player> {
-    if (!state.ready || isOver(state)) {
-      return null;
-    }
-    if (state.moves.length == 0) {
-      return state.players[state.sequence[0]];
-    }
-    var move = state.moves[state.moves.length-1];
-    var index = state.sequence.indexOf(state.tiles[move.to].piece);
-    if (index == -1) {
-      return null;
-    }
-    var player;
-    do {
-      index++;
-      if (index == state.sequence.length) {
-        index = 0;
-      }
-      player = state.players[state.sequence[index]];
-    } while(state.standings.indexOf(player.id) > -1);
-    return player;
-  }
-
-  static public function isOver(state:State):Bool {
-    return (state.standings.length == state.sequence.length);
   }
 
   //
@@ -305,12 +298,12 @@ class Board {
 
   static public function allowedMoves(state:State):Array<Tile> {
     var moves:Array<Tile> = [];
-    if (!state.ready || isOver(state)) {
+    if (!isRunning(state)) {
       return moves;
     }
 
     if (state.selectedTile == null) {
-      var player = currentPlayer(state); 
+      var player = state.currentPlayer; 
       for (tile in state.tiles) {
         if (tile.piece == player.id) {
           if (allowedMovesForTile(state, tile).length > 0) {
@@ -329,7 +322,11 @@ class Board {
   //
 
   static public function selectTile(state:State, ?tile:Tile) {
-    if (tile == null || tile == state.selectedTile) {
+    if (!isRunning(state)) {
+      return;
+    }
+
+    if (tile == null || tile == state.selectedTile || tile.piece != state.currentPlayer.id) {
       state.selectedTile = null;
       return;
     }
@@ -352,9 +349,8 @@ class Board {
     to.piece = from.piece;
     from.piece = null;
     state.moves.push({from:from.id, to:to.id});
-    state.selectedTile = null;
 
-    // Victory?
+    // Update Standings
     var victory = true;
     for (tile in state.tiles) {
       if (tile.piece == to.piece && tile.owner != to.piece) {
@@ -373,10 +369,16 @@ class Board {
         }
       }
     }
+
+    // Update Current Player
+    updateCurrentPlayer(state);
+
+    // Update Selected Tile
+    state.selectedTile = null;
   }
 
   static public function cancelLastMove(state:State) {
-    if (!state.ready || isOver(state)) {
+    if (!isRunning(state)) {
       return;
     }
 
@@ -395,8 +397,39 @@ class Board {
     from.piece = to.piece;
     to.piece = null;
 
+    // Update Standings
     if (state.standings.length > 0 && state.standings[state.standings.length] == from.piece) {
       state.standings.pop();
     }
+
+    // Update Current Player
+    updateCurrentPlayer(state);
+  }
+
+  //
+  // Update
+  //
+
+  static function updateCurrentPlayer(state:State) {
+    var player:Null<Player> = null;
+    if (!isOver(state)) {
+      if (state.moves.length == 0) {
+        player = state.players[state.sequence[0]];
+      }
+      else {
+        var move = state.moves[state.moves.length-1];
+        var index = state.sequence.indexOf(state.tiles[move.to].piece);
+        if (index > -1) {
+          do {
+            index++;
+            if (index == state.sequence.length) {
+              index = 0;
+            }
+            player = state.players[state.sequence[index]];
+          } while(state.standings.indexOf(player.id) > -1);
+        }
+      }
+    }
+    state.currentPlayer = player;
   }
 }

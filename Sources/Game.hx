@@ -149,7 +149,7 @@ class Game {
 
       if (Input.keyDown(KeyCode.Alt)) {
         // Quick Save
-        if (state.ready) {
+        if (Board.isRunning(state)) {
           trace('Quick Save $save');
           Storage.write(filename, Board.save(state));
         }
@@ -225,38 +225,36 @@ class Game {
         }
       }
 
-      if (state.ready) {
-        if (Board.isOver(state)) {
-          var window:UIWindow = { x:WIDTH * 0.2, y:HEIGHT * 0.1, w:WIDTH * 0.6, h:HEIGHT * 0.8, title:tr('standings') };
-          var dimensions:Dimensions = UI.dimensions(window);
-          ui.window(window);
+      if (Board.isOver(state)) {
+        var window:UIWindow = { x:WIDTH * 0.2, y:HEIGHT * 0.1, w:WIDTH * 0.6, h:HEIGHT * 0.8, title:tr('standings') };
+        var dimensions:Dimensions = UI.dimensions(window);
+        ui.window(window);
 
-          var nb = state.standings.length;
-          var h = (dimensions.height - (nb - 1) * dimensions.margin) / nb;
-          var dy = (dimensions.height + dimensions.margin) / nb;
-          for (i in 0...nb) {
-            var player:Null<Player> = state.players[state.standings[i]];
-            ui.rank({
-              rank:Std.string(i+1),
-              player:player,
-              x:dimensions.left,
-              y:dimensions.top + dy * i,
-              w:dimensions.width,
-              h:h,
-            });
-          }
+        var nb = state.standings.length;
+        var h = (dimensions.height - (nb - 1) * dimensions.margin) / nb;
+        var dy = (dimensions.height + dimensions.margin) / nb;
+        for (i in 0...nb) {
+          var player:Null<Player> = state.players[state.standings[i]];
+          ui.rank({
+            rank:Std.string(i+1),
+            player:player,
+            x:dimensions.left,
+            y:dimensions.top + dy * i,
+            w:dimensions.width,
+            h:h,
+          });
         }
-        else {
-          if (ui.button({ text:tr('ai'), x:WIDTH * 0.025, y:WIDTH * 0.025, w:WIDTH * 0.125, h:HEIGHT * 0.067 }).hit) {
-            aiMode = !aiMode;
-            trace('AI Mode: $aiMode');
-          }
-          if (aiMode && !sequencer.busy()) {
-            var move = AI.search(state);
-            if (move != null) {
-              sequencer.push(selectTile, move.from, 1);
-              sequencer.push(selectTile, move.to, 1);
-            }
+      }
+      else if (Board.isRunning(state)) {
+        if (ui.button({ text:tr('ai'), x:WIDTH * 0.025, y:WIDTH * 0.025, w:WIDTH * 0.125, h:HEIGHT * 0.067 }).hit) {
+          aiMode = !aiMode;
+          trace('AI Mode: $aiMode');
+        }
+        if (aiMode && !sequencer.busy()) {
+          var move = AI.search(state);
+          if (move != null) {
+            sequencer.push(selectTile, move.from, 1);
+            sequencer.push(selectTile, move.to, 1);
           }
         }
       }
@@ -284,7 +282,7 @@ class Game {
         }
 
         if (ui.button({ text:tr('play'), disabled:(sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - HEIGHT * 0.067, w:dimensions.width, h:HEIGHT * 0.067 }).hit) {
-          state.ready = true;
+          Board.start(state);
         }
       }
 
