@@ -11,7 +11,7 @@ class AI {
     }
 
     var player = state.currentPlayer;
-    var bestEvaluation:Null<Int> = null;
+    var bestScore:Null<Int> = null;
     var bestMoves:Array<Move> = [];
     for (tile in state.allowedMoves) {
       Board.selectTile(state, tile);
@@ -20,19 +20,19 @@ class AI {
       for (move in moves) {
         Board.selectTile(state, tile);
         Board.selectTile(state, move);
-        var evaluation = evaluate(state, player);
-        trace('from:${tile.id}, to:${move.id}, note:$evaluation');
-        if (bestEvaluation == null || bestEvaluation > evaluation) {
-          bestEvaluation = evaluation;
+        var score = evaluate(state, player);
+        trace('from:${tile.id}, to:${move.id}, score:$score');
+        if (bestScore == null || bestScore > score) {
+          bestScore = score;
           bestMoves = [{ from:tile.id, to:move.id }];
         }
-        else if (bestEvaluation == evaluation) {
+        else if (bestScore == score) {
           bestMoves.push({ from:tile.id, to:move.id });
         }
         Board.cancelLastMove(state);
       }
     }
-    trace('bestEvaluation:$bestEvaluation');
+    trace('bestScore:$bestScore');
     trace('bestMoves:$bestMoves');
     if (bestMoves.length == 0) {
       return null;
@@ -45,19 +45,25 @@ class AI {
 
   static function evaluate(state:State, player:Player):Int {
     var used:Array<Int> = [];
-    var note = 0;
-    for (tile in state.tiles) {
-      if (tile.piece == player.id && tile.owner != player.id) {
-        for (goal in state.tiles) {
-          if (goal.owner == player.id && goal.piece != player.id && used.indexOf(goal.id) == -1) {
-            used.push(goal.id);
-            note += distance(tile, goal);
-            break;
+    var score = 0;
+    for (goal in state.tiles) {
+      if (goal.owner == player.id && goal.piece != player.id) {
+        var bestScore:Null<Int> = null;
+        var bestTile:Null<Int> = null;
+        for (tile in state.tiles) {
+          if (tile.piece == player.id && tile.owner != player.id && used.indexOf(tile.id) == -1) {
+            var score = distance(tile, goal);
+            if (bestScore == null || bestScore > score) {
+              bestScore = score;
+              bestTile = tile.id;
+            }
           }
         }
+        score += bestScore;
+        used.push(bestTile);
       }
     }
-    return note;
+    return score;
   }
 
   static function distance(from:Tile, to:Tile):Int {
