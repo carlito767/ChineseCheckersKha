@@ -231,83 +231,6 @@ class Board {
   }
 
   //
-  // Allowed moves
-  //
-
-  static function neighbors(state:State, tile:Tile):Array<Tile> {
-    //    (1) (2)
-    //      \ /
-    //  (3)- * -(4)
-    //      / \
-    //    (5) (6)
-    var tiles:Array<Tile> = [];
-    for (neighbor in state.tiles) {
-      if (
-        ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y - 1)) || // (1)
-        ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y - 1)) || // (2)
-        ((neighbor.x == tile.x - 2) && (neighbor.y == tile.y    )) || // (3)
-        ((neighbor.x == tile.x + 2) && (neighbor.y == tile.y    )) || // (4)
-        ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y + 1)) || // (5)
-        ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y + 1))    // (6)
-      ) {
-        tiles.push(neighbor);
-      }
-    }
-
-    return tiles;
-  }
-
-  static function jump(state:State, from:Tile, via:Tile):Null<Tile> {
-    var x = via.x + (via.x - from.x);
-    var y = via.y + (via.y - from.y);
-    for (tile in state.tiles) {
-      if (tile.x == x && tile.y == y) {
-        return tile;
-      }
-    }
-    return null;
-  }
-
-  static function jumps(state:State, tile:Tile, tiles:Array<Tile>) {
-    for (neighbor in neighbors(state, tile)) {
-      if (neighbor.piece != null) {
-        var jumpTile = jump(state, tile, neighbor);
-        if (jumpTile != null && jumpTile.piece == null && tiles.indexOf(jumpTile) == -1) {
-          tiles.push(jumpTile);
-          jumps(state, jumpTile, tiles);
-        }
-      }
-    }
-  }
-
-  static function allowedMovesForTile(state:State, tile:Tile) {
-    var moves:Array<Tile> = [];
-
-    jumps(state, tile, moves);
-    for (neighbor in neighbors(state, tile)) {
-      if (neighbor.piece == null) {
-        moves.push(neighbor);
-      }
-    }
-
-    // Once a peg has reached his home, it may not leave it
-    if (tile.piece == tile.owner) {
-      var i = 0;
-      while (i < moves.length) {
-        var moveTile = moves[i];
-        if (moveTile.owner != tile.owner) {
-          moves.splice(i, 1);
-        }
-        else {
-          ++i;
-        }
-      }
-    }
-
-    return moves;
-  }
-
-  //
   // Movements
   //
 
@@ -404,6 +327,83 @@ class Board {
 
     // Update Allowed Moves
     updateAllowedMoves(state);
+  }
+
+  //
+  // Allowed moves
+  //
+
+  static function neighbors(state:State, tile:Tile):Array<Tile> {
+    //    (1) (2)
+    //      \ /
+    //  (3)- * -(4)
+    //      / \
+    //    (5) (6)
+    var tiles:Array<Tile> = [];
+    for (neighbor in state.tiles) {
+      if (
+        ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y - 1)) || // (1)
+        ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y - 1)) || // (2)
+        ((neighbor.x == tile.x - 2) && (neighbor.y == tile.y    )) || // (3)
+        ((neighbor.x == tile.x + 2) && (neighbor.y == tile.y    )) || // (4)
+        ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y + 1)) || // (5)
+        ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y + 1))    // (6)
+      ) {
+        tiles.push(neighbor);
+      }
+    }
+
+    return tiles;
+  }
+
+  static function jump(state:State, from:Tile, via:Tile):Null<Tile> {
+    var x = via.x + (via.x - from.x);
+    var y = via.y + (via.y - from.y);
+    for (tile in state.tiles) {
+      if (tile.x == x && tile.y == y) {
+        return tile;
+      }
+    }
+    return null;
+  }
+
+  static function jumps(state:State, tile:Tile, tiles:Array<Tile>) {
+    for (neighbor in neighbors(state, tile)) {
+      if (neighbor.piece != null) {
+        var jumpTile = jump(state, tile, neighbor);
+        if (jumpTile != null && jumpTile.piece == null && tiles.indexOf(jumpTile) == -1) {
+          tiles.push(jumpTile);
+          jumps(state, jumpTile, tiles);
+        }
+      }
+    }
+  }
+
+  static function allowedMovesForTile(state:State, tile:Tile) {
+    var moves:Array<Tile> = [];
+
+    jumps(state, tile, moves);
+    for (neighbor in neighbors(state, tile)) {
+      if (neighbor.piece == null) {
+        moves.push(neighbor);
+      }
+    }
+
+    // Once a peg has reached his home, it may not leave it
+    if (tile.piece == tile.owner) {
+      var i = 0;
+      while (i < moves.length) {
+        var moveTile = moves[i];
+        if (moveTile.owner != tile.owner) {
+          moves.splice(i, 1);
+        }
+        else {
+          ++i;
+        }
+      }
+    }
+
+    return moves;
   }
 
   //
