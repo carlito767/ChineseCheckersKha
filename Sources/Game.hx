@@ -247,9 +247,8 @@ class Game {
       }
       else if (Board.isRunning(state)) {
         if (ui.button({ text:tr('ai'), x:WIDTH * 0.025, y:WIDTH * 0.025, w:WIDTH * 0.125, h:HEIGHT * 0.067 }).hit) {
-          // TODO: fix me please
-          // aiMode = !aiMode;
-          // trace('AI Mode: $aiMode');
+          aiMode = !aiMode;
+          trace('AI Mode: $aiMode');
         }
         if (aiMode && !sequencer.busy()) {
           var move = AI.search(state);

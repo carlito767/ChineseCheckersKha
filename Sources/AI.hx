@@ -6,29 +6,30 @@ import Board.State;
 
 class AI {
   static public function search(state:State, ?depth:Int = 1):Null<Move> {
-    var currentPlayer = state.currentPlayer;
-    if (currentPlayer == null) {
+    if (!Board.isRunning(state)) {
       return null;
     }
 
+    var player = state.currentPlayer;
     var bestEvaluation:Null<Int> = null;
     var bestMoves:Array<Move> = [];
-    for (tile in state.tiles) {
-      if (tile.piece == currentPlayer.id) {
+    for (tile in state.allowedMoves) {
+      Board.selectTile(state, tile);
+      var moves = state.allowedMoves;
+      Board.selectTile(state);
+      for (move in moves) {
         Board.selectTile(state, tile);
-        var moves = state.allowedMoves;
-        for (move in moves) {
-          Board.selectTile(state, move);
-          var evaluation = evaluate(state, currentPlayer);
-          if (bestEvaluation == null || bestEvaluation > evaluation) {
-            bestEvaluation = evaluation;
-            bestMoves = [{ from:tile.id, to:move.id }];
-          }
-          else if (bestEvaluation == evaluation) {
-            bestMoves.push({ from:tile.id, to:move.id });
-          }
-          Board.cancelLastMove(state);
+        Board.selectTile(state, move);
+        var evaluation = evaluate(state, player);
+        trace('from:${tile.id}, to:${move.id}, note:$evaluation');
+        if (bestEvaluation == null || bestEvaluation > evaluation) {
+          bestEvaluation = evaluation;
+          bestMoves = [{ from:tile.id, to:move.id }];
         }
+        else if (bestEvaluation == evaluation) {
+          bestMoves.push({ from:tile.id, to:move.id });
+        }
+        Board.cancelLastMove(state);
       }
     }
     trace('bestEvaluation:$bestEvaluation');
