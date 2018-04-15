@@ -16,7 +16,7 @@ class AI {
     for (tile in state.tiles) {
       if (tile.piece == currentPlayer.id) {
         Board.selectTile(state, tile);
-        var moves = Board.allowedMoves(state);
+        var moves = state.allowedMoves;
         for (move in moves) {
           Board.selectTile(state, move);
           var evaluation = evaluate(state, currentPlayer);

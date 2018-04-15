@@ -206,7 +206,7 @@ class Game {
       var boardHeight = (state.height - 1) * distanceY + radius * 2;
       var dx = (WIDTH - boardWidth) * 0.5;
       var dy = (HEIGHT - boardHeight) * 0.5;
-      var moves = Board.allowedMoves(state);
+      var moves = state.allowedMoves;
       for (tile in state.tiles) {
         var tx = dx + (tile.x - 1) * distanceX;
         var ty = dy + (tile.y - 1) * distanceY;
@@ -247,8 +247,9 @@ class Game {
       }
       else if (Board.isRunning(state)) {
         if (ui.button({ text:tr('ai'), x:WIDTH * 0.025, y:WIDTH * 0.025, w:WIDTH * 0.125, h:HEIGHT * 0.067 }).hit) {
-          aiMode = !aiMode;
-          trace('AI Mode: $aiMode');
+          // TODO: fix me please
+          // aiMode = !aiMode;
+          // trace('AI Mode: $aiMode');
         }
         if (aiMode && !sequencer.busy()) {
           var move = AI.search(state);

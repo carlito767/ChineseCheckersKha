@@ -38,6 +38,7 @@ typedef State = {
   var moves:Array<Move>;
   var standings:Array<Int>;
   var currentPlayer:Null<Player>;
+  var allowedMoves:Array<Tile>;
   var selectedTile:Null<Tile>;
 }
 
@@ -93,7 +94,7 @@ class ChineseCheckers {
 //
 
 class Board {
-  static inline var GAMESAVE_VERSION = 2;
+  static inline var GAMESAVE_VERSION = 3;
 
   static public function sequences():Array<Sequence> {
     return ChineseCheckers.sequences;
@@ -108,6 +109,7 @@ class Board {
     var moves:Array<Move> = [];
     var standings:Array<Int> = [];
     var currentPlayer:Null<Player> = null;
+    var allowedMoves:Array<Tile> = [];
     var selectedTile:Null<Tile> = null;
 
     // Players
@@ -153,6 +155,7 @@ class Board {
       standings:standings,
       currentPlayer:currentPlayer,
       selectedTile:selectedTile,
+      allowedMoves:allowedMoves,
     }
   }
 
@@ -189,13 +192,23 @@ class Board {
 
       // Since version 2
       currentPlayer:null,
+
+      // Since version 3
+      allowedMoves:[],
     };
 
     switch (gamesave.version) {
     case 1:
+      trace('Gamesave: convert from version 1 to version $GAMESAVE_VERSION');
       updateCurrentPlayer(state);
+      updateAllowedMoves(state);
+    case 2:
+      trace('Gamesave: convert from version 2 to version $GAMESAVE_VERSION');
+      state.currentPlayer = gamesave.currentPlayer;
+      updateAllowedMoves(state);
     case GAMESAVE_VERSION:
       state.currentPlayer = gamesave.currentPlayer;
+      state.allowedMoves = gamesave.allowedMoves;
     default:
       trace('Gamesave: unknown version');
       return null;
@@ -216,6 +229,7 @@ class Board {
       standings:state.standings,
       currentPlayer:state.currentPlayer,
       selectedTile:state.selectedTile,
+      allowedMoves:state.allowedMoves,
     };
   }
 
@@ -296,27 +310,6 @@ class Board {
     return moves;
   }
 
-  static public function allowedMoves(state:State):Array<Tile> {
-    var moves:Array<Tile> = [];
-    if (!isRunning(state)) {
-      return moves;
-    }
-
-    if (state.selectedTile == null) {
-      var player = state.currentPlayer; 
-      for (tile in state.tiles) {
-        if (tile.piece == player.id) {
-          if (allowedMovesForTile(state, tile).length > 0) {
-            moves.push(tile);
-          }
-        }
-      }
-      return moves;
-    }
-
-    return allowedMovesForTile(state, state.selectedTile);
-  }
-
   //
   // Movements
   //
@@ -326,29 +319,36 @@ class Board {
       return;
     }
 
-    if (tile == null || tile == state.selectedTile || tile.piece != state.currentPlayer.id) {
+    if (tile == null || tile == state.selectedTile) {
       state.selectedTile = null;
+      updateAllowedMoves(state);
       return;
     }
 
-    if (state.selectedTile == null) {
+    if (state.allowedMoves.indexOf(tile) == -1) {
+      state.selectedTile = null;
+      if (tile.piece == state.currentPlayer.id) {
+        if (allowedMovesForTile(state, tile).length > 0) {
+          state.selectedTile = tile;
+        }
+      }
+      updateAllowedMoves(state);
+      return;
+    }
+    else if (state.selectedTile == null) {
       state.selectedTile = tile;
+      updateAllowedMoves(state);
       return;
     }
 
     // Move
     var from = state.selectedTile;
     var to = tile;
-    if (allowedMoves(state).indexOf(to) == -1) {
-      if (allowedMovesForTile(state, to).length > 0) {
-        state.selectedTile = to;
-      }
-      return;
-    }
 
     to.piece = from.piece;
     from.piece = null;
     state.moves.push({from:from.id, to:to.id});
+    state.selectedTile = null;
 
     // Update Standings
     var victory = true;
@@ -373,8 +373,8 @@ class Board {
     // Update Current Player
     updateCurrentPlayer(state);
 
-    // Update Selected Tile
-    state.selectedTile = null;
+    // Update Allowed Moves
+    updateAllowedMoves(state);
   }
 
   static public function cancelLastMove(state:State) {
@@ -404,6 +404,9 @@ class Board {
 
     // Update Current Player
     updateCurrentPlayer(state);
+
+    // Update Allowed Moves
+    updateAllowedMoves(state);
   }
 
   //
@@ -431,5 +434,25 @@ class Board {
       }
     }
     state.currentPlayer = player;
+  }
+
+  static function updateAllowedMoves(state:State) {
+    var moves:Array<Tile> = [];
+    if (isRunning(state)) {
+      if (state.selectedTile == null) {
+        var player = state.currentPlayer; 
+        for (tile in state.tiles) {
+          if (tile.piece == player.id) {
+            if (allowedMovesForTile(state, tile).length > 0) {
+              moves.push(tile);
+            }
+          }
+        }
+      }
+      else {
+        moves = allowedMovesForTile(state, state.selectedTile);
+      }
+    }
+    state.allowedMoves = moves;
   }
 }
