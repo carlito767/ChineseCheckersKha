@@ -90,13 +90,6 @@ class Game {
       return defaults;
     }
 
-    for (field in Reflect.fields(defaults)) {
-      if (!Reflect.hasField(settings, field)) {
-        trace('Settings: missing field "$field"');
-        return defaults;
-      }
-    }
-
     return settings;
   }
 
