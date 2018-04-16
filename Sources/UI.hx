@@ -259,6 +259,8 @@ class UI extends Mui {
     var sw = object.w * 0.2;
     g.drawLine(object.x + sw, object.y + 2, object.x + sw, object.y + object.h - 2, 2);
     // Rank
+    g.font = Assets.fonts.StickRice;
+    g.fontSize = Std.int(object.h * 0.7);
     var coordinates = centerText(object.rank, { x:object.x, y:object.y, w:sw, h:object.h });
     g.color = Color.White;
     g.drawString(object.rank, coordinates.x, coordinates.y);
