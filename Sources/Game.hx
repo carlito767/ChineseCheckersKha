@@ -121,6 +121,12 @@ class Game {
       language = (language == 'en') ? 'fr' : 'en';
       saveSettings();
     }
+    else if (Input.keyPressed(KeyCode.A)) {
+      AI.search(state);
+    }
+    else if (Input.keyPressed(KeyCode.M)) {
+      trace('moves:${state.moves}');
+    }
     else if (Input.keyPressed(KeyCode.S)) {
       trace('state:$state');
     }
