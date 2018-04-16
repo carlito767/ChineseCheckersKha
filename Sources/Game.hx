@@ -246,8 +246,8 @@ class Game {
         if (aiMode && !sequencer.busy()) {
           var move = AI.search(state);
           if (move != null) {
-            sequencer.push(selectTile, move.from, 1);
-            sequencer.push(selectTile, move.to, 1);
+            sequencer.push(selectTile, move.from, 0.5);
+            sequencer.push(selectTile, move.to, 0.5);
           }
         }
       }
