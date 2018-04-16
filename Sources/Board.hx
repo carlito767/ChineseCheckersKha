@@ -318,7 +318,7 @@ class Board {
     to.piece = null;
 
     // Update Standings
-    if (state.standings.length > 0 && state.standings[state.standings.length] == from.piece) {
+    if (state.standings.length > 0 && state.standings[state.standings.length-1] == from.piece) {
       state.standings.pop();
     }
 
