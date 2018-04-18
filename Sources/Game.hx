@@ -117,26 +117,34 @@ class Game {
   //
 
   function updateScreen() {
+    if (Input.keyPressed(KeyCode.H)) {
+      // Hint
+      AI.search(state);
+    }
     if (Input.keyPressed(KeyCode.L)) {
+      // Language
       language = (language == 'en') ? 'fr' : 'en';
       saveSettings();
     }
-    else if (Input.keyPressed(KeyCode.A)) {
-      AI.search(state);
-    }
-    else if (Input.keyPressed(KeyCode.M)) {
+    if (Input.keyPressed(KeyCode.M)) {
+      // Moves
       trace('moves:${state.moves}');
     }
-    else if (Input.keyPressed(KeyCode.S)) {
+    if (Input.keyPressed(KeyCode.P)) {
+      // Play/Pause
+      aiMode = !aiMode;
+    }
+    if (Input.keyPressed(KeyCode.S)) {
+      // State
       trace('state:$state');
     }
-    else if (Input.keyPressed(KeyCode.Decimal)) {
+    if (Input.keyPressed(KeyCode.Decimal)) {
       UI.showBoundsRectangles = !UI.showBoundsRectangles;
     }
-    else if (Input.keyPressed(KeyCode.Numpad0)) {
+    if (Input.keyPressed(KeyCode.Numpad0)) {
       showTileId = !showTileId;
     }
-    else if (Input.keyPressed(KeyCode.Numpad1) || Input.keyPressed(KeyCode.Numpad2) || Input.keyPressed(KeyCode.Numpad3)) {
+    if (Input.keyPressed(KeyCode.Numpad1) || Input.keyPressed(KeyCode.Numpad2) || Input.keyPressed(KeyCode.Numpad3)) {
       var save = 1;
       if (Input.keyDown(KeyCode.Numpad2)) {
         save = 2;
@@ -245,10 +253,6 @@ class Game {
         }
       }
       else if (Board.isRunning(state)) {
-        if (ui.button({ text:tr('ai'), x:WIDTH * 0.025, y:WIDTH * 0.025, w:WIDTH * 0.125, h:HEIGHT * 0.067 }).hit) {
-          aiMode = !aiMode;
-          trace('AI Mode: $aiMode');
-        }
         if (aiMode && !sequencer.busy()) {
           var move = AI.search(state);
           if (move != null) {

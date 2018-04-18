@@ -1,5 +1,4 @@
 typedef Translation = {
-  var ai:String;
   var language:String;
   var newGame:String;
   var numberOfPlayers:String;
@@ -21,7 +20,6 @@ class Translations {
   static function set_language(iso) {
     translation = switch(iso) {
       case 'fr': {
-        ai:'IA',
         language:'Langue :',
         newGame:'Nouvelle Partie',
         numberOfPlayers:'Nombre de joueurs',
@@ -32,7 +30,6 @@ class Translations {
         title2:'Chinoises',
       }
       default: {
-        ai:'AI',
         language:'Language:',
         newGame:'New Game',
         numberOfPlayers:'Number of players',
