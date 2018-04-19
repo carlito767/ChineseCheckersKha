@@ -99,7 +99,6 @@ class ChineseCheckers {
 // Board
 //
 
-@:allow(AI)
 class Board {
   static inline var GAMESAVE_VERSION = 4;
 
@@ -233,43 +232,13 @@ class Board {
   // Moves
   //
 
-  static public function selectTile(state:State, ?tile:Tile) {
-    if (!isRunning(state)) {
-      return;
-    }
-
-    if (tile == null || tile == state.selectedTile) {
-      state.selectedTile = null;
-      updateAllowedMoves(state);
-      return;
-    }
-
-    if (state.allowedMoves.indexOf(tile) == -1) {
-      state.selectedTile = null;
-      if (tile.piece == state.currentPlayer.id) {
-        if (allowedMovesForTile(state, tile).length > 0) {
-          state.selectedTile = tile;
-        }
-      }
-      updateAllowedMoves(state);
-      return;
-    }
-    else if (state.selectedTile == null) {
-      state.selectedTile = tile;
-      updateAllowedMoves(state);
-      return;
-    }
-
-    applyMove(state, state.selectedTile, tile);
+  static public function move(state:State, from:Tile, to:Tile) {
+    applyMove(state, from, to);
     state.selectedTile = null;
     update(state);
   }
 
   static public function cancelLastMove(state:State) {
-    if (!isRunning(state)) {
-      return;
-    }
-
     if (state.selectedTile != null) {
       state.selectedTile = null;
       return;
@@ -279,7 +248,7 @@ class Board {
     update(state);
   }
 
-  static function applyMove(state:State, from:Tile, to:Tile) {
+  static public function applyMove(state:State, from:Tile, to:Tile) {
     to.piece = from.piece;
     from.piece = null;
     state.moves.push({from:from.id, to:to.id});
@@ -305,7 +274,7 @@ class Board {
     }
   }
 
-  static function cancelMove(state:State) {
+  static public function cancelMove(state:State) {
     if (state.moves.length == 0) {
       return;
     }
@@ -326,7 +295,7 @@ class Board {
   // Allowed moves
   //
 
-  static function allowedMoves(state:State):Array<Tile> {
+  static public function allowedMoves(state:State):Array<Tile> {
     var moves:Array<Tile> = [];
     if (state.currentPlayer == null) {
       return moves;
@@ -341,7 +310,7 @@ class Board {
     return moves;
   }
 
-  static function allowedMovesForTile(state:State, tile:Tile) {
+  static public function allowedMovesForTile(state:State, tile:Tile) {
     var moves:Array<Tile> = [];
 
     jumps(state, tile, moves);
@@ -417,7 +386,7 @@ class Board {
   // Update
   //
 
-  static function update(state:State) {
+  static public function update(state:State) {
     updateCurrentPlayer(state);
     updateAllowedMoves(state);
   }

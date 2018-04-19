@@ -107,8 +107,13 @@ class Game {
   // Sequencing
   //
 
-  function selectTile(state:State, id:Int):Bool {
-    Board.selectTile(state, state.tiles[id]);
+  function aiSelectTile(state:State, id:Int):Bool {
+    state.selectedTile = state.tiles[id];
+    return true;
+  }
+
+  function aiMove(state:State, move:Move):Bool {
+    Board.move(state, state.tiles[move.from], state.tiles[move.to]);
     return true;
   }
 
@@ -214,6 +219,7 @@ class Game {
       var dx = (WIDTH - boardWidth) * 0.5;
       var dy = (HEIGHT - boardHeight) * 0.5;
       var moves = state.allowedMoves;
+      var disabled = (!Board.isRunning(state) || aiMode);
       for (tile in state.tiles) {
         var tx = dx + (tile.x - 1) * distanceX;
         var ty = dy + (tile.y - 1) * distanceY;
@@ -227,8 +233,26 @@ class Game {
           emphasis = Selected;
         }
         var player = (tile.piece == null) ? null : state.players[tile.piece];
-        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(showTileId) ? Std.string(tile.id) : null, disabled:aiMode }).hit) {
-          Board.selectTile(state, tile);
+        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(showTileId) ? Std.string(tile.id) : null, disabled:disabled }).hit) {
+          if (tile == state.selectedTile) {
+            state.selectedTile = null;
+          }
+          else if (state.allowedMoves.indexOf(tile) == -1) {
+            state.selectedTile = null;
+            if (tile.piece == state.currentPlayer.id) {
+              if (Board.allowedMovesForTile(state, tile).length > 0) {
+                state.selectedTile = tile;
+              }
+            }
+          }
+          else if (state.selectedTile == null) {
+            state.selectedTile = tile;
+          }
+          else {
+            Board.applyMove(state, state.selectedTile, tile);
+            state.selectedTile = null;
+          }
+          Board.update(state);
         }
       }
 
@@ -256,8 +280,8 @@ class Game {
         if (aiMode && !sequencer.busy()) {
           var move = AI.search(state);
           if (move != null) {
-            sequencer.push(selectTile, move.from, 0.5);
-            sequencer.push(selectTile, move.to, 0.5);
+            sequencer.push(aiSelectTile, move.from, 0.5);
+            sequencer.push(aiMove, move, 0.5);
           }
         }
       }
