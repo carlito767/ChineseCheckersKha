@@ -14,12 +14,9 @@ class AI {
     var bestScore:Null<Int> = null;
     var bestMoves:Array<Move> = [];
     for (tile in state.allowedMoves) {
-      Board.selectTile(state, tile);
-      var moves = state.allowedMoves;
-      Board.selectTile(state);
+      var moves = Board.allowedMovesForTile(state, tile);
       for (move in moves) {
-        Board.selectTile(state, tile);
-        Board.selectTile(state, move);
+        Board.applyMove(state, tile, move);
         var score = evaluate(state, player);
         trace('from:${tile.id}, to:${move.id}, score:$score');
         if (bestScore == null || bestScore > score) {
@@ -29,7 +26,7 @@ class AI {
         else if (bestScore == score) {
           bestMoves.push({ from:tile.id, to:move.id });
         }
-        Board.cancelLastMove(state);
+        Board.cancelMove(state);
       }
     }
     trace('bestScore:$bestScore');

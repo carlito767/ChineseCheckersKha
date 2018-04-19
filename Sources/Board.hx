@@ -99,6 +99,7 @@ class ChineseCheckers {
 // Board
 //
 
+@:allow(AI)
 class Board {
   static inline var GAMESAVE_VERSION = 4;
 
@@ -166,9 +167,7 @@ class Board {
   }
 
   static public function start(state:State) {
-    state.selectedTile = null;
-    updateCurrentPlayer(state);
-    updateAllowedMoves(state);
+    update(state);
   }
 
   static public function isOver(state:State):Bool {
@@ -231,7 +230,7 @@ class Board {
   }
 
   //
-  // Movements
+  // Moves
   //
 
   static public function selectTile(state:State, ?tile:Tile) {
@@ -261,14 +260,29 @@ class Board {
       return;
     }
 
-    // Move
-    var from = state.selectedTile;
-    var to = tile;
+    applyMove(state, state.selectedTile, tile);
+    state.selectedTile = null;
+    update(state);
+  }
 
+  static public function cancelLastMove(state:State) {
+    if (!isRunning(state)) {
+      return;
+    }
+
+    if (state.selectedTile != null) {
+      state.selectedTile = null;
+      return;
+    }
+
+    cancelMove(state);
+    update(state);
+  }
+
+  static function applyMove(state:State, from:Tile, to:Tile) {
     to.piece = from.piece;
     from.piece = null;
     state.moves.push({from:from.id, to:to.id});
-    state.selectedTile = null;
 
     // Update Standings
     var victory = true;
@@ -289,24 +303,9 @@ class Board {
         }
       }
     }
-
-    // Update Current Player
-    updateCurrentPlayer(state);
-
-    // Update Allowed Moves
-    updateAllowedMoves(state);
   }
 
-  static public function cancelLastMove(state:State) {
-    if (!isRunning(state)) {
-      return;
-    }
-
-    if (state.selectedTile != null) {
-      state.selectedTile = null;
-      return;
-    }
-
+  static function cancelMove(state:State) {
     if (state.moves.length == 0) {
       return;
     }
@@ -321,62 +320,25 @@ class Board {
     if (state.standings.length > 0 && state.standings[state.standings.length-1] == from.piece) {
       state.standings.pop();
     }
-
-    // Update Current Player
-    updateCurrentPlayer(state);
-
-    // Update Allowed Moves
-    updateAllowedMoves(state);
   }
 
   //
   // Allowed moves
   //
 
-  static function neighbors(state:State, tile:Tile):Array<Tile> {
-    //    (1) (2)
-    //      \ /
-    //  (3)- * -(4)
-    //      / \
-    //    (5) (6)
-    var tiles:Array<Tile> = [];
-    for (neighbor in state.tiles) {
-      if (
-        ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y - 1)) || // (1)
-        ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y - 1)) || // (2)
-        ((neighbor.x == tile.x - 2) && (neighbor.y == tile.y    )) || // (3)
-        ((neighbor.x == tile.x + 2) && (neighbor.y == tile.y    )) || // (4)
-        ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y + 1)) || // (5)
-        ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y + 1))    // (6)
-      ) {
-        tiles.push(neighbor);
-      }
+  static function allowedMoves(state:State):Array<Tile> {
+    var moves:Array<Tile> = [];
+    if (state.currentPlayer == null) {
+      return moves;
     }
 
-    return tiles;
-  }
-
-  static function jump(state:State, from:Tile, via:Tile):Null<Tile> {
-    var x = via.x + (via.x - from.x);
-    var y = via.y + (via.y - from.y);
+    var player = state.currentPlayer; 
     for (tile in state.tiles) {
-      if (tile.x == x && tile.y == y) {
-        return tile;
+      if (tile.piece == player.id && allowedMovesForTile(state, tile).length > 0) {
+        moves.push(tile);
       }
     }
-    return null;
-  }
-
-  static function jumps(state:State, tile:Tile, tiles:Array<Tile>) {
-    for (neighbor in neighbors(state, tile)) {
-      if (neighbor.piece != null) {
-        var jumpTile = jump(state, tile, neighbor);
-        if (jumpTile != null && jumpTile.piece == null && tiles.indexOf(jumpTile) == -1) {
-          tiles.push(jumpTile);
-          jumps(state, jumpTile, tiles);
-        }
-      }
-    }
+    return moves;
   }
 
   static function allowedMovesForTile(state:State, tile:Tile) {
@@ -406,9 +368,59 @@ class Board {
     return moves;
   }
 
+  static function neighbors(state:State, tile:Tile):Array<Tile> {
+    //    (1) (2)
+    //      \ /
+    //  (3)- * -(4)
+    //      / \
+    //    (5) (6)
+    var tiles:Array<Tile> = [];
+    for (neighbor in state.tiles) {
+      if (
+        ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y - 1)) || // (1)
+        ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y - 1)) || // (2)
+        ((neighbor.x == tile.x - 2) && (neighbor.y == tile.y    )) || // (3)
+        ((neighbor.x == tile.x + 2) && (neighbor.y == tile.y    )) || // (4)
+        ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y + 1)) || // (5)
+        ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y + 1))    // (6)
+      ) {
+        tiles.push(neighbor);
+      }
+    }
+    return tiles;
+  }
+
+  static function jump(state:State, from:Tile, via:Tile):Null<Tile> {
+    var x = via.x + (via.x - from.x);
+    var y = via.y + (via.y - from.y);
+    for (tile in state.tiles) {
+      if (tile.x == x && tile.y == y) {
+        return tile;
+      }
+    }
+    return null;
+  }
+
+  static function jumps(state:State, tile:Tile, tiles:Array<Tile>) {
+    for (neighbor in neighbors(state, tile)) {
+      if (neighbor.piece != null) {
+        var jumpTile = jump(state, tile, neighbor);
+        if (jumpTile != null && jumpTile.piece == null && tiles.indexOf(jumpTile) == -1) {
+          tiles.push(jumpTile);
+          jumps(state, jumpTile, tiles);
+        }
+      }
+    }
+  }
+
   //
   // Update
   //
+
+  static function update(state:State) {
+    updateCurrentPlayer(state);
+    updateAllowedMoves(state);
+  }
 
   static function updateCurrentPlayer(state:State) {
     var player:Null<Player> = null;
@@ -434,22 +446,6 @@ class Board {
   }
 
   static function updateAllowedMoves(state:State) {
-    var moves:Array<Tile> = [];
-    if (isRunning(state)) {
-      if (state.selectedTile == null) {
-        var player = state.currentPlayer; 
-        for (tile in state.tiles) {
-          if (tile.piece == player.id) {
-            if (allowedMovesForTile(state, tile).length > 0) {
-              moves.push(tile);
-            }
-          }
-        }
-      }
-      else {
-        moves = allowedMovesForTile(state, state.selectedTile);
-      }
-    }
-    state.allowedMoves = moves;
+    state.allowedMoves = (state.selectedTile == null) ? allowedMoves(state) : allowedMovesForTile(state, state.selectedTile);
   }
 }
