@@ -122,34 +122,12 @@ class Game {
   //
 
   function updateScreen() {
-    if (Input.keyPressed(KeyCode.H)) {
-      // Hint
-      AI.search(state);
-    }
     if (Input.keyPressed(KeyCode.L)) {
       // Language
       language = (language == 'en') ? 'fr' : 'en';
       saveSettings();
     }
-    if (Input.keyPressed(KeyCode.M)) {
-      // Moves
-      trace('moves:${state.moves}');
-    }
-    if (Input.keyPressed(KeyCode.P)) {
-      // Play/Pause
-      aiMode = !aiMode;
-    }
-    if (Input.keyPressed(KeyCode.S)) {
-      // State
-      trace('state:$state');
-    }
-    if (Input.keyPressed(KeyCode.Decimal)) {
-      UI.showBoundsRectangles = !UI.showBoundsRectangles;
-    }
-    if (Input.keyPressed(KeyCode.Numpad0)) {
-      showTileId = !showTileId;
-    }
-    if (Input.keyPressed(KeyCode.Numpad1) || Input.keyPressed(KeyCode.Numpad2) || Input.keyPressed(KeyCode.Numpad3)) {
+    else if (Input.keyPressed(KeyCode.Numpad1) || Input.keyPressed(KeyCode.Numpad2) || Input.keyPressed(KeyCode.Numpad3)) {
       var save = 1;
       if (Input.keyDown(KeyCode.Numpad2)) {
         save = 2;
@@ -183,7 +161,36 @@ class Game {
     case 'title':
     case 'play':
       if (Input.keyPressed(KeyCode.Backspace)) {
+        // Cancel last move
         Board.cancelLastMove(state);
+      }
+      else if (Input.keyPressed(KeyCode.Add)) {
+        // TODO: Increase sequencer speed
+      }
+      else if (Input.keyPressed(KeyCode.Subtract)) {
+        // TODO: Decrease sequencer speed
+      }
+      else if (Input.keyPressed(KeyCode.H)) {
+        // Hint
+        AI.search(state);
+      }
+      else if (Input.keyPressed(KeyCode.M)) {
+        // Moves
+        trace('moves:${state.moves}');
+      }
+      else if (Input.keyPressed(KeyCode.P)) {
+        // Play/Pause
+        aiMode = !aiMode;
+      }
+      else if (Input.keyPressed(KeyCode.S)) {
+        // State
+        trace('state:$state');
+      }
+      else if (Input.keyPressed(KeyCode.Decimal)) {
+        UI.showBoundsRectangles = !UI.showBoundsRectangles;
+      }
+      else if (Input.keyPressed(KeyCode.Numpad0)) {
+        showTileId = !showTileId;
       }
     }
   }
