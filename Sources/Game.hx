@@ -28,7 +28,11 @@ class Game {
   static public inline var WIDTH = 800;
   static public inline var HEIGHT = 600;
 
-  var aiMode:Bool = false;
+  var aiMode(default, set):Bool = false;
+  function set_aiMode(value) {
+    sequencer.reset();
+    return aiMode = value;
+  }
 
   var sequencer:Sequencer<State> = new Sequencer();
 
@@ -162,6 +166,7 @@ class Game {
     case 'play':
       if (Input.keyPressed(KeyCode.Backspace)) {
         // Cancel last move
+        aiMode = false;
         Board.cancelLastMove(state);
       }
       else if (Input.keyPressed(KeyCode.Add)) {
