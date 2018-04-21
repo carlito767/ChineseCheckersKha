@@ -131,6 +131,9 @@ class Game {
       language = (language == 'en') ? 'fr' : 'en';
       saveSettings();
     }
+    else if (Input.keyPressed(KeyCode.Decimal)) {
+      UI.showHitbox = !UI.showHitbox;
+    }
     else if (Input.keyPressed(KeyCode.Numpad1) || Input.keyPressed(KeyCode.Numpad2) || Input.keyPressed(KeyCode.Numpad3)) {
       var save = 1;
       if (Input.keyDown(KeyCode.Numpad2)) {
@@ -195,9 +198,6 @@ class Game {
       else if (Input.keyPressed(KeyCode.S)) {
         // State
         trace('state:$state');
-      }
-      else if (Input.keyPressed(KeyCode.Decimal)) {
-        UI.showBoundsRectangles = !UI.showBoundsRectangles;
       }
       else if (Input.keyPressed(KeyCode.Numpad0)) {
         showTileId = !showTileId;

@@ -89,7 +89,7 @@ typedef UIWindow = {
 //
 
 class UI extends Mui {
-  static public var showBoundsRectangles = false;
+  static public var showHitbox = false;
 
   var g:Graphics;
   var scaling:Scaling;
@@ -110,9 +110,15 @@ class UI extends Mui {
     g.disableScissor();
   }
 
-  override function evaluate<T:(MuiObject)>(object:T):MuiEval {
+  function render<T:(MuiObject)>(object:T, f:T->MuiEval->Void):MuiEval {
     scaleObject(object);
-    return super.evaluate(object);
+    var eval:MuiEval = evaluate(object);
+    f(object, eval);
+    if (showHitbox) {
+      g.color = Color.Green;
+      g.drawRect(object.x, object.y, object.w, object.h);
+    }
+    return eval;
   }
 
   //
@@ -208,8 +214,10 @@ class UI extends Mui {
   //
 
   public function button(object:UIButton):MuiEval {
-    var eval:MuiEval = evaluate(object);
+    return render(object, renderButton);
+  }
 
+  function renderButton(object:UIButton, eval:MuiEval) {
     background(object);
 
     var color:Color = Color.White;
@@ -225,12 +233,10 @@ class UI extends Mui {
     var coordinates = centerText(object.text, object);
     g.drawString(object.text, coordinates.x, coordinates.y);
 
-    if (showBoundsRectangles) {
+    if (showHitbox) {
       g.color = Color.Green;
       g.drawRect(coordinates.x, coordinates.y, g.font.width(g.fontSize, object.text), g.font.height(g.fontSize));
     }
-
-    return eval;
   }
 
   //
@@ -238,12 +244,12 @@ class UI extends Mui {
   //
 
   public function image(object:UIImage):MuiEval {
-    var eval:MuiEval = evaluate(object);
+    return render(object,renderImage);
+  }
 
+  function renderImage(object:UIImage, eval:MuiEval) {
     g.color = Color.White;
     g.drawScaledImage(object.image, object.x, object.y, object.w, object.h);
-
-    return eval;
   }
 
   //
@@ -251,8 +257,10 @@ class UI extends Mui {
   //
 
   public function rank(object:UIRank):MuiEval {
-    var eval:MuiEval = evaluate(object);
+    return render(object, renderRank);
+  }
 
+  function renderRank(object:UIRank, eval:MuiEval) {
     // Slot
     background(object);
     // Separator
@@ -273,8 +281,6 @@ class UI extends Mui {
       g.color = Color.White;
       g.drawCircle(coordinates.x, coordinates.y, radius, 2);
     }
-
-    return eval;
   }
 
   //
@@ -282,8 +288,10 @@ class UI extends Mui {
   //
 
   public function tile(object:UITile):MuiEval {
-    var eval:MuiEval = evaluate(object);
+    return render(object, renderTile);
+  }
 
+  function renderTile(object:UITile, eval:MuiEval) {
     var radius = object.h * 0.5;
     var cx = object.x + radius;
     var cy = object.y + radius;
@@ -312,11 +320,6 @@ class UI extends Mui {
       g.drawCircle(cx, cy, radius, radius * 0.1);
     }
 
-    if (showBoundsRectangles) {
-      g.color = Color.Green;
-      g.drawRect(object.x, object.y, object.w, object.h);
-    }
-
     if (object.id != null) {
       var color = (object.player == null) ? Color.Black : object.player.color;
       g.color = Color.fromBytes(255 - color.Rb, 255 - color.Gb, 255 - color.Bb);
@@ -325,7 +328,6 @@ class UI extends Mui {
       var coordinates = centerText(object.id, object);
       g.drawString(object.id, coordinates.x, coordinates.y);
     }
-    return eval;
   }
 
   //
@@ -333,14 +335,14 @@ class UI extends Mui {
   //
 
   public function title(object:UITitle):MuiEval {
-    var eval:MuiEval = evaluate(object);
+    return render(object, renderTitle);
+  }
 
+  function renderTitle(object:UITitle, eval:MuiEval) {
     g.color = Color.White;
     g.font = Assets.fonts.BatikGangster;
     g.fontSize = Std.int(object.h);
     g.drawString(object.text, object.x, object.y);
-
-    return eval;
   }
 
   //
@@ -348,8 +350,10 @@ class UI extends Mui {
   //
 
   public function window(object:UIWindow):MuiEval {
-    var eval:MuiEval = evaluate(object);
+    return render(object, renderWindow);
+  }
 
+  public function renderWindow(object:UIWindow, eval:MuiEval) {
     background(object);
     if (object.title != null) {
       var h = object.h * 0.2;
@@ -363,7 +367,5 @@ class UI extends Mui {
       g.color = Color.White;
       g.drawString(object.title, coordinates.x, coordinates.y);
     }
-
-    return eval;
   }
 }
