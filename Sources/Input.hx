@@ -12,10 +12,10 @@ typedef Mouse = {
 }
 
 class Input {
-  static public var keyboard(default, null):Keyboard = { keys:new Map<KeyCode, Bool>(), read:new Map<KeyCode, Bool>() };
-  static public var mouse(default, null):Mouse = { x:0, y:0, buttons:new Map<Int, Bool>() };
+  public static var keyboard(default, null):Keyboard = { keys:new Map<KeyCode, Bool>(), read:new Map<KeyCode, Bool>() };
+  public static var mouse(default, null):Mouse = { x:0, y:0, buttons:new Map<Int, Bool>() };
 
-  static public function init() {
+  public static function init() {
     var khaKeyboard = kha.input.Keyboard.get();
     if (khaKeyboard != null) {
       khaKeyboard.notify(onKeyDown, onKeyUp, null);
@@ -31,11 +31,11 @@ class Input {
   // Keyboard
   //
 
-  static public function keyDown(key:KeyCode):Bool {
+  public static function keyDown(key:KeyCode):Bool {
     return (keyboard.keys[key] == true);
   }
 
-  static public function keyPressed(key:KeyCode, ?repeat:Bool = false):Bool {
+  public static function keyPressed(key:KeyCode, ?repeat:Bool = false):Bool {
     if (!repeat && keyboard.read[key] == true) {
       return false;
     }

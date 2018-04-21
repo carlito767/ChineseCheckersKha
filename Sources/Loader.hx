@@ -6,7 +6,7 @@ import kha.System;
 import Game;
 
 class Loader {
-  static public function init() {
+  public static function init() {
     System.notifyOnRender(render);
     Assets.loadEverything(function() {
       System.removeRenderListener(render);

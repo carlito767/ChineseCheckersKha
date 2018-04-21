@@ -24,9 +24,9 @@ typedef Settings = {
 }
 
 class Game {
-  static public inline var TITLE = 'ChineseCheckersKha';
-  static public inline var WIDTH = 800;
-  static public inline var HEIGHT = 600;
+  public static inline var TITLE = 'ChineseCheckersKha';
+  public static inline var WIDTH = 800;
+  public static inline var HEIGHT = 600;
 
   var aiMode(default, set):Bool = false;
   function set_aiMode(value) {

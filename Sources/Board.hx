@@ -58,7 +58,7 @@ typedef RawPlayer = {
 }
 
 class ChineseCheckers {
-  static public var board(default, null):Array<String> = [
+  public static var board(default, null):Array<String> = [
     '            4            ',
     '           4 4           ',
     '          4 4 4          ',
@@ -78,7 +78,7 @@ class ChineseCheckers {
     '            1            ',
   ];
 
-  static public var players(default, null):Array<RawPlayer> = [
+  public static var players(default, null):Array<RawPlayer> = [
     { home:4, color:Color.Black },
     { home:5, color:Color.fromBytes(  0, 128, 128) }, // teal
     { home:6, color:Color.fromBytes(  0, 128,   0) }, // green
@@ -87,7 +87,7 @@ class ChineseCheckers {
     { home:3, color:Color.Yellow },
   ];
 
-  static public var sequences(default, null):Array<Sequence> = [
+  public static var sequences(default, null):Array<Sequence> = [
     [ 1, 4 ],
     [ 1, 3, 5 ],
     [ 1, 3, 4, 6 ],
@@ -102,11 +102,11 @@ class ChineseCheckers {
 class Board {
   static inline var GAMESAVE_VERSION = 4;
 
-  static public function sequences():Array<Sequence> {
+  public static function sequences():Array<Sequence> {
     return ChineseCheckers.sequences;
   }
 
-  static public function create(?sequenceIndex:Int):State {
+  public static function create(?sequenceIndex:Int):State {
     var width:Int = ChineseCheckers.board[0].length;
     var height:Int = ChineseCheckers.board.length;
     var sequence:Sequence = [];
@@ -165,15 +165,15 @@ class Board {
     }
   }
 
-  static public function start(state:State) {
+  public static function start(state:State) {
     update(state);
   }
 
-  static public function isOver(state:State):Bool {
+  public static function isOver(state:State):Bool {
     return (state.standings.length > 0 && state.standings.length == state.sequence.length - 1);
   }
 
-  static public function isRunning(state:State):Bool {
+  public static function isRunning(state:State):Bool {
     return (state.currentPlayer != null);
   }
 
@@ -181,7 +181,7 @@ class Board {
   // Gamesave
   //
 
-  static public function load(gamesave:Null<Gamesave>):Null<State> {
+  public static function load(gamesave:Null<Gamesave>):Null<State> {
     if (gamesave == null) {
       return null;
     }
@@ -215,7 +215,7 @@ class Board {
     return state;
   }
 
-  static public function save(state:State):Gamesave {
+  public static function save(state:State):Gamesave {
     return {
       version:GAMESAVE_VERSION,
       width:state.width,
@@ -232,13 +232,13 @@ class Board {
   // Moves
   //
 
-  static public function move(state:State, from:Tile, to:Tile) {
+  public static function move(state:State, from:Tile, to:Tile) {
     applyMove(state, from, to);
     state.selectedTile = null;
     update(state);
   }
 
-  static public function cancelLastMove(state:State) {
+  public static function cancelLastMove(state:State) {
     if (state.selectedTile != null) {
       state.selectedTile = null;
       return;
@@ -248,7 +248,7 @@ class Board {
     update(state);
   }
 
-  static public function applyMove(state:State, from:Tile, to:Tile) {
+  public static function applyMove(state:State, from:Tile, to:Tile) {
     to.piece = from.piece;
     from.piece = null;
     state.moves.push({from:from.id, to:to.id});
@@ -266,7 +266,7 @@ class Board {
     }
   }
 
-  static public function cancelMove(state:State) {
+  public static function cancelMove(state:State) {
     if (state.moves.length == 0) {
       return;
     }
@@ -287,7 +287,7 @@ class Board {
   // Allowed moves
   //
 
-  static public function allowedMoves(state:State):Array<Tile> {
+  public static function allowedMoves(state:State):Array<Tile> {
     var moves:Array<Tile> = [];
     if (state.currentPlayer == null) {
       return moves;
@@ -302,7 +302,7 @@ class Board {
     return moves;
   }
 
-  static public function allowedMovesForTile(state:State, tile:Tile) {
+  public static function allowedMovesForTile(state:State, tile:Tile) {
     var moves:Array<Tile> = [];
 
     jumps(state, tile, moves);
@@ -378,7 +378,7 @@ class Board {
   // Update
   //
 
-  static public function update(state:State) {
+  public static function update(state:State) {
     updateCurrentPlayer(state);
     updateAllowedMoves(state);
   }

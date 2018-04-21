@@ -89,7 +89,7 @@ typedef UIWindow = {
 //
 
 class UI extends Mui {
-  static public var showHitbox = false;
+  public static var showHitbox = false;
 
   var g:Graphics;
   var scaling:Scaling;
@@ -152,7 +152,7 @@ class UI extends Mui {
   // Formatting
   //
 
-  static public function dimensions(window:UIWindow):Dimensions {
+  public static function dimensions(window:UIWindow):Dimensions {
     var dy = (window.title == null) ? 0 : window.h * 0.2;
     var margin = window.w * 0.05;
     var width = window.w - margin * 2;

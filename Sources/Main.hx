@@ -13,7 +13,7 @@ import Game;
 import Loader;
 
 class Main {
-  static public function main() {
+  public static function main() {
     // https://github.com/Kode/Kha/issues/94
     #if kha_html5
     document.documentElement.style.padding = '0';

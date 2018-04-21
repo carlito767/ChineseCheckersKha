@@ -10,12 +10,12 @@ typedef Translation = {
 }
 
 class Translations {
-  static public function tr(id:String):String {
+  public static function tr(id:String):String {
     var value:Null<String> = Reflect.field(translation, id);
     return (value == null) ? id : value;
   }
 
-  static public var language(default, set):String;
+  public static var language(default, set):String;
 
   static function set_language(iso) {
     translation = switch(iso) {

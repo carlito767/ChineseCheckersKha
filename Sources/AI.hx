@@ -5,7 +5,7 @@ import Board.Tile;
 import Board.State;
 
 class AI {
-  static public function search(state:State, ?depth:Int = 1):Null<Move> {
+  public static function search(state:State, ?depth:Int = 1):Null<Move> {
     if (!Board.isRunning(state)) {
       return null;
     }
