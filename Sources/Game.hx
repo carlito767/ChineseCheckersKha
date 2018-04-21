@@ -169,11 +169,16 @@ class Game {
         aiMode = false;
         Board.cancelLastMove(state);
       }
+      else if (Input.keyPressed(KeyCode.Return)) {
+        // Restore sequencer speed
+        sequencer.speed = 1.0;
+      }
       else if (Input.keyPressed(KeyCode.Add)) {
-        // TODO: Increase sequencer speed
+        // Increase sequencer speed
+        sequencer.speed *= 2;
       }
       else if (Input.keyPressed(KeyCode.Subtract)) {
-        // TODO: Decrease sequencer speed
+        sequencer.speed *= 0.5;
       }
       else if (Input.keyPressed(KeyCode.H)) {
         // Hint
