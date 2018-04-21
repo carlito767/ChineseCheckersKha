@@ -264,18 +264,28 @@ class Game {
       }
 
       if (Board.isOver(state)) {
+        var standings:Array<Player> = [];
+        for (playerId in state.standings) {
+          standings.push(state.players[playerId]);
+        }
+        // Who is the great loser?
+        for (player in state.players) {
+          if (state.standings.indexOf(player.id) == -1) {
+            standings.push(player);
+          }
+        }
+
         var window:UIWindow = { x:WIDTH * 0.2, y:HEIGHT * 0.1, w:WIDTH * 0.6, h:HEIGHT * 0.8, title:tr('standings') };
         var dimensions:Dimensions = UI.dimensions(window);
         ui.window(window);
 
-        var nb = state.standings.length;
+        var nb = standings.length;
         var h = (dimensions.height - (nb - 1) * dimensions.margin) / nb;
         var dy = (dimensions.height + dimensions.margin) / nb;
         for (i in 0...nb) {
-          var player:Null<Player> = state.players[state.standings[i]];
           ui.rank({
             rank:Std.string(i+1),
-            player:player,
+            player:standings[i],
             x:dimensions.left,
             y:dimensions.top + dy * i,
             w:dimensions.width,

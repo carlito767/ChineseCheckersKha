@@ -170,7 +170,7 @@ class Board {
   }
 
   static public function isOver(state:State):Bool {
-    return (state.standings.length > 0 && state.standings.length == state.sequence.length);
+    return (state.standings.length > 0 && state.standings.length == state.sequence.length - 1);
   }
 
   static public function isRunning(state:State):Bool {
@@ -263,14 +263,6 @@ class Board {
     }
     if (victory) {
       state.standings.push(to.piece);
-      if (state.standings.length == state.sequence.length-1) {
-        // Who is the great loser?
-        for (player in state.players) {
-          if (state.standings.indexOf(player.id) == -1) {
-            state.standings.push(player.id);
-          }
-        }
-      }
     }
   }
 
