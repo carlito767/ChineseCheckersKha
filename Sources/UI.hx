@@ -88,6 +88,7 @@ typedef UIWindow = {
 // UI
 //
 
+@:build(Macro.buildUI())
 class UI extends Mui {
   public static var showHitbox = false;
 
@@ -108,17 +109,6 @@ class UI extends Mui {
   public function postRender() {
     end();
     g.disableScissor();
-  }
-
-  function render<T:(MuiObject)>(object:T, f:T->MuiEval->Void):MuiEval {
-    scaleObject(object);
-    var eval:MuiEval = evaluate(object);
-    f(object, eval);
-    if (showHitbox) {
-      g.color = Color.Green;
-      g.drawRect(object.x, object.y, object.w, object.h);
-    }
-    return eval;
   }
 
   //
@@ -213,11 +203,8 @@ class UI extends Mui {
   // Button
   //
 
-  public function button(object:UIButton):MuiEval {
-    return render(object, renderButton);
-  }
-
-  function renderButton(object:UIButton, eval:MuiEval) {
+  @ui
+  function button(object:UIButton) {
     background(object);
 
     var color:Color = Color.White;
@@ -243,11 +230,8 @@ class UI extends Mui {
   // Image
   //
 
-  public function image(object:UIImage):MuiEval {
-    return render(object,renderImage);
-  }
-
-  function renderImage(object:UIImage, eval:MuiEval) {
+  @ui
+  function image(object:UIImage) {
     g.color = Color.White;
     g.drawScaledImage(object.image, object.x, object.y, object.w, object.h);
   }
@@ -256,11 +240,8 @@ class UI extends Mui {
   // Rank
   //
 
-  public function rank(object:UIRank):MuiEval {
-    return render(object, renderRank);
-  }
-
-  function renderRank(object:UIRank, eval:MuiEval) {
+  @ui
+  function rank(object:UIRank) {
     // Slot
     background(object);
     // Separator
@@ -287,11 +268,8 @@ class UI extends Mui {
   // Tile
   //
 
-  public function tile(object:UITile):MuiEval {
-    return render(object, renderTile);
-  }
-
-  function renderTile(object:UITile, eval:MuiEval) {
+  @ui
+  function tile(object:UITile) {
     var radius = object.h * 0.5;
     var cx = object.x + radius;
     var cy = object.y + radius;
@@ -334,11 +312,8 @@ class UI extends Mui {
   // Title
   //
 
-  public function title(object:UITitle):MuiEval {
-    return render(object, renderTitle);
-  }
-
-  function renderTitle(object:UITitle, eval:MuiEval) {
+  @ui
+  function title(object:UITitle) {
     g.color = Color.White;
     g.font = Assets.fonts.BatikGangster;
     g.fontSize = Std.int(object.h);
@@ -349,11 +324,8 @@ class UI extends Mui {
   // Window
   //
 
-  public function window(object:UIWindow):MuiEval {
-    return render(object, renderWindow);
-  }
-
-  public function renderWindow(object:UIWindow, eval:MuiEval) {
+  @ui
+  function window(object:UIWindow) {
     background(object);
     if (object.title != null) {
       var h = object.h * 0.2;
