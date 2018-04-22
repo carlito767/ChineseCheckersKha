@@ -18,7 +18,7 @@ class Translations {
   public static var language(default, set):String;
 
   static function set_language(iso) {
-    translation = switch(iso) {
+    translation = switch iso {
       case 'fr': {
         language:'Langue :',
         newGame:'Nouvelle Partie',

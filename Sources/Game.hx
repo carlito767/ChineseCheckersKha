@@ -87,7 +87,7 @@ class Game {
       return defaults;
     }
 
-    switch (settings.version) {
+    switch settings.version {
     case SETTINGS_VERSION:
     default:
       trace('Settings: unknown version');

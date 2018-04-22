@@ -200,7 +200,7 @@ class Board {
       allowedMoves:[],
     };
 
-    switch (gamesave.version) {
+    switch gamesave.version {
     case 1:
     case 2:
     case 3:
