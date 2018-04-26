@@ -5,6 +5,7 @@ import kha.input.KeyCode;
 import AI;
 import Board;
 import Board.Player;
+import Board.PlayerKind;
 import Board.Tile;
 import Board.Sequence;
 import Board.State;
@@ -28,11 +29,7 @@ class Game {
   public static inline var WIDTH = 800;
   public static inline var HEIGHT = 600;
 
-  var aiMode(default, set):Bool = false;
-  function set_aiMode(value) {
-    sequencer.reset();
-    return aiMode = value;
-  }
+  var pause:Bool = false;
 
   var sequencer:Sequencer<State> = new Sequencer();
 
@@ -42,7 +39,6 @@ class Game {
 
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
-    aiMode = false;
     state = Board.create(value);
     return sequenceIndex = value;
   }
@@ -156,7 +152,6 @@ class Game {
         var gamesave:Null<State> = Board.load(Storage.read(filename));
         if (gamesave != null) {
           trace('Quick Load $save');
-          aiMode = false;
           state = gamesave;
           screen = 'play';
           return;
@@ -169,7 +164,7 @@ class Game {
     case 'play':
       if (Input.keyPressed(KeyCode.Backspace)) {
         // Cancel last move
-        aiMode = false;
+        pause = true;
         Board.cancelLastMove(state);
       }
       else if (Input.keyPressed(KeyCode.Return)) {
@@ -193,7 +188,7 @@ class Game {
       }
       else if (Input.keyPressed(KeyCode.P)) {
         // Play/Pause
-        aiMode = !aiMode;
+        pause = !pause;
       }
       else if (Input.keyPressed(KeyCode.S)) {
         // State
@@ -236,21 +231,21 @@ class Game {
       var dx = (WIDTH - boardWidth) * 0.5;
       var dy = (HEIGHT - boardHeight) * 0.5;
       var moves = state.allowedMoves;
-      var disabled = (!Board.isRunning(state) || aiMode);
+      var human = Board.isRunning(state) && state.currentPlayer.kind == Human;
       for (tile in state.tiles) {
         var tx = dx + (tile.x - 1) * distanceX;
         var ty = dy + (tile.y - 1) * distanceY;
         var selectable = (moves.indexOf(tile) > -1);
         var selected = (state.selectedTile == tile);
         var emphasis:UITileEmphasis = None;
-        if (!aiMode && !sequencer.busy() && selectable) {
+        if (human && !sequencer.busy() && selectable) {
           emphasis = (state.selectedTile == null) ? Selectable : AllowedMove;
         }
         else if (selected) {
           emphasis = Selected;
         }
         var player = (tile.piece == null) ? null : state.players[tile.piece];
-        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(showTileId) ? Std.string(tile.id) : null, disabled:disabled }).hit) {
+        if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(showTileId) ? Std.string(tile.id) : null, disabled:!human }).hit) {
           if (tile == state.selectedTile) {
             state.selectedTile = null;
           }
@@ -304,7 +299,7 @@ class Game {
         }
       }
       else if (Board.isRunning(state)) {
-        if (aiMode && !sequencer.busy()) {
+        if (!pause && !human && !sequencer.busy()) {
           var move = AI.search(state);
           if (move != null) {
             sequencer.push(aiSelectTile, move.from, 0.5);

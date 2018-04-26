@@ -23,6 +23,12 @@ typedef Move = {
 typedef Player = {
   var id:Int;
   var color:Color;
+  var kind:PlayerKind;
+}
+
+enum PlayerKind {
+  Human;
+  Computer;
 }
 
 typedef Tile = {
@@ -100,7 +106,7 @@ class ChineseCheckers {
 //
 
 class Board {
-  static inline var GAMESAVE_VERSION = 4;
+  static inline var GAMESAVE_VERSION = 5;
 
   public static function sequences():Array<Sequence> {
     return ChineseCheckers.sequences;
@@ -127,6 +133,7 @@ class Board {
         players[id] = {
           id:id,
           color:player.color,
+          kind:(id == 1) ? Human : Computer,
         };
         owners[player.home] = id;
       }
@@ -201,9 +208,10 @@ class Board {
     };
 
     switch gamesave.version {
-    case 1:
-    case 2:
-    case 3:
+    case 1|2|3|4:
+      for (player in state.players) {
+        player.kind = Human;
+      }
     case GAMESAVE_VERSION:
     default:
       trace('Gamesave: unknown version');
