@@ -69,36 +69,26 @@ class Board {
     var selectedTile:Null<Tile> = null;
 
     // Players
-    var owners = new Map<Int, Int>();
     if (sequenceIndex != null) {
       sequence = SEQUENCES[sequenceIndex];
       for (id in sequence) {
-        var player = PLAYERS[id-1];
+        var player = Board.players[id-1];
         players[id] = {
           id:id,
           color:player.color,
           kind:(id == 1) ? Human : Computer,
         };
-        owners[player.home] = id;
       }
     }
 
     // Tiles
-    var id = 0;
-    for (y in 0...HEIGHT) {
-      var row = BOARD[y];
-      for (x in 0...WIDTH) {
-        var value = row.charAt(x);
-        if (value != ' ') {
-          var player = Std.parseInt(value);
-          tiles[++id] = {
-            id:id,
-            x:x + 1,
-            y:y + 1,
-            owner:(player != null) ? owners[player] : null,
-            piece:(player != null && players[player] != null) ? player : null,
-          };
-        } 
+    for (tile in Board.tiles) {
+      tiles[tile.id] = {
+        id:tile.id,
+        x:tile.x,
+        y:tile.y,
+        owner:tile.owner,
+        piece:(tile.piece != null && players[tile.piece] != null) ? tile.piece : null,
       }
     }
 

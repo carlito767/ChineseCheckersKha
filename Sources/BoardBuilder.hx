@@ -39,6 +39,44 @@ class BoardBuilder {
       ]
     }
 
+    // Players
+    var players = [];
+    var owners = new Map<Int, Int>();
+    var id = 0;
+    for (player in data.players) {
+      players.push({
+        id:++id,
+        color:player.color,
+      });
+      owners[player.home] = id;
+    }
+
+    // Tiles
+    var tiles = [];
+    var width = data.board[0].length;
+    var height = data.board.length;
+    var id = 0;
+    for (y in 0...height) {
+      var row = data.board[y];
+      for (x in 0...width) {
+        var value = row.charAt(x);
+        if (value != ' ') {
+          var player = Std.parseInt(value);
+          tiles.push({
+            id:++id,
+            x:x + 1,
+            y:y + 1,
+            owner:(player != null) ? owners[player] : null,
+            piece:(player != null) ? player : null,
+          });
+        } 
+      }
+    }
+
+    //
+    // Fields
+    //
+
     var fields = Context.getBuildFields();
 
     // WIDTH
@@ -46,7 +84,7 @@ class BoardBuilder {
       access:[APublic,AStatic,AInline],
       name:'WIDTH',
       pos:Context.currentPos(),
-      kind:FVar(macro:Int, macro $v{data.board[0].length}),
+      kind:FVar(macro:Int, macro $v{width}),
     });
 
     // HEIGHT
@@ -54,23 +92,32 @@ class BoardBuilder {
       access:[APublic,AStatic,AInline],
       name:'HEIGHT',
       pos:Context.currentPos(),
-      kind:FVar(macro:Int, macro $v{data.board.length}),
+      kind:FVar(macro:Int, macro $v{height}),
     });
 
-    // BOARD
+    // players
     fields.push({
       access:[AStatic],
-      name:'BOARD',
+      name:'players',
       pos:Context.currentPos(),
-      kind:FVar(macro:Array<String>, macro $v{data.board}),
+      kind:FVar(macro:Array<{
+        var id:Int;
+        var color:Int;
+      }>, macro $v{players}),
     });
 
-    // PLAYERS
+    // tiles
     fields.push({
       access:[AStatic],
-      name:'PLAYERS',
+      name:'tiles',
       pos:Context.currentPos(),
-      kind:FVar(macro:Array<{var home:Int;var color:Int;}>, macro $v{data.players}),
+      kind:FVar(macro:Array<{
+        var id:Int;
+        var x:Int;
+        var y:Int;
+        var owner:Null<Int>;
+        var piece:Null<Int>;
+      }>, macro $v{tiles}),
     });
 
     // SEQUENCES
