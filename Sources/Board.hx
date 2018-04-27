@@ -2,8 +2,6 @@ import kha.Color;
 
 typedef Gamesave = {
   var version:Int;
-  var width:Int;
-  var height:Int;
   var sequence:Sequence;
   var players:Map<Int, Player>;
   var tiles:Map<Int, Tile>;
@@ -42,8 +40,6 @@ typedef Tile = {
 typedef Sequence = Array<Int>;
 
 typedef State = {
-  var width:Int;
-  var height:Int;
   var sequence:Sequence;
   var players:Map<Int, Player>;
   var tiles:Map<Int, Tile>;
@@ -55,66 +51,14 @@ typedef State = {
 }
 
 //
-// Raw Board
-//
-
-typedef RawPlayer = {
-  var home:Int;
-  var color:Color;
-}
-
-class ChineseCheckers {
-  public static var board(default, null):Array<String> = [
-    '            4            ',
-    '           4 4           ',
-    '          4 4 4          ',
-    '         4 4 4 4         ',
-    '3 3 3 3 * * * * * 5 5 5 5',
-    ' 3 3 3 * * * * * * 5 5 5 ',
-    '  3 3 * * * * * * * 5 5  ',
-    '   3 * * * * * * * * 5   ',
-    '    * * * * * * * * *    ',
-    '   2 * * * * * * * * 6   ',
-    '  2 2 * * * * * * * 6 6  ',
-    ' 2 2 2 * * * * * * 6 6 6 ',
-    '2 2 2 2 * * * * * 6 6 6 6',
-    '         1 1 1 1         ',
-    '          1 1 1          ',
-    '           1 1           ',
-    '            1            ',
-  ];
-
-  public static var players(default, null):Array<RawPlayer> = [
-    { home:4, color:Color.Black },
-    { home:5, color:Color.fromBytes(  0, 128, 128) }, // teal
-    { home:6, color:Color.fromBytes(  0, 128,   0) }, // green
-    { home:1, color:Color.Red },
-    { home:2, color:Color.Purple },
-    { home:3, color:Color.Yellow },
-  ];
-
-  public static var sequences(default, null):Array<Sequence> = [
-    [ 1, 4 ],
-    [ 1, 3, 5 ],
-    [ 1, 3, 4, 6 ],
-    [ 1, 2, 3, 4, 5, 6 ],
-  ];
-}
-
-//
 // Board
 //
 
+@:build(BoardBuilder.build())
 class Board {
-  static inline var GAMESAVE_VERSION = 5;
-
-  public static function sequences():Array<Sequence> {
-    return ChineseCheckers.sequences;
-  }
+  static inline var GAMESAVE_VERSION = 6;
 
   public static function create(?sequenceIndex:Int):State {
-    var width:Int = ChineseCheckers.board[0].length;
-    var height:Int = ChineseCheckers.board.length;
     var sequence:Sequence = [];
     var players:Map<Int, Player> = new Map<Int, Player>();
     var tiles:Map<Int, Tile> = new Map<Int, Tile>();
@@ -127,9 +71,9 @@ class Board {
     // Players
     var owners = new Map<Int, Int>();
     if (sequenceIndex != null) {
-      sequence = ChineseCheckers.sequences[sequenceIndex];
+      sequence = SEQUENCES[sequenceIndex];
       for (id in sequence) {
-        var player = ChineseCheckers.players[id-1];
+        var player = PLAYERS[id-1];
         players[id] = {
           id:id,
           color:player.color,
@@ -141,9 +85,9 @@ class Board {
 
     // Tiles
     var id = 0;
-    for (y in 0...height) {
-      var row = ChineseCheckers.board[y];
-      for (x in 0...width) {
+    for (y in 0...HEIGHT) {
+      var row = BOARD[y];
+      for (x in 0...WIDTH) {
         var value = row.charAt(x);
         if (value != ' ') {
           var player = Std.parseInt(value);
@@ -159,8 +103,6 @@ class Board {
     }
 
     return {
-      width:width,
-      height:height,
       sequence:sequence,
       players:players,
       tiles:tiles,
@@ -194,8 +136,6 @@ class Board {
     }
 
     var state:State = {
-      width:gamesave.width,
-      height:gamesave.height,
       sequence:gamesave.sequence,
       players:gamesave.players,
       tiles:gamesave.tiles,
@@ -212,6 +152,7 @@ class Board {
       for (player in state.players) {
         player.kind = Human;
       }
+    case 5:
     case GAMESAVE_VERSION:
     default:
       trace('Gamesave: unknown version');
@@ -226,8 +167,6 @@ class Board {
   public static function save(state:State):Gamesave {
     return {
       version:GAMESAVE_VERSION,
-      width:state.width,
-      height:state.height,
       sequence:state.sequence,
       players:state.players,
       tiles:state.tiles,
