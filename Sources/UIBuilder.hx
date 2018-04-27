@@ -1,8 +1,8 @@
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
-class Macro {
-  static public function buildUI():Array<Field> {
+class UIBuilder {
+  static public function build():Array<Field> {
     var fields = Context.getBuildFields();
 
     for (field in fields) {

@@ -88,7 +88,7 @@ typedef UIWindow = {
 // UI
 //
 
-@:build(Macro.buildUI())
+@:build(UIBuilder.build())
 class UI extends Mui {
   public static var showHitbox = false;
 
