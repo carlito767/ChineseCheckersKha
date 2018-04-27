@@ -39,6 +39,7 @@ class Game {
 
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
+    pause = false;
     state = Board.create(value);
     return sequenceIndex = value;
   }
@@ -170,13 +171,16 @@ class Game {
       else if (Input.keyPressed(KeyCode.Return)) {
         // Restore sequencer speed
         sequencer.speed = 1.0;
+        trace('speed:${sequencer.speed}');
       }
       else if (Input.keyPressed(KeyCode.Add)) {
         // Increase sequencer speed
         sequencer.speed *= 2;
+        trace('speed:${sequencer.speed}');
       }
       else if (Input.keyPressed(KeyCode.Subtract)) {
         sequencer.speed *= 0.5;
+        trace('speed:${sequencer.speed}');
       }
       else if (Input.keyPressed(KeyCode.H)) {
         // Hint
