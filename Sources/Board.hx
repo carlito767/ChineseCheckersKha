@@ -13,6 +13,13 @@ typedef Gamesave = {
 // State
 //
 
+enum PlayerKind {
+  Human;
+  AiEasy;
+  AiMedium;
+  AiHard;
+}
+
 typedef Move = {
   var from:Int;
   var to:Int;
@@ -22,11 +29,6 @@ typedef Player = {
   var id:Int;
   var color:Color;
   var kind:PlayerKind;
-}
-
-enum PlayerKind {
-  Human;
-  Computer;
 }
 
 typedef Tile = {
@@ -76,7 +78,7 @@ class Board {
         players[id] = {
           id:id,
           color:player.color,
-          kind:(id == 1) ? Human : Computer,
+          kind:(id == 1) ? Human : AiEasy,
         };
       }
     }

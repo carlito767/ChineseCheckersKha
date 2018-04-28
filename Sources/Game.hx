@@ -186,6 +186,12 @@ class Game {
         // Hint
         AI.search(state);
       }
+      else if (Input.keyPressed(KeyCode.K)) {
+        if (Board.isRunning(state)) {
+          pause = true;
+          state.currentPlayer.kind = (state.currentPlayer.kind == Human) ? AiEasy : Human;
+        }
+      }
       else if (Input.keyPressed(KeyCode.M)) {
         // Moves
         trace('moves:${state.moves}');
@@ -304,7 +310,12 @@ class Game {
       }
       else if (Board.isRunning(state)) {
         if (!pause && !human && !sequencer.busy()) {
-          var move = AI.search(state);
+          var move = null;
+          switch state.currentPlayer.kind {
+          case AiEasy:
+            move = AI.search(state);
+          default:
+          }
           if (move != null) {
             sequencer.push(aiSelectTile, move.from, 0.5);
             sequencer.push(aiMove, move, 0.5);
