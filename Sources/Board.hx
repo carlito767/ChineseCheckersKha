@@ -58,7 +58,7 @@ typedef State = {
 
 @:build(BoardBuilder.build())
 class Board {
-  static inline var GAMESAVE_VERSION = 6;
+  static inline var GAMESAVE_VERSION = 7;
 
   public static function create(?sequenceIndex:Int):State {
     var sequence:Sequence = [];
@@ -78,7 +78,7 @@ class Board {
         players[id] = {
           id:id,
           color:player.color,
-          kind:(id == 1) ? Human : AiEasy,
+          kind:(sequence.length == 2 && id != 1) ? AiEasy : Human,
         };
       }
     }
@@ -118,6 +118,10 @@ class Board {
     return (state.currentPlayer != null);
   }
 
+  public static function victory(state:State, id:Int):Bool {
+    return (state.standings.indexOf(id) != -1);
+  }
+
   //
   // Gamesave
   //
@@ -140,11 +144,10 @@ class Board {
     };
 
     switch gamesave.version {
-    case 1|2|3|4:
+    case 1|2|3|4|5|6:
       for (player in state.players) {
         player.kind = Human;
       }
-    case 5:
     case GAMESAVE_VERSION:
     default:
       trace('Gamesave: unknown version');

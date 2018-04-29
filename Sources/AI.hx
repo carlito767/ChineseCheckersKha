@@ -4,63 +4,103 @@ import Board.Player;
 import Board.Tile;
 import Board.State;
 
+// Minimax (2 players)
 class AI {
-  public static function search(state:State, ?depth:Int = 1):Null<Move> {
-    if (!Board.isRunning(state)) {
+  static var depth:UInt;
+  static var maximizer:Int;
+  static var minimizer:Int;
+
+  public static function search(state:State, ?maxDepth:UInt = 0):Null<Move> {
+    if (state.currentPlayer == null) {
       return null;
     }
 
-    var player = state.currentPlayer;
+    if (state.sequence.length != 2 && maxDepth != 0) {
+      return null;
+    }
+
+    depth = maxDepth;
+    maximizer = state.currentPlayer.id;
+    minimizer = (state.sequence[0] == maximizer) ? state.sequence[1] : state.sequence[0];
+
     var bestScore:Null<Int> = null;
-    var bestMoves:Array<Move> = [];
+    var bestMoves:Null<Array<Move>> = null;
     for (tile in state.allowedMoves) {
       var moves = Board.allowedMovesForTile(state, tile);
       for (move in moves) {
-        Board.applyMove(state, tile, move);
-        var score = evaluate(state, player);
-        trace('from:${tile.id}, to:${move.id}, score:$score');
-        if (bestScore == null || bestScore > score) {
-          bestScore = score;
-          bestMoves = [{ from:tile.id, to:move.id }];
+        Board.move(state, tile, move);
+        var score:Null<Int> = explore(state);
+        if (score != null) {
+          if (bestScore == null || score > bestScore) {
+            bestScore = score;
+            bestMoves = [{ from:tile.id, to:move.id }];
+          }
+          else if (bestScore == score) {
+            bestMoves.push({ from:tile.id, to:move.id });
+          }
         }
-        else if (bestScore == score) {
-          bestMoves.push({ from:tile.id, to:move.id });
+        Board.cancelLastMove(state);
+      }
+    }
+    if (bestScore == null) {
+      return null;
+    }
+    trace('bestMoves:$bestMoves');
+    var i = Math.floor(Math.random() * bestMoves.length);
+    var move = bestMoves[i];
+    trace('bestMove:$move');
+    return move;
+  }
+
+  static function explore(state:State):Null<Int> {
+    if (depth == 0 || state.currentPlayer == null) {
+      return evaluate(state);
+    }
+
+    trace('depth:$depth');
+
+    var isMaximizer = (state.currentPlayer.id == maximizer);
+    if (isMaximizer) {
+      depth--;
+    }
+
+    var f = (isMaximizer) ? Math.max : Math.min;
+
+    var bestScore:Null<Int> = null;
+    for (tile in state.allowedMoves) {
+      var moves = Board.allowedMovesForTile(state, tile);
+      for (move in moves) {
+        Board.move(state, tile, move);
+        var score:Null<Int> = (depth == 0) ? evaluate(state) : explore(state);
+        if (score != null) {
+          bestScore = (bestScore == null) ? score : Std.int(f(score, bestScore));
         }
         Board.cancelMove(state);
       }
     }
-    trace('bestScore:$bestScore');
-    trace('bestMoves:$bestMoves');
-    if (bestMoves.length == 0) {
-      return null;
+
+    if (isMaximizer) {
+      depth++;
     }
-    var i = Math.floor(Math.random() * bestMoves.length);
-    var bestMove = bestMoves[i];
-    trace('bestMove:$bestMove');
-    return bestMove;
+    return bestScore;
   }
 
-  static function evaluate(state:State, player:Player):Int {
-    var used:Array<Int> = [];
-    var score = 0;
-    for (goal in state.tiles) {
-      if (goal.owner == player.id && goal.piece != player.id) {
-        var bestScore:Null<Int> = null;
-        var bestTile:Null<Int> = null;
-        for (tile in state.tiles) {
-          if (tile.piece == player.id && tile.owner != player.id && used.indexOf(tile.id) == -1) {
-            var score = distance(tile, goal);
-            if (bestScore == null || bestScore > score) {
-              bestScore = score;
-              bestTile = tile.id;
-            }
+  static function evaluate(state:State):Int {
+    return distances(state, minimizer) - distances(state, maximizer);
+  }
+
+  static function distances(state:State, id:Int) {
+    var distances = 0;
+    for (tile in state.tiles) {
+      if (tile.piece == id && tile.owner != id) {
+        for (goal in state.tiles) {
+          if (goal.owner == id && goal.piece != id) {
+            distances += distance(tile, goal);
           }
         }
-        score += bestScore;
-        used.push(bestTile);
       }
     }
-    return score;
+    return distances;
   }
 
   static function distance(from:Tile, to:Tile):Int {
