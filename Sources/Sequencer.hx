@@ -13,28 +13,17 @@ class Sequencer<T> {
   var currentParameter:Dynamic;
   var currentDelay:Float;
 
-  var doReset:Bool;
-
   public function new() {
-    init();
-  }
-
-  function init() {
     timer = new Timer();
     tasks = [];
     parameters = [];
     delays = [];
     currentTask = null;
     currentDelay = 0;
-    doReset = false;
   }
 
   public function busy():Bool {
     return (currentTask != null || tasks.length > 0);
-  }
-
-  public function reset() {
-    doReset = true;
   }
 
   public function push(task:T->Dynamic->Bool, ?parameter:Dynamic, ?delay:Float = 0) {
@@ -45,10 +34,6 @@ class Sequencer<T> {
 
   public function update(object:T) {
     var dt = timer.update();
-    if (doReset) {
-      init();
-      return;
-    }
     if (!busy()) {
       return;
     }
