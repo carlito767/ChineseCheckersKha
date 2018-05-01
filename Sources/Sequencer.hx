@@ -1,3 +1,5 @@
+// Inspired by: https://github.com/juakob/SequenceCode
+
 import kha.Scheduler;
 
 import Timer;
