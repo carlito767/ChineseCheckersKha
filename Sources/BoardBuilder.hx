@@ -41,7 +41,7 @@ class BoardBuilder {
 
     // Players
     var players = [];
-    var owners = new Map<Int, Int>();
+    var owners = new Map();
     var id = 0;
     for (player in data.players) {
       players.push({

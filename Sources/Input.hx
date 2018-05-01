@@ -12,8 +12,8 @@ typedef Mouse = {
 }
 
 class Input {
-  public static var keyboard(default, null):Keyboard = { keys:new Map<KeyCode, Bool>(), read:new Map<KeyCode, Bool>() };
-  public static var mouse(default, null):Mouse = { x:0, y:0, buttons:new Map<Int, Bool>() };
+  public static var keyboard(default, null):Keyboard = { keys:new Map(), read:new Map() };
+  public static var mouse(default, null):Mouse = { x:0, y:0, buttons:new Map() };
 
   public static function init() {
     var khaKeyboard = kha.input.Keyboard.get();

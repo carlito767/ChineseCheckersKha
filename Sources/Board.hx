@@ -62,8 +62,8 @@ class Board {
 
   public static function create(?sequenceIndex:Int):State {
     var sequence:Sequence = [];
-    var players:Map<Int, Player> = new Map<Int, Player>();
-    var tiles:Map<Int, Tile> = new Map<Int, Tile>();
+    var players:Map<Int, Player> = new Map();
+    var tiles:Map<Int, Tile> = new Map();
     var moves:Array<Move> = [];
     var standings:Array<Int> = [];
     var currentPlayer:Null<Player> = null;
