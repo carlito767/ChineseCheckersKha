@@ -7,6 +7,7 @@ import js.html.CanvasElement;
 import js.Browser.document;
 import js.Browser.window;
 #end
+import kha.Scheduler;
 import kha.System;
 
 class Main {
@@ -30,6 +31,11 @@ class Main {
     resize();
     #end
 
-    System.init({ title:Game.TITLE, width:Game.WIDTH, height:Game.HEIGHT, samplesPerPixel:4 }, Loader.init);
+    Loader.onDone = function() {
+      var game = new Game();
+      Scheduler.addTimeTask(game.update, 0, 1 / 60);
+      System.notifyOnRender(game.render);
+    }
+    System.init({ title:Game.TITLE, width:Game.WIDTH, height:Game.HEIGHT, samplesPerPixel:4 }, Loader.load);
   }
 }
