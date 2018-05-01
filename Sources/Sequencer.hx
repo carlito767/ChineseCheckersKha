@@ -3,14 +3,6 @@ import kha.Scheduler;
 import Timer;
 
 class Sequencer<T> {
-  public var speed(default, set):Float;
-  function set_speed(value) {
-    if (value <= 0.0) {
-      value = 1.0;
-    }
-    return speed = value;
-  }
-
   var timer:Timer;
 
   var tasks:Array<T->Dynamic->Bool>;
@@ -35,7 +27,6 @@ class Sequencer<T> {
     currentTask = null;
     currentDelay = 0;
     doReset = false;
-    speed = 1.0;
   }
 
   public function busy():Bool {
@@ -67,7 +58,7 @@ class Sequencer<T> {
       currentDelay = delays.shift();
     }
     else if (currentDelay > 0) {
-      currentDelay -= dt * speed;
+      currentDelay -= dt;
     }
     if (currentDelay > 0) {
       return;

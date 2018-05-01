@@ -168,20 +168,6 @@ class Game {
         pause = true;
         Board.cancelLastMove(state);
       }
-      else if (Input.keyPressed(KeyCode.Return)) {
-        // Restore sequencer speed
-        sequencer.speed = 1.0;
-        trace('speed:${sequencer.speed}');
-      }
-      else if (Input.keyPressed(KeyCode.Add)) {
-        // Increase sequencer speed
-        sequencer.speed *= 2;
-        trace('speed:${sequencer.speed}');
-      }
-      else if (Input.keyPressed(KeyCode.Subtract)) {
-        sequencer.speed *= 0.5;
-        trace('speed:${sequencer.speed}');
-      }
       else if (Input.keyPressed(KeyCode.K)) {
         // Kind
         if (state.currentPlayer != null && state.sequence.length == 2) {
