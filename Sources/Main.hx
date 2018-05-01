@@ -9,9 +9,6 @@ import js.Browser.window;
 #end
 import kha.System;
 
-import Game;
-import Loader;
-
 class Main {
   public static function main() {
     // https://github.com/Kode/Kha/issues/94

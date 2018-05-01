@@ -1,6 +1,4 @@
-import Board;
 import Board.Move;
-import Board.Player;
 import Board.Tile;
 import Board.State;
 

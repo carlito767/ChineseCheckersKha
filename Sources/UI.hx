@@ -7,8 +7,6 @@ using kha.graphics2.GraphicsExtension;
 import kha.System;
 
 import Board.Player;
-import Board.Tile;
-import Mui;
 import Mui.MuiEval;
 import Mui.MuiInput;
 import Mui.MuiObject;

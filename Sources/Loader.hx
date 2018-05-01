@@ -3,8 +3,6 @@ import kha.Framebuffer;
 import kha.Scheduler;
 import kha.System;
 
-import Game;
-
 class Loader {
   public static function init() {
     System.notifyOnRender(render);

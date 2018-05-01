@@ -1,4 +1,6 @@
+import kha.input.Keyboard as KhaKeyboard;
 import kha.input.KeyCode;
+import kha.input.Mouse as KhaMouse;
 
 typedef Keyboard = {
   var keys:Map<KeyCode, Bool>;
@@ -16,12 +18,12 @@ class Input {
   public static var mouse(default, null):Mouse = { x:0, y:0, buttons:new Map() };
 
   public static function init() {
-    var khaKeyboard = kha.input.Keyboard.get();
+    var khaKeyboard = KhaKeyboard.get();
     if (khaKeyboard != null) {
       khaKeyboard.notify(onKeyDown, onKeyUp, null);
     }
 
-    var khaMouse = kha.input.Mouse.get();
+    var khaMouse = KhaMouse.get();
     if (khaMouse != null) {
       khaMouse.notify(onMouseDown, onMouseUp, null, null);
     }
