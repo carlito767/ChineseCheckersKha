@@ -40,9 +40,11 @@ class Input {
     }
   }
 
-  public static function connect(signal:Signal0, command:Command) {
+  public static function connect(command:Command):Signal0 {
+    var signal = new Signal0();
     signal.connect(command.slot);
     commands.set(signal, command);
+    return signal;
   }
 
   public static function disconnect(signal:Signal0) {

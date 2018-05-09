@@ -6,7 +6,6 @@ import Board.Move;
 import Board.Player;
 import Board.Sequence;
 import Board.State;
-import Signal.Signal0;
 import Translations.language;
 import Translations.tr;
 import UI.Dimensions;
@@ -55,16 +54,6 @@ class Game {
 
   var showTileId:Bool = false;
 
-  // Signals
-  var signalHitbox = new Signal0();
-  var signalLanguage = new Signal0();
-  var signalQuickLoad1 = new Signal0();
-  var signalQuickLoad2 = new Signal0();
-  var signalQuickLoad3 = new Signal0();
-  var signalQuickSave1 = new Signal0();
-  var signalQuickSave2 = new Signal0();
-  var signalQuickSave3 = new Signal0();
-
   // Slots
   function slotHitbox() {
     UI.showHitbox = !UI.showHitbox;
@@ -103,14 +92,14 @@ class Game {
     loadSettings();
 
     Input.init();
-    Input.connect(signalHitbox, { keys:[KeyCode.Decimal], slot:slotHitbox });
-    Input.connect(signalLanguage, { keys:[KeyCode.L], slot:slotLanguage });
-    Input.connect(signalQuickLoad1, { keys:[KeyCode.Numpad1], slot:slotQuickLoad1 });
-    Input.connect(signalQuickLoad2, { keys:[KeyCode.Numpad2], slot:slotQuickLoad2 });
-    Input.connect(signalQuickLoad3, { keys:[KeyCode.Numpad3], slot:slotQuickLoad3 });
-    Input.connect(signalQuickSave1, { keys:[KeyCode.Alt, KeyCode.Numpad1], slot:slotQuickSave1 });
-    Input.connect(signalQuickSave2, { keys:[KeyCode.Alt, KeyCode.Numpad2], slot:slotQuickSave2 });
-    Input.connect(signalQuickSave3, { keys:[KeyCode.Alt, KeyCode.Numpad3], slot:slotQuickSave3 });
+    Input.connect({ keys:[KeyCode.Decimal], slot:slotHitbox });
+    Input.connect({ keys:[KeyCode.L], slot:slotLanguage });
+    Input.connect({ keys:[KeyCode.Numpad1], slot:slotQuickLoad1 });
+    Input.connect({ keys:[KeyCode.Numpad2], slot:slotQuickLoad2 });
+    Input.connect({ keys:[KeyCode.Numpad3], slot:slotQuickLoad3 });
+    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad1], slot:slotQuickSave1 });
+    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad2], slot:slotQuickSave2 });
+    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad3], slot:slotQuickSave3 });
 
     scenes = [
       "title" => new SceneTitle(this),

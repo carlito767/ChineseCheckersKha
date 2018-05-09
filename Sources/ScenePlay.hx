@@ -6,33 +6,31 @@ import Signal.Signal0;
 class ScenePlay implements IScene {
   var game:Game;
 
-  // Signals
-  var signalCancelMove = new Signal0();
-  var signalKind = new Signal0();
-  var signalPause = new Signal0();
-  var signalTileId = new Signal0();
-
-  var commands:Map<Signal0, Command>;
+  var commands:Array<Command>;
+  var signals:Array<Signal0>;
 
   public function new(game:Game) {
     this.game = game;
   
     commands = [
-      signalCancelMove => { keys:[KeyCode.Backspace], slot:slotCancelMove },
-      signalKind => { keys:[KeyCode.K], slot:slotKind },
-      signalPause => { keys:[KeyCode.P], slot:slotPause },
-      signalTileId => { keys:[KeyCode.Numpad0], slot:slotTileId },
+      { keys:[KeyCode.Backspace], slot:slotCancelMove },
+      { keys:[KeyCode.K], slot:slotKind },
+      { keys:[KeyCode.P], slot:slotPause },
+      { keys:[KeyCode.Numpad0], slot:slotTileId },
     ];
+
+    signals = [];
   }
 
   public function enter() {
-    for (signal in commands.keys()) {
-      Input.connect(signal, commands[signal]);
+    for (command in commands) {
+      var signal = Input.connect(command);
+      signals.push(signal);
     }
   }
 
   public function leave() {
-    for (signal in commands.keys()) {
+    for (signal in signals) {
       Input.disconnect(signal);
     }
   }
