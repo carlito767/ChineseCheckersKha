@@ -54,52 +54,19 @@ class Game {
 
   var showTileId:Bool = false;
 
-  // Slots
-  function slotHitbox() {
-    UI.showHitbox = !UI.showHitbox;
-  }
-
-  function slotLanguage() {
-    language = (language == 'en') ? 'fr' : 'en';
-    saveSettings();
-  }
-
-  function slotQuickLoad1() {
-    quickLoad(1);
-  }
-
-  function slotQuickLoad2() {
-    quickLoad(2);
-  }
-
-  function slotQuickLoad3() {
-    quickLoad(3);
-  }
-
-  function slotQuickSave1() {
-    quickSave(1);
-  }
-
-  function slotQuickSave2() {
-    quickSave(2);
-  }
-
-  function slotQuickSave3() {
-    quickSave(3);
-  }
-
   public function new() {
     loadSettings();
 
     Input.init();
-    Input.connect({ keys:[KeyCode.Decimal], slot:slotHitbox });
-    Input.connect({ keys:[KeyCode.L], slot:slotLanguage });
-    Input.connect({ keys:[KeyCode.Numpad1], slot:slotQuickLoad1 });
-    Input.connect({ keys:[KeyCode.Numpad2], slot:slotQuickLoad2 });
-    Input.connect({ keys:[KeyCode.Numpad3], slot:slotQuickLoad3 });
-    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad1], slot:slotQuickSave1 });
-    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad2], slot:slotQuickSave2 });
-    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad3], slot:slotQuickSave3 });
+    Input.connect({ keys:[KeyCode.L], slot:changeLanguage });
+    Input.connect({ keys:[KeyCode.Decimal], slot:function() { UI.showHitbox = !UI.showHitbox; } });
+    Input.connect({ keys:[KeyCode.Numpad0], slot:function() { showTileId = !showTileId; } });
+    Input.connect({ keys:[KeyCode.Numpad1], slot:function() { quickLoad(1); } });
+    Input.connect({ keys:[KeyCode.Numpad2], slot:function() { quickLoad(2); } });
+    Input.connect({ keys:[KeyCode.Numpad3], slot:function() { quickLoad(3); } });
+    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad1], slot:function() { quickSave(1); } });
+    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad2], slot:function() { quickSave(2); } });
+    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad3], slot:function() { quickSave(3); } });
 
     scenes = [
       "title" => new SceneTitle(this),
@@ -160,6 +127,15 @@ class Game {
   }
 
   //
+  // Language
+  //
+
+  function changeLanguage() {
+    language = (language == 'en') ? 'fr' : 'en';
+    saveSettings();
+  }
+
+  //
   // Quick Load/Save
   //
 
@@ -211,7 +187,7 @@ class Game {
         screen = 'play';
       }
       if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH * 0.63, y:HEIGHT * 0.7, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
-        slotLanguage();
+        changeLanguage();
       }
     case 'play':
       ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:WIDTH, h:HEIGHT, disabled:true });

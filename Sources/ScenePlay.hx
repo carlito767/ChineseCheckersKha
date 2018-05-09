@@ -13,10 +13,9 @@ class ScenePlay implements IScene {
     this.game = game;
   
     commands = [
-      { keys:[KeyCode.Backspace], slot:slotCancelMove },
-      { keys:[KeyCode.K], slot:slotKind },
-      { keys:[KeyCode.P], slot:slotPause },
-      { keys:[KeyCode.Numpad0], slot:slotTileId },
+      { keys:[KeyCode.Backspace], slot:cancelLastMove },
+      { keys:[KeyCode.K], slot:changePlayerKind },
+      { keys:[KeyCode.P], slot:pause },
     ];
 
     signals = [];
@@ -35,24 +34,19 @@ class ScenePlay implements IScene {
     }
   }
 
-  // Slots
-  function slotCancelMove() {
+  function cancelLastMove() {
     game.pause = true;
     Board.cancelLastMove(game.state);
   }
 
-  function slotKind() {
+  function changePlayerKind() {
     if (game.state.currentPlayer != null && game.state.sequence.length == 2) {
       game.pause = true;
       game.state.currentPlayer.kind = (game.state.currentPlayer.kind == Human) ? AiEasy : Human;
     }
   }
 
-  function slotPause() {
+  function pause() {
     game.pause = !game.pause;
-  }
-
-  function slotTileId() {
-    game.showTileId = !game.showTileId;
   }
 }
