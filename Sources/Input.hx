@@ -13,7 +13,6 @@ typedef Command = {
 
 typedef Keyboard = {
   var keys:Map<KeyCode, Bool>;
-  var read:Map<KeyCode, Bool>;
 }
 
 typedef Mouse = {
@@ -23,7 +22,7 @@ typedef Mouse = {
 }
 
 class Input {
-  public static var keyboard(default, null):Keyboard = { keys:new Map(), read:new Map() };
+  public static var keyboard(default, null):Keyboard = { keys:new Map() };
   public static var mouse(default, null):Mouse = { x:0, y:0, buttons:new Map() };
 
   static var commands:Map<Signal0, Command> = new Map();
@@ -59,21 +58,6 @@ class Input {
   // Keyboard
   //
 
-  public static function keyDown(key:KeyCode):Bool {
-    return (keyboard.keys[key] == true);
-  }
-
-  public static function keyPressed(key:KeyCode, ?repeat:Bool = false):Bool {
-    if (!repeat && keyboard.read[key] == true) {
-      return false;
-    }
-    var pressed = (keyboard.keys[key] == true);
-    if (pressed) {
-      keyboard.read[key] = true;
-    }
-    return pressed;
-  }
-
   static function onKeyDown(key:KeyCode) {
     keyboard.keys[key] = true;
 
@@ -97,7 +81,6 @@ class Input {
 
   static function onKeyUp(key:KeyCode) {
     keyboard.keys[key] = false;
-    keyboard.read[key] = false;
 
     for (command in commands) {
       if (command.active == true && command.keys.indexOf(key) != -1) {
