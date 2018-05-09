@@ -59,7 +59,7 @@ class Game {
     ui.preRender(g, WIDTH, HEIGHT, { x:x, y:y, select:select });
     var currentScene = scenes[scene];
     if (currentScene != null) {
-      currentScene.render();
+      currentScene.render(ui);
     }
     ui.postRender();
     g.end();
@@ -114,7 +114,7 @@ class Game {
   // UI
   //
 
-  public static var ui:UI = new UI();
+  static var ui:UI = new UI();
 
   public static var showTileId:Bool = false;
 

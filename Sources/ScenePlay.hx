@@ -43,8 +43,7 @@ class ScenePlay implements IScene {
   public function update() {
   }
 
-  public function render() {
-    var ui = Game.ui;
+  public function render(ui:UI) {
     var state = Game.state;
     var sequencer = Game.sequencer;
 
