@@ -1,5 +1,6 @@
 import kha.input.KeyCode;
 
+import Input.Command;
 import Signal.Signal0;
 
 class ScenePlay implements IScene {
@@ -11,27 +12,29 @@ class ScenePlay implements IScene {
   var signalPause = new Signal0();
   var signalTileId = new Signal0();
 
+  var commands:Map<Signal0, Command>;
+
   public function new(game:Game) {
     this.game = game;
-
-    Input.commands.push({ keys:[KeyCode.Backspace], signal:signalCancelMove });
-    Input.commands.push({ keys:[KeyCode.K], signal:signalKind });
-    Input.commands.push({ keys:[KeyCode.P], signal:signalPause });
-    Input.commands.push({ keys:[KeyCode.Numpad0], signal:signalTileId });
+  
+    commands = [
+      signalCancelMove => { keys:[KeyCode.Backspace], slot:slotCancelMove },
+      signalKind => { keys:[KeyCode.K], slot:slotKind },
+      signalPause => { keys:[KeyCode.P], slot:slotPause },
+      signalTileId => { keys:[KeyCode.Numpad0], slot:slotTileId },
+    ];
   }
 
   public function enter() {
-    signalCancelMove.connect(slotCancelMove);
-    signalKind.connect(slotKind);
-    signalPause.connect(slotPause);
-    signalTileId.connect(slotTileId);
+    for (signal in commands.keys()) {
+      Input.connect(signal, commands[signal]);
+    }
   }
 
   public function leave() {
-    signalCancelMove.disconnect();
-    signalKind.disconnect();
-    signalPause.disconnect();
-    signalTileId.disconnect();
+    for (signal in commands.keys()) {
+      Input.disconnect(signal);
+    }
   }
 
   // Slots

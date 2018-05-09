@@ -6,7 +6,7 @@ import Signal.Signal0;
 
 typedef Command = {
   var keys:Array<KeyCode>;
-  var signal:Signal0;
+  var slot:Void->Void;
   @:optional var repeat:Bool;
   @:optional var active:Bool;
 }
@@ -23,10 +23,10 @@ typedef Mouse = {
 }
 
 class Input {
-  public static var commands:Array<Command> = [];
-
   public static var keyboard(default, null):Keyboard = { keys:new Map(), read:new Map() };
   public static var mouse(default, null):Mouse = { x:0, y:0, buttons:new Map() };
+
+  static var commands:Map<Signal0, Command> = new Map();
 
   public static function init() {
     var khaKeyboard = KhaKeyboard.get();
@@ -37,6 +37,19 @@ class Input {
     var khaMouse = KhaMouse.get();
     if (khaMouse != null) {
       khaMouse.notify(onMouseDown, onMouseUp, null, null);
+    }
+  }
+
+  public static function connect(signal:Signal0, command:Command) {
+    signal.connect(command.slot);
+    commands.set(signal, command);
+  }
+
+  public static function disconnect(signal:Signal0) {
+    var command = commands[signal];
+    if (command != null) {
+      signal.disconnect(command.slot);
+      commands.remove(signal);
     }
   }
 
@@ -62,7 +75,8 @@ class Input {
   static function onKeyDown(key:KeyCode) {
     keyboard.keys[key] = true;
 
-    for (command in commands) {
+    for (signal in commands.keys()) {
+      var command = commands[signal];
       if ((command.active != true || command.repeat == true) && command.keys.indexOf(key) != -1) {
         var active = true;
         for (key in command.keys) {
@@ -73,7 +87,7 @@ class Input {
         }
         command.active = active;
         if (active) {
-          command.signal.emit();
+          signal.emit();
         }
       }
     }

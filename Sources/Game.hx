@@ -102,24 +102,15 @@ class Game {
   public function new() {
     loadSettings();
 
-    signalHitbox.connect(slotHitbox);
-    signalLanguage.connect(slotLanguage);
-    signalQuickLoad1.connect(slotQuickLoad1);
-    signalQuickLoad2.connect(slotQuickLoad2);
-    signalQuickLoad3.connect(slotQuickLoad3);
-    signalQuickSave1.connect(slotQuickSave1);
-    signalQuickSave2.connect(slotQuickSave2);
-    signalQuickSave3.connect(slotQuickSave3);
-
     Input.init();
-    Input.commands.push({ keys:[KeyCode.Decimal], signal:signalHitbox });
-    Input.commands.push({ keys:[KeyCode.L], signal:signalLanguage });
-    Input.commands.push({ keys:[KeyCode.Numpad1], signal:signalQuickLoad1 });
-    Input.commands.push({ keys:[KeyCode.Numpad2], signal:signalQuickLoad2 });
-    Input.commands.push({ keys:[KeyCode.Numpad3], signal:signalQuickLoad3 });
-    Input.commands.push({ keys:[KeyCode.Alt, KeyCode.Numpad1], signal:signalQuickSave1 });
-    Input.commands.push({ keys:[KeyCode.Alt, KeyCode.Numpad2], signal:signalQuickSave2 });
-    Input.commands.push({ keys:[KeyCode.Alt, KeyCode.Numpad3], signal:signalQuickSave3 });
+    Input.connect(signalHitbox, { keys:[KeyCode.Decimal], slot:slotHitbox });
+    Input.connect(signalLanguage, { keys:[KeyCode.L], slot:slotLanguage });
+    Input.connect(signalQuickLoad1, { keys:[KeyCode.Numpad1], slot:slotQuickLoad1 });
+    Input.connect(signalQuickLoad2, { keys:[KeyCode.Numpad2], slot:slotQuickLoad2 });
+    Input.connect(signalQuickLoad3, { keys:[KeyCode.Numpad3], slot:slotQuickLoad3 });
+    Input.connect(signalQuickSave1, { keys:[KeyCode.Alt, KeyCode.Numpad1], slot:slotQuickSave1 });
+    Input.connect(signalQuickSave2, { keys:[KeyCode.Alt, KeyCode.Numpad2], slot:slotQuickSave2 });
+    Input.connect(signalQuickSave3, { keys:[KeyCode.Alt, KeyCode.Numpad3], slot:slotQuickSave3 });
 
     scenes = [
       "title" => new SceneTitle(this),
