@@ -18,10 +18,13 @@ typedef Settings = {
   var language:String;
 }
 
+@:allow(IScene)
 class Game {
   public static inline var TITLE = 'ChineseCheckersKha';
   public static inline var WIDTH = 800;
   public static inline var HEIGHT = 600;
+
+  var scenes:Map<String, IScene>;
 
   var pause:Bool = false;
 
@@ -29,7 +32,18 @@ class Game {
 
   var ui:UI = new UI();
 
-  var screen:String;
+  var screen(default, set):String;
+  function set_screen(value) {
+    var currentScene = scenes[screen];
+    if (currentScene != null) {
+      currentScene.leave();
+    }
+    var newScene = scenes[value];
+    if (newScene != null) {
+      newScene.enter();
+    }
+    return screen = value;
+  }
 
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
@@ -107,13 +121,17 @@ class Game {
     Input.commands.push({ keys:[KeyCode.Alt, KeyCode.Numpad2], signal:signalQuickSave2 });
     Input.commands.push({ keys:[KeyCode.Alt, KeyCode.Numpad3], signal:signalQuickSave3 });
 
+    scenes = [
+      "title" => new SceneTitle(this),
+      "play" => new ScenePlay(this),
+    ];
+
     screen = 'title';
     sequenceIndex = null;
   }
 
   public function update() {
     sequencer.update(state);
-    updateScreen();
   }
 
   public function render(framebuffer:Framebuffer) {
@@ -198,44 +216,6 @@ class Game {
   }
 
   //
-  // Update
-  //
-
-  function updateScreen() {
-    switch screen {
-    case 'title':
-    case 'play':
-      if (Input.keyPressed(KeyCode.Backspace)) {
-        // Cancel last move
-        pause = true;
-        Board.cancelLastMove(state);
-      }
-      else if (Input.keyPressed(KeyCode.K)) {
-        // Kind
-        if (state.currentPlayer != null && state.sequence.length == 2) {
-          pause = true;
-          state.currentPlayer.kind = (state.currentPlayer.kind == Human) ? AiEasy : Human;
-        }
-      }
-      else if (Input.keyPressed(KeyCode.M)) {
-        // Moves
-        trace('moves:${state.moves}');
-      }
-      else if (Input.keyPressed(KeyCode.P)) {
-        // Play/Pause
-        pause = !pause;
-      }
-      else if (Input.keyPressed(KeyCode.S)) {
-        // State
-        trace('state:$state');
-      }
-      else if (Input.keyPressed(KeyCode.Numpad0)) {
-        showTileId = !showTileId;
-      }
-    }
-  }
-
-  //
   // Render
   //
 
@@ -251,8 +231,7 @@ class Game {
         screen = 'play';
       }
       if (ui.button({ text:'${tr('language')} ${language.toUpperCase()}', x:WIDTH * 0.63, y:HEIGHT * 0.7, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
-        language = (language == 'en') ? 'fr' : 'en';
-        saveSettings();
+        slotLanguage();
       }
     case 'play':
       ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:WIDTH, h:HEIGHT, disabled:true });
