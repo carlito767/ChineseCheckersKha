@@ -32,9 +32,9 @@ class Main {
     #end
 
     Loader.onDone = function() {
-      var game = new Game();
-      Scheduler.addTimeTask(game.update, 0, 1 / 60);
-      System.notifyOnRender(game.render);
+      Game.initialize();
+      Scheduler.addTimeTask(Game.update, 0, 1 / 60);
+      System.notifyOnRender(Game.render);
     }
     System.init({ title:Game.TITLE, width:Game.WIDTH, height:Game.HEIGHT, samplesPerPixel:4 }, Loader.load);
   }

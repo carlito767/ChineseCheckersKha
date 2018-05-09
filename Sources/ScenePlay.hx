@@ -14,14 +14,10 @@ import UI.UITileEmphasis;
 import UI.UIWindow;
 
 class ScenePlay implements IScene {
-  var game:Game;
-
   var commands:Array<Command>;
   var signals:Array<Signal0>;
 
-  public function new(game:Game) {
-    this.game = game;
-  
+  public function new() {
     commands = [
       { keys:[KeyCode.Backspace], slot:cancelLastMove },
       { keys:[KeyCode.K], slot:changePlayerKind },
@@ -48,9 +44,9 @@ class ScenePlay implements IScene {
   }
 
   public function render() {
-    var ui = game.ui;
-    var state = game.state;
-    var sequencer = game.sequencer;
+    var ui = Game.ui;
+    var state = Game.state;
+    var sequencer = Game.sequencer;
 
     ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT, disabled:true });
 
@@ -77,7 +73,7 @@ class ScenePlay implements IScene {
         emphasis = Selected;
       }
       var player = (tile.piece == null) ? null : state.players[tile.piece];
-      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(game.showTileId) ? Std.string(tile.id) : null, disabled:!human }).hit) {
+      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Game.showTileId) ? Std.string(tile.id) : null, disabled:!human }).hit) {
         if (tile == state.selectedTile) {
           state.selectedTile = null;
         }
@@ -131,7 +127,7 @@ class ScenePlay implements IScene {
       }
     }
     else if (Board.isRunning(state)) {
-      if (!game.pause && !human && !sequencer.busy()) {
+      if (!Game.pause && !human && !sequencer.busy()) {
         var move:Null<Move> = null;
         switch state.currentPlayer.kind {
         case AiEasy:
@@ -139,8 +135,8 @@ class ScenePlay implements IScene {
         default:
         }
         if (move != null) {
-          sequencer.push(game.aiSelectTile, move.from, 0.3);
-          sequencer.push(game.aiMove, move, 0.3);
+          sequencer.push(Game.aiSelectTile, move.from, 0.3);
+          sequencer.push(Game.aiMove, move, 0.3);
         }
       }
     }
@@ -157,40 +153,40 @@ class ScenePlay implements IScene {
         var sequence:Sequence = sequences[i];
         if (ui.button({
           text:Std.string(sequence.length),
-          selected:(game.sequenceIndex == i),
+          selected:(Game.sequenceIndex == i),
           x:dimensions.left + dx * i,
           y:dimensions.top,
           w:w,
           h:w,
         }).hit) {
-          game.sequenceIndex = i;
+          Game.sequenceIndex = i;
         }
       }
 
-      if (ui.button({ text:tr('play'), disabled:(game.sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - Game.HEIGHT * 0.067, w:dimensions.width, h:Game.HEIGHT * 0.067 }).hit) {
+      if (ui.button({ text:tr('play'), disabled:(Game.sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - Game.HEIGHT * 0.067, w:dimensions.width, h:Game.HEIGHT * 0.067 }).hit) {
         Board.start(state);
       }
     }
 
     if (ui.button({ text:tr('quit'), x:Game.WIDTH * 0.85, y:Game.WIDTH * 0.025, w:Game.WIDTH * 0.125, h:Game.HEIGHT * 0.067 }).hit) {
-      game.sequenceIndex = null;
-      game.scene = 'title';
+      Game.sequenceIndex = null;
+      Game.scene = 'title';
     }
   }
 
   function cancelLastMove() {
-    game.pause = true;
-    Board.cancelLastMove(game.state);
+    Game.pause = true;
+    Board.cancelLastMove(Game.state);
   }
 
   function changePlayerKind() {
-    if (game.state.currentPlayer != null && game.state.sequence.length == 2) {
-      game.pause = true;
-      game.state.currentPlayer.kind = (game.state.currentPlayer.kind == Human) ? AiEasy : Human;
+    if (Game.state.currentPlayer != null && Game.state.sequence.length == 2) {
+      Game.pause = true;
+      Game.state.currentPlayer.kind = (Game.state.currentPlayer.kind == Human) ? AiEasy : Human;
     }
   }
 
   function pause() {
-    game.pause = !game.pause;
+    Game.pause = !Game.pause;
   }
 }

@@ -11,43 +11,13 @@ typedef Settings = {
   var language:String;
 }
 
-@:allow(IScene)
 class Game {
   public static inline var TITLE = 'ChineseCheckersKha';
   public static inline var WIDTH = 800;
   public static inline var HEIGHT = 600;
 
-  var scenes:Map<String, IScene>;
-  var scene(default, set):String;
-  function set_scene(value) {
-    var currentScene = scenes[scene];
-    if (currentScene != null) {
-      currentScene.leave();
-    }
-    var newScene = scenes[value];
-    if (newScene != null) {
-      newScene.enter();
-    }
-    return scene = value;
-  }
-
-  var pause:Bool = false;
-
-  var sequencer:Sequencer<State> = new Sequencer();
-
-  var ui:UI = new UI();
-
-  var sequenceIndex(default, set):Null<Int>;
-  function set_sequenceIndex(value) {
-    pause = false;
-    state = Board.create(value);
-    return sequenceIndex = value;
-  }
-  var state:State;
-
-  var showTileId:Bool = false;
-
-  public function new() {
+  @:allow(Main)
+  static function initialize() {
     loadSettings();
 
     Input.init();
@@ -62,15 +32,16 @@ class Game {
     Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad3], slot:function() { quickSave(3); } });
 
     scenes = [
-      "title" => new SceneTitle(this),
-      "play" => new ScenePlay(this),
+      "title" => new SceneTitle(),
+      "play" => new ScenePlay(),
     ];
 
     scene = 'title';
     sequenceIndex = null;
   }
 
-  public function update() {
+  @:allow(Main)
+  static function update() {
     sequencer.update(state);
     var currentScene = scenes[scene];
     if (currentScene != null) {
@@ -78,7 +49,8 @@ class Game {
     }
   }
 
-  public function render(framebuffer:Framebuffer) {
+  @:allow(Main)
+  static function render(framebuffer:Framebuffer) {
     var g = framebuffer.g2;
     var x = Input.mouse.x;
     var y = Input.mouse.y;
@@ -94,12 +66,81 @@ class Game {
   }
 
   //
+  // Language
+  //
+
+  public static function changeLanguage() {
+    language = (language == 'en') ? 'fr' : 'en';
+    saveSettings();
+  }
+
+  //
+  // State
+  //
+
+  public static var state:State;
+  public static var sequenceIndex(default, set):Null<Int>;
+  static function set_sequenceIndex(value) {
+    pause = false;
+    state = Board.create(value);
+    return sequenceIndex = value;
+  }
+
+  //
+  // Pause
+  //
+
+  public static var pause:Bool = false;
+
+  //
+  // Scene
+  //
+
+  static var scenes:Map<String, IScene>;
+  public static var scene(default, set):String;
+  static function set_scene(value) {
+    var currentScene = scenes[scene];
+    if (currentScene != null) {
+      currentScene.leave();
+    }
+    var newScene = scenes[value];
+    if (newScene != null) {
+      newScene.enter();
+    }
+    return scene = value;
+  }
+
+  //
+  // UI
+  //
+
+  public static var ui:UI = new UI();
+
+  public static var showTileId:Bool = false;
+
+  //
+  // Sequencing
+  //
+
+  public static var sequencer:Sequencer<State> = new Sequencer();
+
+  public static function aiSelectTile(state:State, id:Int):Bool {
+    state.selectedTile = state.tiles[id];
+    return true;
+  }
+
+  public static function aiMove(state:State, move:Move):Bool {
+    Board.move(state, state.tiles[move.from], state.tiles[move.to]);
+    return true;
+  }
+
+  //
   // Settings
   //
 
   static inline var SETTINGS_VERSION = 1;
 
-  function checkSettings(settings:Null<Settings>):Settings {
+  static function checkSettings(settings:Null<Settings>):Settings {
     var defaults:Settings = { version:SETTINGS_VERSION, language:'en' };
 
     if (settings == null) {
@@ -116,30 +157,21 @@ class Game {
     return settings;
   }
 
-  function loadSettings() {
+  static function loadSettings() {
     var settings:Settings = checkSettings(Storage.read('settings'));
     language = settings.language;
   }
 
-  function saveSettings() {
+  static function saveSettings() {
     var settings:Settings = { version:SETTINGS_VERSION, language:language };
     Storage.write('settings', settings);
-  }
-
-  //
-  // Language
-  //
-
-  function changeLanguage() {
-    language = (language == 'en') ? 'fr' : 'en';
-    saveSettings();
   }
 
   //
   // Quick Load/Save
   //
 
-  function quickLoad(id:Int) {
+  static function quickLoad(id:Int) {
     var gamesave:Null<State> = Board.load(Storage.read('gamesave$id'));
     if (gamesave == null) {
       return;
@@ -150,24 +182,10 @@ class Game {
     scene = 'play';
   }
 
-  function quickSave(id:Int) {
+  static function quickSave(id:Int) {
     if (Board.isRunning(state)) {
       trace('Quick Save $id');
       Storage.write('gamesave$id', Board.save(state));
     }
-  }
-
-  //
-  // Sequencing
-  //
-
-  function aiSelectTile(state:State, id:Int):Bool {
-    state.selectedTile = state.tiles[id];
-    return true;
-  }
-
-  function aiMove(state:State, move:Move):Bool {
-    Board.move(state, state.tiles[move.from], state.tiles[move.to]);
-    return true;
   }
 }

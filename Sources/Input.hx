@@ -79,7 +79,7 @@ class Input {
 
     for (signal in commands.keys()) {
       var command = commands[signal];
-      if ((command.active != true || command.repeat == true) && command.keys.indexOf(key) != -1) {
+      if (command != null && (command.active != true || command.repeat == true) && command.keys.indexOf(key) != -1) {
         var active = true;
         for (key in command.keys) {
           if (keyboard.keys[key] != true) {
