@@ -2,6 +2,15 @@ import kha.input.Keyboard as KhaKeyboard;
 import kha.input.KeyCode;
 import kha.input.Mouse as KhaMouse;
 
+import Signal.Signal0;
+
+typedef Command = {
+  var keys:Array<KeyCode>;
+  var signal:Signal0;
+  @:optional var repeat:Bool;
+  @:optional var active:Bool;
+}
+
 typedef Keyboard = {
   var keys:Map<KeyCode, Bool>;
   var read:Map<KeyCode, Bool>;
@@ -14,6 +23,8 @@ typedef Mouse = {
 }
 
 class Input {
+  public static var commands:Array<Command> = [];
+
   public static var keyboard(default, null):Keyboard = { keys:new Map(), read:new Map() };
   public static var mouse(default, null):Mouse = { x:0, y:0, buttons:new Map() };
 
@@ -50,11 +61,33 @@ class Input {
 
   static function onKeyDown(key:KeyCode) {
     keyboard.keys[key] = true;
+
+    for (command in commands) {
+      if ((command.active != true || command.repeat == true) && command.keys.indexOf(key) != -1) {
+        var active = true;
+        for (key in command.keys) {
+          if (keyboard.keys[key] != true) {
+            active = false;
+            break;
+          }
+        }
+        command.active = active;
+        if (active) {
+          command.signal.emit();
+        }
+      }
+    }
   }
 
   static function onKeyUp(key:KeyCode) {
     keyboard.keys[key] = false;
     keyboard.read[key] = false;
+
+    for (command in commands) {
+      if (command.active == true && command.keys.indexOf(key) != -1) {
+        command.active = false;
+      }
+    }
   }
 
   //

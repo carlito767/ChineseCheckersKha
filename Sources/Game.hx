@@ -6,6 +6,7 @@ import Board.Move;
 import Board.Player;
 import Board.Sequence;
 import Board.State;
+import Signal.Signal0;
 import Translations.language;
 import Translations.tr;
 import UI.Dimensions;
@@ -40,9 +41,72 @@ class Game {
 
   var showTileId:Bool = false;
 
+  // Signals
+  var signalHitbox:Signal0 = new Signal0();
+  var signalLanguage:Signal0 = new Signal0();
+  var signalQuickLoad1:Signal0 = new Signal0();
+  var signalQuickLoad2:Signal0 = new Signal0();
+  var signalQuickLoad3:Signal0 = new Signal0();
+  var signalQuickSave1:Signal0 = new Signal0();
+  var signalQuickSave2:Signal0 = new Signal0();
+  var signalQuickSave3:Signal0 = new Signal0();
+
+  // Slots
+  function slotHitbox() {
+    UI.showHitbox = !UI.showHitbox;
+  }
+
+  function slotLanguage() {
+    language = (language == 'en') ? 'fr' : 'en';
+    saveSettings();
+  }
+
+  function slotQuickLoad1() {
+    quickLoad(1);
+  }
+
+  function slotQuickLoad2() {
+    quickLoad(2);
+  }
+
+  function slotQuickLoad3() {
+    quickLoad(3);
+  }
+
+  function slotQuickSave1() {
+    quickSave(1);
+  }
+
+  function slotQuickSave2() {
+    quickSave(2);
+  }
+
+  function slotQuickSave3() {
+    quickSave(3);
+  }
+
   public function new() {
     loadSettings();
+
+    signalHitbox.connect(slotHitbox);
+    signalLanguage.connect(slotLanguage);
+    signalQuickLoad1.connect(slotQuickLoad1);
+    signalQuickLoad2.connect(slotQuickLoad2);
+    signalQuickLoad3.connect(slotQuickLoad3);
+    signalQuickSave1.connect(slotQuickSave1);
+    signalQuickSave2.connect(slotQuickSave2);
+    signalQuickSave3.connect(slotQuickSave3);
+
     Input.init();
+    Input.commands.push({ keys:[KeyCode.Decimal], signal:signalHitbox });
+    Input.commands.push({ keys:[KeyCode.L], signal:signalLanguage });
+    Input.commands.push({ keys:[KeyCode.Numpad1], signal:signalQuickLoad1 });
+    Input.commands.push({ keys:[KeyCode.Numpad2], signal:signalQuickLoad2 });
+    Input.commands.push({ keys:[KeyCode.Numpad3], signal:signalQuickLoad3 });
+    Input.commands.push({ keys:[KeyCode.Alt, KeyCode.Numpad1], signal:signalQuickSave1 });
+    Input.commands.push({ keys:[KeyCode.Alt, KeyCode.Numpad2], signal:signalQuickSave2 });
+    Input.commands.push({ keys:[KeyCode.Alt, KeyCode.Numpad3], signal:signalQuickSave3 });
+
     screen = 'title';
     sequenceIndex = null;
   }
@@ -98,6 +162,28 @@ class Game {
   }
 
   //
+  // Quick Load/Save
+  //
+
+  function quickLoad(id:Int) {
+    var gamesave:Null<State> = Board.load(Storage.read('gamesave$id'));
+    if (gamesave == null) {
+      return;
+    }
+
+    trace('Quick Load $id');
+    state = gamesave;
+    screen = 'play';
+  }
+
+  function quickSave(id:Int) {
+    if (Board.isRunning(state)) {
+      trace('Quick Save $id');
+      Storage.write('gamesave$id', Board.save(state));
+    }
+  }
+
+  //
   // Sequencing
   //
 
@@ -116,43 +202,6 @@ class Game {
   //
 
   function updateScreen() {
-    if (Input.keyPressed(KeyCode.L)) {
-      // Language
-      language = (language == 'en') ? 'fr' : 'en';
-      saveSettings();
-    }
-    else if (Input.keyPressed(KeyCode.Decimal)) {
-      UI.showHitbox = !UI.showHitbox;
-    }
-    else if (Input.keyPressed(KeyCode.Numpad1) || Input.keyPressed(KeyCode.Numpad2) || Input.keyPressed(KeyCode.Numpad3)) {
-      var save = 1;
-      if (Input.keyDown(KeyCode.Numpad2)) {
-        save = 2;
-      }
-      else if (Input.keyDown(KeyCode.Numpad3)) {
-        save = 3;
-      }
-      var filename = 'gamesave$save';
-
-      if (Input.keyDown(KeyCode.Alt)) {
-        // Quick Save
-        if (Board.isRunning(state)) {
-          trace('Quick Save $save');
-          Storage.write(filename, Board.save(state));
-        }
-      }
-      else {
-        // Quick Load
-        var gamesave:Null<State> = Board.load(Storage.read(filename));
-        if (gamesave != null) {
-          trace('Quick Load $save');
-          state = gamesave;
-          screen = 'play';
-          return;
-        }
-      }
-    }
-
     switch screen {
     case 'title':
     case 'play':
