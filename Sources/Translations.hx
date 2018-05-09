@@ -10,15 +10,10 @@ typedef Translation = {
 }
 
 class Translations {
-  public static function tr(id:String):String {
-    var value:Null<String> = Reflect.field(translation, id);
-    return (value == null) ? id : value;
-  }
-
+  public static var tr:Translation;
   public static var language(default, set):String;
-
   static function set_language(iso) {
-    translation = switch iso {
+    tr = switch iso {
       case 'fr': {
         language:'Langue :',
         newGame:'Nouvelle Partie',
@@ -42,6 +37,4 @@ class Translations {
     }
     return language = iso;
   }
-
-  static var translation:Translation;
 }

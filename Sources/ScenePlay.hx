@@ -107,7 +107,7 @@ class ScenePlay implements IScene {
         }
       }
 
-      var window:UIWindow = { x:Game.WIDTH * 0.2, y:Game.HEIGHT * 0.1, w:Game.WIDTH * 0.6, h:Game.HEIGHT * 0.8, title:tr('standings') };
+      var window:UIWindow = { x:Game.WIDTH * 0.2, y:Game.HEIGHT * 0.1, w:Game.WIDTH * 0.6, h:Game.HEIGHT * 0.8, title:tr.standings };
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);
 
@@ -140,7 +140,7 @@ class ScenePlay implements IScene {
       }
     }
     else {
-      var window:UIWindow = { x:Game.WIDTH * 0.3, y:Game.HEIGHT * 0.33, w:Game.WIDTH * 0.4, h:Game.HEIGHT * 0.34, title:tr('numberOfPlayers') };
+      var window:UIWindow = { x:Game.WIDTH * 0.3, y:Game.HEIGHT * 0.33, w:Game.WIDTH * 0.4, h:Game.HEIGHT * 0.34, title:tr.numberOfPlayers };
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);
 
@@ -162,12 +162,12 @@ class ScenePlay implements IScene {
         }
       }
 
-      if (ui.button({ text:tr('play'), disabled:(Game.sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - Game.HEIGHT * 0.067, w:dimensions.width, h:Game.HEIGHT * 0.067 }).hit) {
+      if (ui.button({ text:tr.play, disabled:(Game.sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - Game.HEIGHT * 0.067, w:dimensions.width, h:Game.HEIGHT * 0.067 }).hit) {
         Board.start(state);
       }
     }
 
-    if (ui.button({ text:tr('quit'), x:Game.WIDTH * 0.85, y:Game.WIDTH * 0.025, w:Game.WIDTH * 0.125, h:Game.HEIGHT * 0.067 }).hit) {
+    if (ui.button({ text:tr.quit, x:Game.WIDTH * 0.85, y:Game.WIDTH * 0.025, w:Game.WIDTH * 0.125, h:Game.HEIGHT * 0.067 }).hit) {
       Game.sequenceIndex = null;
       Game.scene = 'title';
     }
