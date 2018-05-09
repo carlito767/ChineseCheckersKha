@@ -6,10 +6,10 @@ class ScenePlay implements IScene {
   var game:Game;
 
   // Signals
-  var signalCancelMove:Signal0 = new Signal0();
-  var signalKind:Signal0 = new Signal0();
-  var signalPause:Signal0 = new Signal0();
-  var signalTileId:Signal0 = new Signal0();
+  var signalCancelMove = new Signal0();
+  var signalKind = new Signal0();
+  var signalPause = new Signal0();
+  var signalTileId = new Signal0();
 
   public function new(game:Game) {
     this.game = game;
@@ -28,10 +28,10 @@ class ScenePlay implements IScene {
   }
 
   public function leave() {
-    signalCancelMove.disconnect(slotCancelMove);
-    signalKind.disconnect(slotKind);
-    signalPause.disconnect(slotPause);
-    signalTileId.disconnect(slotTileId);
+    signalCancelMove.disconnect();
+    signalKind.disconnect();
+    signalPause.disconnect();
+    signalTileId.disconnect();
   }
 
   // Slots

@@ -56,14 +56,14 @@ class Game {
   var showTileId:Bool = false;
 
   // Signals
-  var signalHitbox:Signal0 = new Signal0();
-  var signalLanguage:Signal0 = new Signal0();
-  var signalQuickLoad1:Signal0 = new Signal0();
-  var signalQuickLoad2:Signal0 = new Signal0();
-  var signalQuickLoad3:Signal0 = new Signal0();
-  var signalQuickSave1:Signal0 = new Signal0();
-  var signalQuickSave2:Signal0 = new Signal0();
-  var signalQuickSave3:Signal0 = new Signal0();
+  var signalHitbox = new Signal0();
+  var signalLanguage = new Signal0();
+  var signalQuickLoad1 = new Signal0();
+  var signalQuickLoad2 = new Signal0();
+  var signalQuickLoad3 = new Signal0();
+  var signalQuickSave1 = new Signal0();
+  var signalQuickSave2 = new Signal0();
+  var signalQuickSave3 = new Signal0();
 
   // Slots
   function slotHitbox() {

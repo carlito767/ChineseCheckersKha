@@ -9,7 +9,12 @@ class Signal<T> {
     slots.push(slot);
   }
 
-  public function disconnect(slot:T) {
+  public function disconnect(?slot:T) {
+    if (slot == null) {
+      slots = [];
+      return;
+    }
+
     var i = 0;
     while (i < slots.length) {
       if (Reflect.compareMethods(slots[i], slot)) {
