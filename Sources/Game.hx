@@ -99,13 +99,15 @@ class Game {
   static var scenes:Map<String, IScene>;
   public static var scene(default, set):String;
   static function set_scene(value) {
-    var currentScene = scenes[scene];
-    if (currentScene != null) {
-      currentScene.leave();
-    }
-    var newScene = scenes[value];
-    if (newScene != null) {
-      newScene.enter();
+    if (scene != value) {
+      var currentScene = scenes[scene];
+      if (currentScene != null) {
+        currentScene.leave();
+      }
+      var newScene = scenes[value];
+      if (newScene != null) {
+        newScene.enter();
+      }
     }
     return scene = value;
   }

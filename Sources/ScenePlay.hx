@@ -22,6 +22,7 @@ class ScenePlay implements IScene {
       { keys:[KeyCode.Backspace], slot:cancelLastMove },
       { keys:[KeyCode.K], slot:changePlayerKind },
       { keys:[KeyCode.P], slot:pause },
+      { keys:[KeyCode.T], slot:function() { Game.scene = 'title'; } }
     ];
 
     signals = [];

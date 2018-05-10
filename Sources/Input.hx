@@ -42,6 +42,7 @@ class Input {
   public static function connect(command:Command):Signal0 {
     var signal = new Signal0();
     signal.connect(command.slot);
+    command.active = false;
     commands.set(signal, command);
     return signal;
   }
@@ -63,7 +64,7 @@ class Input {
 
     for (signal in commands.keys()) {
       var command = commands[signal];
-      if (command != null && (command.active != true || command.repeat == true) && command.keys.indexOf(key) != -1) {
+      if ((command.active != true || command.repeat == true) && command.keys.indexOf(key) != -1) {
         var active = true;
         for (key in command.keys) {
           if (keyboard.keys[key] != true) {
