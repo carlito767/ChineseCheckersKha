@@ -39,11 +39,12 @@ class ScenePlay implements IScene {
     for (signal in signals) {
       Input.disconnect(signal);
     }
+    AI.reset();
   }
 
   public function update() {
     if (!Game.pause && Game.state.currentPlayer != null && Game.state.currentPlayer.kind != Human) {
-      AI.update(Game.state);
+      AI.initialize(Game.state);
     }
   }
 

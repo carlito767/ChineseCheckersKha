@@ -1,11 +1,14 @@
+import kha.Scheduler;
+
 import Board.Move;
 import Board.Tile;
 import Board.State;
 
 // Minimax (2 players)
 class AI {
-  public static var started:Bool = false;
-  public static var played:Bool = false;
+  public static var taskId:Null<Int> = null;
+
+  static var state:State;
 
   static var depth:UInt;
   static var maximizer:Int;
@@ -18,37 +21,53 @@ class AI {
   static var bestScore:Null<Int>;
   static var bestMoves:Array<Move>;
 
-  public static function update(state:State) {
-    if (played) {
+  public static function initialize(boardState:State) {
+    if (taskId != null) {
       return;
     }
 
-    if (!started) {
-      started = true;
+    state = boardState;
 
-      depth = 0;
-      maximizer = state.currentPlayer.id;
-      minimizer = (state.sequence[0] == maximizer) ? state.sequence[1] : state.sequence[0];
+    depth = 0;
+    maximizer = state.currentPlayer.id;
+    minimizer = (state.sequence[0] == maximizer) ? state.sequence[1] : state.sequence[0];
+    allowedMoves = Board.allowedMoves(state);
+    tile = null;
+    tileMoves = [];
+    bestScore = null;
+    bestMoves = [];
 
-      allowedMoves = Board.allowedMoves(state);
-      tile = null;
-      tileMoves = [];
-      bestScore = null;
-      bestMoves = [];
+    taskId = Scheduler.addFrameTask(search, 100);
+  }
+
+  public static function reset() {
+    if (taskId == null) {
+      return;
     }
 
+    Scheduler.removeFrameTask(taskId);
+    taskId = null;
+  }
+
+  static function search():Bool {
     if (tile == null) {
       tile = allowedMoves.shift();
       tileMoves = null;
     }
     if (tile == null) {
-      played = true;
+      Scheduler.removeFrameTask(taskId);
       if (bestMoves.length > 0) {
         var i = Math.floor(Math.random() * bestMoves.length);
         var move = bestMoves[i];
         trace('bestMove:$move');
-        Game.sequencer.push(Game.aiSelectTile, move.from, 0.3);
-        Game.sequencer.push(Game.aiMove, move, 0.3);
+        Game.sequencer.push(function(state:State, move:Move) {
+          state.selectedTile = state.tiles[move.from];
+        }, move, 0.3);
+        Game.sequencer.push(function(state:State, move:Move) {
+          Board.move(state, state.tiles[move.from], state.tiles[move.to]);
+          AI.taskId = null;
+        }, move, 0.3);
+        return false;
       }
     }
     else {
@@ -75,6 +94,7 @@ class AI {
         Board.cancelLastMove(state);
       }
     }
+    return true;
   }
 
   static function explore(state:State):Null<Int> {

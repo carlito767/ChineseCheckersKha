@@ -7,28 +7,25 @@ import Timer;
 class Sequencer<T> {
   var timer:Timer;
 
-  var tasks:Array<T->Dynamic->Bool>;
+  var tasks:Array<T->Dynamic->Void>;
   var parameters:Array<Dynamic>;
   var delays:Array<Float>;
 
-  var currentTask:Null<T->Dynamic->Bool>;
-  var currentParameter:Dynamic;
-  var currentDelay:Float;
+  var currentDelay:Null<Float>;
 
   public function new() {
     timer = new Timer();
     tasks = [];
     parameters = [];
     delays = [];
-    currentTask = null;
-    currentDelay = 0;
+    currentDelay = null;
   }
 
   public function busy():Bool {
-    return (currentTask != null || tasks.length > 0);
+    return (currentDelay != null || delays.length > 0);
   }
 
-  public function push(task:T->Dynamic->Bool, ?parameter:Dynamic, ?delay:Float = 0) {
+  public function push(task:T->Dynamic->Void, ?parameter:Dynamic, ?delay:Float = 0) {
     tasks.push(task);
     parameters.push(parameter);
     delays.push(delay);
@@ -39,9 +36,7 @@ class Sequencer<T> {
     if (!busy()) {
       return;
     }
-    if (currentTask == null) {
-      currentTask = tasks.shift();
-      currentParameter = parameters.shift();
+    if (currentDelay == null) {
       currentDelay = delays.shift();
     }
     else if (currentDelay > 0) {
@@ -51,8 +46,9 @@ class Sequencer<T> {
       return;
     }
 
-    if (currentTask(object, currentParameter)) {
-      currentTask = null;
-    }
+    currentDelay = null;
+    var task = tasks.shift();
+    var parameter = parameters.shift();
+    task(object, parameter);
   }
 }
