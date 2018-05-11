@@ -62,7 +62,7 @@ class AI {
         trace('bestMove:$move');
         Sequencer.push(function() {
           ${state}.selectedTile = ${state}.tiles[${move.from}];
-        }, 0.3);
+        });
         Sequencer.push(function() {
           Board.move(${state}, ${state}.tiles[${move.from}], ${state}.tiles[${move.to}]);
           AI.taskId = null;
