@@ -4,39 +4,39 @@ import kha.Scheduler;
 
 import Timer;
 
-class Sequencer<T> {
-  var timer:Timer;
+class Sequencer {
+  static var timer:Timer;
 
-  var tasks:Array<T->Dynamic->Void>;
-  var parameters:Array<Dynamic>;
-  var delays:Array<Float>;
+  static var tasks:Array<Void->Void>;
+  static var delays:Array<Float>;
 
-  var currentDelay:Null<Float>;
+  static var currentTask:Null<Void->Void>;
+  static var currentDelay:Float;
 
-  public function new() {
+  public static function initialize() {
     timer = new Timer();
     tasks = [];
-    parameters = [];
     delays = [];
-    currentDelay = null;
+    currentTask = null;
+    currentDelay = 0;
   }
 
-  public function busy():Bool {
-    return (currentDelay != null || delays.length > 0);
+  public static function busy():Bool {
+    return (currentTask != null || tasks.length > 0);
   }
 
-  public function push(task:T->Dynamic->Void, ?parameter:Dynamic, ?delay:Float = 0) {
+  public static function push(task:Void->Void, ?delay:Float = 0) {
     tasks.push(task);
-    parameters.push(parameter);
     delays.push(delay);
   }
 
-  public function update(object:T) {
+  public static function update() {
     var dt = timer.update();
     if (!busy()) {
       return;
     }
-    if (currentDelay == null) {
+    if (currentTask == null) {
+      currentTask = tasks.shift();
       currentDelay = delays.shift();
     }
     else if (currentDelay > 0) {
@@ -46,9 +46,7 @@ class Sequencer<T> {
       return;
     }
 
-    currentDelay = null;
-    var task = tasks.shift();
-    var parameter = parameters.shift();
-    task(object, parameter);
+    currentTask();
+    currentTask = null;
   }
 }

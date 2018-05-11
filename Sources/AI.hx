@@ -60,13 +60,13 @@ class AI {
         var i = Math.floor(Math.random() * bestMoves.length);
         var move = bestMoves[i];
         trace('bestMove:$move');
-        Game.sequencer.push(function(state:State, move:Move) {
-          state.selectedTile = state.tiles[move.from];
-        }, move, 0.3);
-        Game.sequencer.push(function(state:State, move:Move) {
-          Board.move(state, state.tiles[move.from], state.tiles[move.to]);
+        Sequencer.push(function() {
+          Game.state.selectedTile = Game.state.tiles[${move.from}];
+        }, 0.3);
+        Sequencer.push(function() {
+          Board.move(Game.state, Game.state.tiles[${move.from}], Game.state.tiles[${move.to}]);
           AI.taskId = null;
-        }, move, 0.3);
+        }, 0.3);
         return false;
       }
     }

@@ -18,6 +18,8 @@ class Game {
 
   @:allow(Main)
   static function initialize() {
+    Sequencer.initialize();
+
     loadSettings();
 
     Input.init();
@@ -42,7 +44,7 @@ class Game {
 
   @:allow(Main)
   static function update() {
-    sequencer.update(state);
+    Sequencer.update();
     var currentScene = scenes[scene];
     if (currentScene != null) {
       currentScene.update();
@@ -119,12 +121,6 @@ class Game {
   static var ui:UI = new UI();
 
   public static var showTileId:Bool = false;
-
-  //
-  // Sequencing
-  //
-
-  public static var sequencer:Sequencer<State> = new Sequencer();
 
   //
   // Settings

@@ -50,7 +50,6 @@ class ScenePlay implements IScene {
 
   public function render(ui:UI) {
     var state = Game.state;
-    var sequencer = Game.sequencer;
 
     ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT, disabled:true });
 
@@ -70,7 +69,7 @@ class ScenePlay implements IScene {
       var selectable = (moves.indexOf(tile) > -1);
       var selected = (state.selectedTile == tile);
       var emphasis:UITileEmphasis = None;
-      if (human && !sequencer.busy() && selectable) {
+      if (human && !Sequencer.busy() && selectable) {
         emphasis = (state.selectedTile == null) ? Selectable : AllowedMove;
       }
       else if (selected) {
