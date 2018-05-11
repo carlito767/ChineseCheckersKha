@@ -2,7 +2,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 
 class BoardBuilder {
-  static public function build():Array<Field> {
+  public static function build():Array<Field> {
     var data = {
       board:[
         '            4            ',

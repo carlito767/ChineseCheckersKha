@@ -2,7 +2,7 @@ import haxe.macro.Context;
 import haxe.macro.Expr;
 
 class UIBuilder {
-  static public function build():Array<Field> {
+  public static function build():Array<Field> {
     var fields = Context.getBuildFields();
 
     for (field in fields) {
