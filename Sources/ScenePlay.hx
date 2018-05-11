@@ -42,6 +42,9 @@ class ScenePlay implements IScene {
   }
 
   public function update() {
+    if (!Game.pause && Game.state.currentPlayer != null && Game.state.currentPlayer.kind != Human) {
+      AI.update(Game.state);
+    }
   }
 
   public function render(ui:UI) {
@@ -126,21 +129,7 @@ class ScenePlay implements IScene {
         });
       }
     }
-    else if (Board.isRunning(state)) {
-      if (!Game.pause && !human && !sequencer.busy()) {
-        var move:Null<Move> = null;
-        switch state.currentPlayer.kind {
-        case AiEasy:
-          move = AI.search(state);
-        default:
-        }
-        if (move != null) {
-          sequencer.push(Game.aiSelectTile, move.from, 0.3);
-          sequencer.push(Game.aiMove, move, 0.3);
-        }
-      }
-    }
-    else {
+    else if (!Board.isRunning(state)) {
       var window:UIWindow = { x:Game.WIDTH * 0.3, y:Game.HEIGHT * 0.33, w:Game.WIDTH * 0.4, h:Game.HEIGHT * 0.34, title:tr.numberOfPlayers };
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);

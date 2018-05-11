@@ -4,28 +4,63 @@ import Board.State;
 
 // Minimax (2 players)
 class AI {
+  public static var started:Bool = false;
+  public static var played:Bool = false;
+
   static var depth:UInt;
   static var maximizer:Int;
   static var minimizer:Int;
 
-  public static function search(state:State, ?maxDepth:UInt = 0):Null<Move> {
-    if (state.currentPlayer == null) {
-      return null;
+  static var allowedMoves:Array<Tile>;
+  static var tile:Null<Tile>;
+  static var tileMoves:Null<Array<Tile>>;
+  static var tileMove:Null<Tile>;
+  static var bestScore:Null<Int>;
+  static var bestMoves:Array<Move>;
+
+  public static function update(state:State) {
+    if (played) {
+      return;
     }
 
-    if (state.sequence.length != 2 && maxDepth != 0) {
-      return null;
+    if (!started) {
+      started = true;
+
+      depth = 0;
+      maximizer = state.currentPlayer.id;
+      minimizer = (state.sequence[0] == maximizer) ? state.sequence[1] : state.sequence[0];
+
+      allowedMoves = Board.allowedMoves(state);
+      tile = null;
+      tileMoves = [];
+      bestScore = null;
+      bestMoves = [];
     }
 
-    depth = maxDepth;
-    maximizer = state.currentPlayer.id;
-    minimizer = (state.sequence[0] == maximizer) ? state.sequence[1] : state.sequence[0];
-
-    var bestScore:Null<Int> = null;
-    var bestMoves:Null<Array<Move>> = null;
-    for (tile in state.allowedMoves) {
-      var moves = Board.allowedMovesForTile(state, tile);
-      for (move in moves) {
+    if (tile == null) {
+      tile = allowedMoves.shift();
+      tileMoves = null;
+    }
+    if (tile == null) {
+      played = true;
+      if (bestMoves.length > 0) {
+        var i = Math.floor(Math.random() * bestMoves.length);
+        var move = bestMoves[i];
+        trace('bestMove:$move');
+        Game.sequencer.push(Game.aiSelectTile, move.from, 0.3);
+        Game.sequencer.push(Game.aiMove, move, 0.3);
+      }
+    }
+    else {
+      if (tileMoves == null) {
+        tileMoves = Board.allowedMovesForTile(state, tile);
+      }
+      var move = tileMoves.shift();
+      if (move == null) {
+        tile = null;
+      }
+      else {
+        trace('Search from ${tile.id} to ${move.id}...');
         Board.move(state, tile, move);
         var score:Null<Int> = explore(state);
         if (score != null) {
@@ -40,22 +75,12 @@ class AI {
         Board.cancelLastMove(state);
       }
     }
-    if (bestScore == null) {
-      return null;
-    }
-    trace('bestMoves:$bestMoves');
-    var i = Math.floor(Math.random() * bestMoves.length);
-    var move = bestMoves[i];
-    trace('bestMove:$move');
-    return move;
   }
 
   static function explore(state:State):Null<Int> {
     if (depth == 0 || state.currentPlayer == null) {
       return evaluate(state);
     }
-
-    trace('depth:$depth');
 
     var isMaximizer = (state.currentPlayer.id == maximizer);
     if (isMaximizer) {

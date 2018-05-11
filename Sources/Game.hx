@@ -133,6 +133,8 @@ class Game {
 
   public static function aiMove(state:State, move:Move):Bool {
     Board.move(state, state.tiles[move.from], state.tiles[move.to]);
+    AI.started = false;
+    AI.played = false;
     return true;
   }
 
