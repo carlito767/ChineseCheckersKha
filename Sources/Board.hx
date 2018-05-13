@@ -27,8 +27,8 @@ typedef Move = {
 
 typedef Player = {
   var id:Int;
-  var color:Color;
-  var kind:PlayerKind;
+  var color:Int;
+  @:optional var kind:PlayerKind;
 }
 
 typedef Tile = {
@@ -56,12 +56,11 @@ typedef State = {
 // Board
 //
 
-@:build(BoardBuilder.build())
 class Board {
   static inline var GAMESAVE_VERSION = 7;
 
-  public static function create(?sequenceIndex:Int):State {
-    var sequence:Sequence = [];
+  public static function create(sourceTiles:Array<Tile>, sourcePlayers:Array<Player>, ?sourceSequence:Sequence):State {
+    var sequence:Sequence = (sourceSequence == null) ? [] : sourceSequence;
     var players:Map<Int, Player> = new Map();
     var tiles:Map<Int, Tile> = new Map();
     var moves:Array<Move> = [];
@@ -71,20 +70,20 @@ class Board {
     var selectedTile:Null<Tile> = null;
 
     // Players
-    if (sequenceIndex != null) {
-      sequence = SEQUENCES[sequenceIndex];
-      for (id in sequence) {
-        var player = Board.players[id-1];
-        players[id] = {
-          id:id,
-          color:player.color,
-          kind:(sequence.length == 2 && id != 1) ? AiEasy : Human,
-        };
+    if (sequence.length > 0) {
+      for (player in sourcePlayers) {
+        if (sequence.indexOf(player.id) != -1) {
+          players[player.id] = {
+            id:player.id,
+            color:player.color,
+            kind:(sequence.length == 2 && player.id != 1) ? AiEasy : Human,
+          }
+        }
       }
     }
 
     // Tiles
-    for (tile in Board.tiles) {
+    for (tile in sourceTiles) {
       tiles[tile.id] = {
         id:tile.id,
         x:tile.x,

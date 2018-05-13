@@ -3,8 +3,10 @@ import kha.input.KeyCode;
 
 import Board.Move;
 import Board.Player;
+import Board.PlayerKind;
 import Board.Sequence;
 import Board.State;
+import BoardChineseCheckers as GameBoard;
 import Input.Command;
 import Signal.Signal0;
 import Translations.language;
@@ -17,11 +19,20 @@ class ScenePlay implements IScene {
   var commands:Array<Command>;
   var signals:Array<Signal0>;
 
+  var sequenceIndex(default, set):Null<Int>;
+  function set_sequenceIndex(value) {
+    var sequence = (value == null) ? null : GameBoard.sequences[value];
+    Game.state = Board.create(GameBoard.tiles, GameBoard.players, sequence);
+    return sequenceIndex = value;
+  }
+
   public function new() {
     commands = [
     ];
 
     signals = [];
+
+    sequenceIndex = null;
   }
 
   public function enter() {
@@ -53,8 +64,8 @@ class ScenePlay implements IScene {
     var radius = Game.HEIGHT * 0.027;
     var distanceX = radius * 1.25;
     var distanceY = radius * 1.25 * 1.7;
-    var boardWidth = (Board.WIDTH - 1) * distanceX + radius * 2;
-    var boardHeight = (Board.HEIGHT - 1) * distanceY + radius * 2;
+    var boardWidth = (GameBoard.WIDTH - 1) * distanceX + radius * 2;
+    var boardHeight = (GameBoard.HEIGHT - 1) * distanceY + radius * 2;
     var dx = (Game.WIDTH - boardWidth) * 0.5;
     var dy = (Game.HEIGHT - boardHeight) * 0.5;
     var moves = state.allowedMoves;
@@ -130,7 +141,7 @@ class ScenePlay implements IScene {
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);
 
-      var sequences = Board.SEQUENCES;
+      var sequences = GameBoard.sequences;
       var nb = sequences.length;
       var w = (dimensions.width - (nb - 1) * dimensions.margin) / nb;
       var dx = (dimensions.width + dimensions.margin) / nb;
@@ -138,23 +149,23 @@ class ScenePlay implements IScene {
         var sequence:Sequence = sequences[i];
         if (ui.button({
           text:Std.string(sequence.length),
-          selected:(Game.sequenceIndex == i),
+          selected:(sequenceIndex == i),
           x:dimensions.left + dx * i,
           y:dimensions.top,
           w:w,
           h:w,
         }).hit) {
-          Game.sequenceIndex = i;
+          sequenceIndex = i;
         }
       }
 
-      if (ui.button({ text:tr.play, disabled:(Game.sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - Game.HEIGHT * 0.067, w:dimensions.width, h:Game.HEIGHT * 0.067 }).hit) {
+      if (ui.button({ text:tr.play, disabled:(sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - Game.HEIGHT * 0.067, w:dimensions.width, h:Game.HEIGHT * 0.067 }).hit) {
         Board.start(state);
       }
     }
 
     if (ui.button({ text:tr.quit, x:Game.WIDTH * 0.85, y:Game.WIDTH * 0.025, w:Game.WIDTH * 0.125, h:Game.HEIGHT * 0.067 }).hit) {
-      Game.sequenceIndex = null;
+      sequenceIndex = null;
       Game.scene = 'title';
     }
   }

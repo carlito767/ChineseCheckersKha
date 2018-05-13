@@ -39,7 +39,6 @@ class Game {
     ];
 
     scene = 'title';
-    sequenceIndex = null;
   }
 
   @:allow(Main)
@@ -81,11 +80,6 @@ class Game {
   //
 
   public static var state:State;
-  public static var sequenceIndex(default, set):Null<Int>;
-  static function set_sequenceIndex(value) {
-    state = Board.create(value);
-    return sequenceIndex = value;
-  }
 
   //
   // Scene
