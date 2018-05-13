@@ -19,10 +19,6 @@ class ScenePlay implements IScene {
 
   public function new() {
     commands = [
-      { keys:[KeyCode.Backspace], slot:cancelLastMove },
-      { keys:[KeyCode.K], slot:changePlayerKind },
-      { keys:[KeyCode.P], slot:pause },
-      { keys:[KeyCode.T], slot:function() { Game.scene = 'title'; } }
     ];
 
     signals = [];
@@ -43,7 +39,7 @@ class ScenePlay implements IScene {
   }
 
   public function update() {
-    if (!Game.pause && Game.state.currentPlayer != null && Game.state.currentPlayer.kind != Human) {
+    if (Game.state.currentPlayer != null && Game.state.currentPlayer.kind != Human) {
       AI.initialize(Game.state);
     }
   }
@@ -161,21 +157,5 @@ class ScenePlay implements IScene {
       Game.sequenceIndex = null;
       Game.scene = 'title';
     }
-  }
-
-  function cancelLastMove() {
-    Game.pause = true;
-    Board.cancelLastMove(Game.state);
-  }
-
-  function changePlayerKind() {
-    if (Game.state.currentPlayer != null && Game.state.sequence.length == 2) {
-      Game.pause = true;
-      Game.state.currentPlayer.kind = (Game.state.currentPlayer.kind == Human) ? AiEasy : Human;
-    }
-  }
-
-  function pause() {
-    Game.pause = !Game.pause;
   }
 }

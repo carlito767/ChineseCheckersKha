@@ -83,16 +83,9 @@ class Game {
   public static var state:State;
   public static var sequenceIndex(default, set):Null<Int>;
   static function set_sequenceIndex(value) {
-    pause = false;
     state = Board.create(value);
     return sequenceIndex = value;
   }
-
-  //
-  // Pause
-  //
-
-  public static var pause:Bool = false;
 
   //
   // Scene
