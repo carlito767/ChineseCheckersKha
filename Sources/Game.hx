@@ -26,12 +26,12 @@ class Game {
     Input.connect({ keys:[KeyCode.L], slot:changeLanguage });
     Input.connect({ keys:[KeyCode.Decimal], slot:function() { UI.showHitbox = !UI.showHitbox; } });
     Input.connect({ keys:[KeyCode.Numpad0], slot:function() { showTileId = !showTileId; } });
-    Input.connect({ keys:[KeyCode.Numpad1], slot:function() { quickLoad(1); } });
-    Input.connect({ keys:[KeyCode.Numpad2], slot:function() { quickLoad(2); } });
-    Input.connect({ keys:[KeyCode.Numpad3], slot:function() { quickLoad(3); } });
     Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad1], slot:function() { quickSave(1); } });
     Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad2], slot:function() { quickSave(2); } });
     Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad3], slot:function() { quickSave(3); } });
+    Input.connect({ keys:[KeyCode.Numpad1], slot:function() { quickLoad(1); } });
+    Input.connect({ keys:[KeyCode.Numpad2], slot:function() { quickLoad(2); } });
+    Input.connect({ keys:[KeyCode.Numpad3], slot:function() { quickLoad(3); } });
 
     scenes = [
       "title" => new SceneTitle(),

@@ -75,6 +75,7 @@ class Input {
         command.active = active;
         if (active) {
           signal.emit();
+          break;
         }
       }
     }
