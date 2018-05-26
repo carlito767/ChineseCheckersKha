@@ -16,22 +16,24 @@ class Game {
   public static inline var WIDTH = 800;
   public static inline var HEIGHT = 600;
 
+  static var inputContext:InputContext = new InputContext();
+
   @:allow(Main)
   static function initialize() {
+    Input.initialize();
     Sequencer.initialize();
 
     loadSettings();
 
-    Input.init();
-    Input.connect({ keys:[KeyCode.L], slot:changeLanguage });
-    Input.connect({ keys:[KeyCode.Decimal], slot:function() { UI.showHitbox = !UI.showHitbox; } });
-    Input.connect({ keys:[KeyCode.Numpad0], slot:function() { showTileId = !showTileId; } });
-    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad1], slot:function() { quickSave(1); } });
-    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad2], slot:function() { quickSave(2); } });
-    Input.connect({ keys:[KeyCode.Alt, KeyCode.Numpad3], slot:function() { quickSave(3); } });
-    Input.connect({ keys:[KeyCode.Numpad1], slot:function() { quickLoad(1); } });
-    Input.connect({ keys:[KeyCode.Numpad2], slot:function() { quickLoad(2); } });
-    Input.connect({ keys:[KeyCode.Numpad3], slot:function() { quickLoad(3); } });
+    inputContext.map(KeyCode.L, changeLanguage);
+    inputContext.map(KeyCode.Decimal, function() { UI.showHitbox = !UI.showHitbox; });
+    inputContext.map(KeyCode.Numpad0, function() { showTileId = !showTileId; });
+    inputContext.map(KeyCode.Numpad1, function() { quickLoad(1); });
+    inputContext.map(KeyCode.Numpad2, function() { quickLoad(2); });
+    inputContext.map(KeyCode.Numpad3, function() { quickLoad(3); });
+    inputContext.map(KeyCode.Numpad7, function() { quickSave(1); });
+    inputContext.map(KeyCode.Numpad8, function() { quickSave(2); });
+    inputContext.map(KeyCode.Numpad9, function() { quickSave(3); });
 
     scenes = [
       "title" => new SceneTitle(),
@@ -43,6 +45,7 @@ class Game {
 
   @:allow(Main)
   static function update() {
+    inputContext.update();
     Sequencer.update();
     var currentScene = scenes[scene];
     if (currentScene != null) {

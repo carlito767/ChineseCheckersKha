@@ -7,8 +7,6 @@ import Board.PlayerKind;
 import Board.Sequence;
 import Board.State;
 import BoardChineseCheckers as GameBoard;
-import Input.Command;
-import Signal.Signal0;
 import Translations.language;
 import Translations.tr;
 import UI.Dimensions;
@@ -16,9 +14,6 @@ import UI.UITileEmphasis;
 import UI.UIWindow;
 
 class ScenePlay implements IScene {
-  var commands:Array<Command>;
-  var signals:Array<Signal0>;
-
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
     var sequence = (value == null) ? null : GameBoard.sequences[value];
@@ -27,25 +22,13 @@ class ScenePlay implements IScene {
   }
 
   public function new() {
-    commands = [
-    ];
-
-    signals = [];
-
     sequenceIndex = null;
   }
 
   public function enter() {
-    for (command in commands) {
-      var signal = Input.connect(command);
-      signals.push(signal);
-    }
   }
 
   public function leave() {
-    for (signal in signals) {
-      Input.disconnect(signal);
-    }
     AI.reset();
   }
 

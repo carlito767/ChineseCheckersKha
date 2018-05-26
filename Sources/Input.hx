@@ -2,15 +2,6 @@ import kha.input.Keyboard as KhaKeyboard;
 import kha.input.KeyCode;
 import kha.input.Mouse as KhaMouse;
 
-import Signal.Signal0;
-
-typedef Command = {
-  var keys:Array<KeyCode>;
-  var slot:Void->Void;
-  @:optional var repeat:Bool;
-  @:optional var active:Bool;
-}
-
 typedef Keyboard = {
   var keys:Map<KeyCode, Bool>;
 }
@@ -25,9 +16,7 @@ class Input {
   public static var keyboard(default, null):Keyboard = { keys:new Map() };
   public static var mouse(default, null):Mouse = { x:0, y:0, buttons:new Map() };
 
-  static var commands:Map<Signal0, Command> = new Map();
-
-  public static function init() {
+  public static function initialize() {
     var khaKeyboard = KhaKeyboard.get();
     if (khaKeyboard != null) {
       khaKeyboard.notify(onKeyDown, onKeyUp, null);
@@ -39,56 +28,16 @@ class Input {
     }
   }
 
-  public static function connect(command:Command):Signal0 {
-    var signal = new Signal0();
-    signal.connect(command.slot);
-    command.active = false;
-    commands.set(signal, command);
-    return signal;
-  }
-
-  public static function disconnect(signal:Signal0) {
-    var command = commands[signal];
-    if (command != null) {
-      signal.disconnect(command.slot);
-      commands.remove(signal);
-    }
-  }
-
   //
   // Keyboard
   //
 
   static function onKeyDown(key:KeyCode) {
     keyboard.keys[key] = true;
-
-    for (signal in commands.keys()) {
-      var command = commands[signal];
-      if ((command.active != true || command.repeat == true) && command.keys.indexOf(key) != -1) {
-        var active = true;
-        for (key in command.keys) {
-          if (keyboard.keys[key] != true) {
-            active = false;
-            break;
-          }
-        }
-        command.active = active;
-        if (active) {
-          signal.emit();
-          break;
-        }
-      }
-    }
   }
 
   static function onKeyUp(key:KeyCode) {
     keyboard.keys[key] = false;
-
-    for (command in commands) {
-      if (command.active == true && command.keys.indexOf(key) != -1) {
-        command.active = false;
-      }
-    }
   }
 
   //
