@@ -1,10 +1,10 @@
 import kha.Assets;
 import kha.Framebuffer;
-import kha.input.KeyCode;
 
 import Board.Move;
 import Board.State;
 import Translations.language;
+import VirtualKey;
 
 typedef Settings = {
   var version:Int;
@@ -25,15 +25,15 @@ class Game {
 
     loadSettings();
 
-    inputContext.map(KeyCode.L, changeLanguage);
-    inputContext.map(KeyCode.Decimal, function() { UI.showHitbox = !UI.showHitbox; });
-    inputContext.map(KeyCode.Numpad0, function() { showTileId = !showTileId; });
-    inputContext.map(KeyCode.Numpad1, function() { quickLoad(1); });
-    inputContext.map(KeyCode.Numpad2, function() { quickLoad(2); });
-    inputContext.map(KeyCode.Numpad3, function() { quickLoad(3); });
-    inputContext.map(KeyCode.Numpad7, function() { quickSave(1); });
-    inputContext.map(KeyCode.Numpad8, function() { quickSave(2); });
-    inputContext.map(KeyCode.Numpad9, function() { quickSave(3); });
+    inputContext.map(VirtualKey.L, changeLanguage);
+    inputContext.map(VirtualKey.Decimal, function() { UI.showHitbox = !UI.showHitbox; });
+    inputContext.map(VirtualKey.Number0, function() { showTileId = !showTileId; });
+    inputContext.map(VirtualKey.Number1, function() { quickLoad(1); });
+    inputContext.map(VirtualKey.Number2, function() { quickLoad(2); });
+    inputContext.map(VirtualKey.Number3, function() { quickLoad(3); });
+    inputContext.map(VirtualKey.Number7, function() { quickSave(1); });
+    inputContext.map(VirtualKey.Number8, function() { quickSave(2); });
+    inputContext.map(VirtualKey.Number9, function() { quickSave(3); });
 
     scenes = [
       "title" => new SceneTitle(),
@@ -56,9 +56,9 @@ class Game {
   @:allow(Main)
   static function render(framebuffer:Framebuffer) {
     var g = framebuffer.g2;
-    var x = Input.mouse.x;
-    var y = Input.mouse.y;
-    var select = (Input.mouse.buttons[0] == true);
+    var x = Input.mouseX;
+    var y = Input.mouseY;
+    var select = Input.isPressed(VirtualKey.MouseLeftButton);
     g.begin();
     ui.preRender(g, WIDTH, HEIGHT, { x:x, y:y, select:select });
     var currentScene = scenes[scene];
