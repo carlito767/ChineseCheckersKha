@@ -2,41 +2,31 @@
 
 import VirtualKey;
 
-typedef Action = {
-  var key:VirtualKey;
-  var command:Void->Void;
+typedef Command = {
+  @:optional var f:Void->Void;
+  @:optional var repeat:Bool;
   @:optional var active:Bool;
 }
 
 class InputContext {
-  var actions:Map<VirtualKey, Action>;
+  var commands:Map<VirtualKey, Command>;
 
   public function new() {
-    actions = new Map();
+    commands = new Map();
   }
 
-  public function map(key:VirtualKey, command:Void->Void) {
-    actions.set(key, {
-      key:key,
-      command:command,
-    });
-  }
-
-  public function unmap(key:VirtualKey) {
-    actions.remove(key);
+  public function map(key:VirtualKey, command:Command) {
+    commands.set(key, command);
   }
 
   public function update() {
-    for (action in actions) {
-      var active = check(action);
-      if (active && action.active != true) {
-        action.command();
+    for (key in commands.keys()) {
+      var command = commands[key];
+      var active = Input.isPressed(key);
+      if (active && command.f != null && (command.repeat == true || command.active != true)) {
+        command.f();
       }
-      action.active = active;
+      command.active = active;
     }
-  }
-
-  function check(action:Action):Bool {
-    return Input.isPressed(action.key);
   }
 }

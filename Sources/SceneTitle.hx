@@ -8,11 +8,11 @@ class SceneTitle implements IScene {
 
   public function new() {
     inputContext = new InputContext();
-    inputContext.map(VirtualKey.L, Game.changeLanguage);
-    inputContext.map(VirtualKey.Decimal, function() { UI.showHitbox = !UI.showHitbox; });
-    inputContext.map(VirtualKey.Number1, function() { Game.quickLoad(1); });
-    inputContext.map(VirtualKey.Number2, function() { Game.quickLoad(2); });
-    inputContext.map(VirtualKey.Number3, function() { Game.quickLoad(3); });
+    inputContext.map(VirtualKey.L, { f:Game.changeLanguage });
+    inputContext.map(VirtualKey.Decimal, { f:function() { UI.showHitbox = !UI.showHitbox; } });
+    inputContext.map(VirtualKey.Number1, { f:function() { Game.quickLoad(1); } });
+    inputContext.map(VirtualKey.Number2, { f:function() { Game.quickLoad(2); } });
+    inputContext.map(VirtualKey.Number3, { f:function() { Game.quickLoad(3); } });
   }
 
   public function enter() {
