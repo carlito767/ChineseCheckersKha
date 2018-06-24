@@ -96,7 +96,7 @@ class Input {
   static public var mouseX(default, null):Float = 0.0;
   static public var mouseY(default, null):Float = 0.0;
 
-  static function virtualKeyfromMouseButton(button:Int):Null<VirtualKey> {
+  static function mouseButtonToVirtualKey(button:Int):Null<VirtualKey> {
     return switch button {
       case 0: VirtualKey.MouseLeftButton;
       case 1: VirtualKey.MouseRightButton;
@@ -108,7 +108,7 @@ class Input {
   static function onMouseDown(button:Int, x:Int, y:Int) {
     mouseX = x;
     mouseY = y;
-    var vk = virtualKeyfromMouseButton(button);
+    var vk = mouseButtonToVirtualKey(button);
     if (vk != null) {
       pressed[vk] = true;
     }
@@ -117,7 +117,7 @@ class Input {
   static function onMouseUp(button:Int, x:Int, y:Int) {
     mouseX = x;
     mouseY = y;
-    var vk = virtualKeyfromMouseButton(button);
+    var vk = mouseButtonToVirtualKey(button);
     if (vk != null) {
       pressed[vk] = false;
     }
