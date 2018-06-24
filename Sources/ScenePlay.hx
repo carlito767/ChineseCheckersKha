@@ -14,6 +14,8 @@ import UI.UITileEmphasis;
 import UI.UIWindow;
 
 class ScenePlay implements IScene {
+  var inputContext:InputContext;
+
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
     var sequence = (value == null) ? null : GameBoard.sequences[value];
@@ -21,8 +23,22 @@ class ScenePlay implements IScene {
     return sequenceIndex = value;
   }
 
+  var showTileId:Bool;
+
   public function new() {
+    inputContext = new InputContext();
+    inputContext.map(VirtualKey.L, Game.changeLanguage);
+    inputContext.map(VirtualKey.Decimal, function() { UI.showHitbox = !UI.showHitbox; });
+    inputContext.map(VirtualKey.Number0, function() { showTileId = !showTileId; });
+    inputContext.map(VirtualKey.Number1, function() { Game.quickLoad(1); });
+    inputContext.map(VirtualKey.Number2, function() { Game.quickLoad(2); });
+    inputContext.map(VirtualKey.Number3, function() { Game.quickLoad(3); });
+    inputContext.map(VirtualKey.Number7, function() { Game.quickSave(1); });
+    inputContext.map(VirtualKey.Number8, function() { Game.quickSave(2); });
+    inputContext.map(VirtualKey.Number9, function() { Game.quickSave(3); });
+
     sequenceIndex = null;
+    showTileId = false;
   }
 
   public function enter() {
@@ -33,6 +49,7 @@ class ScenePlay implements IScene {
   }
 
   public function update() {
+    inputContext.update();
     if (Game.state.currentPlayer != null && Game.state.currentPlayer.kind != Human) {
       AI.initialize(Game.state);
     }
@@ -66,7 +83,7 @@ class ScenePlay implements IScene {
         emphasis = Selected;
       }
       var player = (tile.piece == null) ? null : state.players[tile.piece];
-      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Game.showTileId) ? Std.string(tile.id) : null, disabled:!human }).hit) {
+      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(showTileId) ? Std.string(tile.id) : null, disabled:!human }).hit) {
         if (tile == state.selectedTile) {
           state.selectedTile = null;
         }

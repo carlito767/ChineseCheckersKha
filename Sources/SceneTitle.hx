@@ -4,7 +4,15 @@ import Translations.language;
 import Translations.tr;
 
 class SceneTitle implements IScene {
+  var inputContext:InputContext;
+
   public function new() {
+    inputContext = new InputContext();
+    inputContext.map(VirtualKey.L, Game.changeLanguage);
+    inputContext.map(VirtualKey.Decimal, function() { UI.showHitbox = !UI.showHitbox; });
+    inputContext.map(VirtualKey.Number1, function() { Game.quickLoad(1); });
+    inputContext.map(VirtualKey.Number2, function() { Game.quickLoad(2); });
+    inputContext.map(VirtualKey.Number3, function() { Game.quickLoad(3); });
   }
 
   public function enter() {
@@ -14,6 +22,7 @@ class SceneTitle implements IScene {
   }
 
   public function update() {
+    inputContext.update();
   }
 
   public function render(ui:UI) {

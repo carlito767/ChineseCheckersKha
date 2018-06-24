@@ -16,24 +16,12 @@ class Game {
   public static inline var WIDTH = 800;
   public static inline var HEIGHT = 600;
 
-  static var inputContext:InputContext = new InputContext();
-
   @:allow(Main)
   static function initialize() {
     Input.initialize();
     Sequencer.initialize();
 
     loadSettings();
-
-    inputContext.map(VirtualKey.L, changeLanguage);
-    inputContext.map(VirtualKey.Decimal, function() { UI.showHitbox = !UI.showHitbox; });
-    inputContext.map(VirtualKey.Number0, function() { showTileId = !showTileId; });
-    inputContext.map(VirtualKey.Number1, function() { quickLoad(1); });
-    inputContext.map(VirtualKey.Number2, function() { quickLoad(2); });
-    inputContext.map(VirtualKey.Number3, function() { quickLoad(3); });
-    inputContext.map(VirtualKey.Number7, function() { quickSave(1); });
-    inputContext.map(VirtualKey.Number8, function() { quickSave(2); });
-    inputContext.map(VirtualKey.Number9, function() { quickSave(3); });
 
     scenes = [
       "title" => new SceneTitle(),
@@ -45,7 +33,6 @@ class Game {
 
   @:allow(Main)
   static function update() {
-    inputContext.update();
     Sequencer.update();
     var currentScene = scenes[scene];
     if (currentScene != null) {
@@ -110,8 +97,6 @@ class Game {
 
   static var ui:UI = new UI();
 
-  public static var showTileId:Bool = false;
-
   //
   // Settings
   //
@@ -149,7 +134,7 @@ class Game {
   // Quick Load/Save
   //
 
-  static function quickLoad(id:Int) {
+  public static function quickLoad(id:Int) {
     var gamesave:Null<State> = Board.load(Storage.read('gamesave$id'));
     if (gamesave == null) {
       return;
@@ -160,7 +145,7 @@ class Game {
     scene = 'play';
   }
 
-  static function quickSave(id:Int) {
+  public static function quickSave(id:Int) {
     if (Board.isRunning(state)) {
       trace('Quick Save $id');
       Storage.write('gamesave$id', Board.save(state));

@@ -103,7 +103,6 @@ class Input {
   }
 
   static function onMouseDown(button:Int, x:Int, y:Int) {
-    trace('button:$button');
     mouseX = x;
     mouseY = y;
     var vk = virtualKeyfromMouseButton(button);
