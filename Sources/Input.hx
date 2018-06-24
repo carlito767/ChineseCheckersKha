@@ -70,6 +70,9 @@ class Input {
     KeyCode.Numpad8 => VirtualKey.Number8,
     KeyCode.Numpad9 => VirtualKey.Number9,
     KeyCode.Decimal => VirtualKey.Decimal,
+    KeyCode.Alt => VirtualKey.Alt,
+    KeyCode.Control => VirtualKey.Control,
+    KeyCode.Shift => VirtualKey.Shift,
   ];
 
   static function onKeyDown(key:KeyCode) {

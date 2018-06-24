@@ -151,4 +151,13 @@ class Game {
       Storage.write('gamesave$id', Board.save(state));
     }
   }
+
+  public static function quickLoadOrSave(id:Int) {
+    if (Input.isPressed(VirtualKey.Alt)) {
+      quickSave(id);
+    }
+    else {
+      quickLoad(id);
+    }
+  }
 }

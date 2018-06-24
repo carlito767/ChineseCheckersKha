@@ -30,12 +30,10 @@ class ScenePlay implements IScene {
     inputContext.map(VirtualKey.L, { f:Game.changeLanguage });
     inputContext.map(VirtualKey.Decimal, { f:function() { UI.showHitbox = !UI.showHitbox; } });
     inputContext.map(VirtualKey.Number0, { f:function() { showTileId = !showTileId; } });
-    inputContext.map(VirtualKey.Number1, { f:function() { Game.quickLoad(1); } });
-    inputContext.map(VirtualKey.Number2, { f:function() { Game.quickLoad(2); } });
-    inputContext.map(VirtualKey.Number3, { f:function() { Game.quickLoad(3); } });
-    inputContext.map(VirtualKey.Number7, { f:function() { Game.quickSave(1); } });
-    inputContext.map(VirtualKey.Number8, { f:function() { Game.quickSave(2); } });
-    inputContext.map(VirtualKey.Number9, { f:function() { Game.quickSave(3); } });
+    inputContext.map(VirtualKey.Number1, { f:function() { Game.quickLoadOrSave(1); } });
+    inputContext.map(VirtualKey.Number2, { f:function() { Game.quickLoadOrSave(2); } });
+    inputContext.map(VirtualKey.Number3, { f:function() { Game.quickLoadOrSave(3); } });
+    inputContext.map(VirtualKey.Alt, { repeat:true });
 
     sequenceIndex = null;
     showTileId = false;
