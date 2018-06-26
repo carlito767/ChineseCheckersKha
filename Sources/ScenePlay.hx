@@ -7,6 +7,7 @@ import Board.PlayerKind;
 import Board.Sequence;
 import Board.State;
 import BoardChineseCheckers as GameBoard;
+import InputContext.Context;
 import Translations.language;
 import Translations.tr;
 import UI.Dimensions;
@@ -14,7 +15,7 @@ import UI.UITileEmphasis;
 import UI.UIWindow;
 
 class ScenePlay implements IScene {
-  var inputContext:InputContext;
+  var context:Context;
 
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
@@ -23,20 +24,19 @@ class ScenePlay implements IScene {
     return sequenceIndex = value;
   }
 
-  var showTileId:Bool;
-
   public function new() {
-    inputContext = new InputContext();
-    inputContext.map(VirtualKey.L, { f:Game.changeLanguage });
-    inputContext.map(VirtualKey.Decimal, { f:function() { UI.showHitbox = !UI.showHitbox; } });
-    inputContext.map(VirtualKey.Number0, { f:function() { showTileId = !showTileId; } });
-    inputContext.map(VirtualKey.Number1, { f:function() { Game.quickLoadOrSave(1); } });
-    inputContext.map(VirtualKey.Number2, { f:function() { Game.quickLoadOrSave(2); } });
-    inputContext.map(VirtualKey.Number3, { f:function() { Game.quickLoadOrSave(3); } });
-    inputContext.map(VirtualKey.Alt, { repeat:true });
+    context = new Context();
+    context.set(VirtualKey.L, "ChangeLanguage");
+    context.set(VirtualKey.Decimal, "ShowHitbox");
+    context.set(VirtualKey.Number0, "ShowTileId");
+    context.set(VirtualKey.Number1, "QuickLoad1");
+    context.set(VirtualKey.Number2, "QuickLoad2");
+    context.set(VirtualKey.Number3, "QuickLoad3");
+    context.set(VirtualKey.Number7, "QuickSave1");
+    context.set(VirtualKey.Number8, "QuickSave2");
+    context.set(VirtualKey.Number9, "QuickSave3");
 
     sequenceIndex = null;
-    showTileId = false;
   }
 
   public function enter() {
@@ -47,7 +47,7 @@ class ScenePlay implements IScene {
   }
 
   public function update() {
-    inputContext.update();
+    InputContext.update(context);
     if (Game.state.currentPlayer != null && Game.state.currentPlayer.kind != Human) {
       AI.initialize(Game.state);
     }
@@ -81,7 +81,7 @@ class ScenePlay implements IScene {
         emphasis = Selected;
       }
       var player = (tile.piece == null) ? null : state.players[tile.piece];
-      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(showTileId) ? Std.string(tile.id) : null, disabled:!human }).hit) {
+      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Game.showTileId) ? Std.string(tile.id) : null, disabled:!human }).hit) {
         if (tile == state.selectedTile) {
           state.selectedTile = null;
         }

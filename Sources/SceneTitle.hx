@@ -1,18 +1,19 @@
 import kha.Assets;
 
+import InputContext.Context;
 import Translations.language;
 import Translations.tr;
 
 class SceneTitle implements IScene {
-  var inputContext:InputContext;
+  var context:Context;
 
   public function new() {
-    inputContext = new InputContext();
-    inputContext.map(VirtualKey.L, { f:Game.changeLanguage });
-    inputContext.map(VirtualKey.Decimal, { f:function() { UI.showHitbox = !UI.showHitbox; } });
-    inputContext.map(VirtualKey.Number1, { f:function() { Game.quickLoad(1); } });
-    inputContext.map(VirtualKey.Number2, { f:function() { Game.quickLoad(2); } });
-    inputContext.map(VirtualKey.Number3, { f:function() { Game.quickLoad(3); } });
+    context = new Context();
+    context.set(VirtualKey.L, "ChangeLanguage");
+    context.set(VirtualKey.Decimal, "ShowHitbox");
+    context.set(VirtualKey.Number1, "QuickLoad1");
+    context.set(VirtualKey.Number2, "QuickLoad2");
+    context.set(VirtualKey.Number3, "QuickLoad3");
   }
 
   public function enter() {
@@ -22,7 +23,7 @@ class SceneTitle implements IScene {
   }
 
   public function update() {
-    inputContext.update();
+    InputContext.update(context);
   }
 
   public function render(ui:UI) {

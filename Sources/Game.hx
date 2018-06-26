@@ -4,7 +4,6 @@ import kha.Framebuffer;
 import Board.Move;
 import Board.State;
 import Translations.language;
-import VirtualKey;
 
 typedef Settings = {
   var version:Int;
@@ -18,6 +17,16 @@ class Game {
 
   @:allow(Main)
   static function initialize() {
+    InputContext.map("ChangeLanguage", Game.changeLanguage);
+    InputContext.map("ShowHitbox", function() { UI.showHitbox = !UI.showHitbox; });
+    InputContext.map("ShowTileId", function() { showTileId = !showTileId; });
+    InputContext.map("QuickLoad1", function() { Game.quickLoad(1); });
+    InputContext.map("QuickLoad2", function() { Game.quickLoad(2); });
+    InputContext.map("QuickLoad3", function() { Game.quickLoad(3); });
+    InputContext.map("QuickSave1", function() { Game.quickSave(1); });
+    InputContext.map("QuickSave2", function() { Game.quickSave(2); });
+    InputContext.map("QuickSave3", function() { Game.quickSave(3); });
+
     Input.initialize();
     Sequencer.initialize();
 
@@ -97,6 +106,8 @@ class Game {
 
   static var ui:UI = new UI();
 
+  public static var showTileId:Bool = false;
+
   //
   // Settings
   //
@@ -149,15 +160,6 @@ class Game {
     if (Board.isRunning(state)) {
       trace('Quick Save $id');
       Storage.write('gamesave$id', Board.save(state));
-    }
-  }
-
-  public static function quickLoadOrSave(id:Int) {
-    if (Input.isPressed(VirtualKey.Alt)) {
-      quickSave(id);
-    }
-    else {
-      quickLoad(id);
     }
   }
 }

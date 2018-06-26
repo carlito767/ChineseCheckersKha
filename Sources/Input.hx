@@ -2,9 +2,9 @@ import kha.input.Keyboard as KhaKeyboard;
 import kha.input.KeyCode;
 import kha.input.Mouse as KhaMouse;
 
-import VirtualKey;
-
 class Input {
+  static var pressed:Map<VirtualKey, Bool> = new Map();
+
   public static function initialize() {
     var khaKeyboard = KhaKeyboard.get();
     if (khaKeyboard != null) {
@@ -17,15 +17,9 @@ class Input {
     }
   }
 
-  //
-  // Virtual Keys
-  //
-
   public static function isPressed(vk:VirtualKey):Bool {
     return (pressed[vk] == true);
   }
-
-  static var pressed:Map<VirtualKey, Bool> = new Map();
 
   //
   // Keyboard
