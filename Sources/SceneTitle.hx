@@ -1,14 +1,14 @@
 import kha.Assets;
 
-import InputContext.Context;
+import Commands.InputContext;
 import Translations.language;
 import Translations.tr;
 
 class SceneTitle implements IScene {
-  var context:Context;
+  var context:InputContext;
 
   public function new() {
-    context = new Context();
+    context = new InputContext();
     context.set(VirtualKey.L, "ChangeLanguage");
     context.set(VirtualKey.Decimal, "ShowHitbox");
     context.set(VirtualKey.Number1, "QuickLoad1");
@@ -23,7 +23,7 @@ class SceneTitle implements IScene {
   }
 
   public function update() {
-    InputContext.update(context);
+    Commands.update(context);
   }
 
   public function render(ui:UI) {

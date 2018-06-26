@@ -17,15 +17,15 @@ class Game {
 
   @:allow(Main)
   static function initialize() {
-    InputContext.map("ChangeLanguage", Game.changeLanguage);
-    InputContext.map("ShowHitbox", function() { UI.showHitbox = !UI.showHitbox; });
-    InputContext.map("ShowTileId", function() { showTileId = !showTileId; });
-    InputContext.map("QuickLoad1", function() { Game.quickLoad(1); });
-    InputContext.map("QuickLoad2", function() { Game.quickLoad(2); });
-    InputContext.map("QuickLoad3", function() { Game.quickLoad(3); });
-    InputContext.map("QuickSave1", function() { Game.quickSave(1); });
-    InputContext.map("QuickSave2", function() { Game.quickSave(2); });
-    InputContext.map("QuickSave3", function() { Game.quickSave(3); });
+    Commands.map("ChangeLanguage", Game.changeLanguage);
+    Commands.map("ShowHitbox", function() { UI.showHitbox = !UI.showHitbox; });
+    Commands.map("ShowTileId", function() { showTileId = !showTileId; });
+    Commands.map("QuickLoad1", function() { Game.quickLoad(1); });
+    Commands.map("QuickLoad2", function() { Game.quickLoad(2); });
+    Commands.map("QuickLoad3", function() { Game.quickLoad(3); });
+    Commands.map("QuickSave1", function() { Game.quickSave(1); });
+    Commands.map("QuickSave2", function() { Game.quickSave(2); });
+    Commands.map("QuickSave3", function() { Game.quickSave(3); });
 
     Input.initialize();
     Sequencer.initialize();

@@ -7,7 +7,7 @@ import Board.PlayerKind;
 import Board.Sequence;
 import Board.State;
 import BoardChineseCheckers as GameBoard;
-import InputContext.Context;
+import Commands.InputContext;
 import Translations.language;
 import Translations.tr;
 import UI.Dimensions;
@@ -15,7 +15,7 @@ import UI.UITileEmphasis;
 import UI.UIWindow;
 
 class ScenePlay implements IScene {
-  var context:Context;
+  var context:InputContext;
 
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
@@ -25,7 +25,7 @@ class ScenePlay implements IScene {
   }
 
   public function new() {
-    context = new Context();
+    context = new InputContext();
     context.set(VirtualKey.L, "ChangeLanguage");
     context.set(VirtualKey.Decimal, "ShowHitbox");
     context.set(VirtualKey.Number0, "ShowTileId");
@@ -47,7 +47,7 @@ class ScenePlay implements IScene {
   }
 
   public function update() {
-    InputContext.update(context);
+    Commands.update(context);
     if (Game.state.currentPlayer != null && Game.state.currentPlayer.kind != Human) {
       AI.initialize(Game.state);
     }

@@ -6,20 +6,18 @@ typedef Command = {
   var active:Bool;
 }
 
-typedef Context = Map<VirtualKey, String>;
+typedef CommandId = String;
 
-class InputContext {
-  static var commands:Map<String, Command> = new Map();
+typedef InputContext = Map<VirtualKey, CommandId>;
 
-  public static function isActive(id:String):Bool {
-    return (commands[id] != null) ?  commands[id].active : false;
-  }
+class Commands {
+  static var commands:Map<CommandId, Command> = new Map();
 
-  public static function map(id:String, f:Void->Void, ?repeat:Bool = false) {
+  public static function map(id:CommandId, f:Void->Void, ?repeat:Bool = false) {
     commands.set(id, { f:f, repeat:repeat, active:false });
   }
 
-  public static function update(context:Context) {
+  public static function update(context:InputContext) {
     for (vk in context.keys()) {
       var id = context[vk];
       var command = commands[id];
