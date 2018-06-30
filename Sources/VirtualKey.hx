@@ -47,7 +47,7 @@ enum VirtualKey {
   Semicolon;
 
   Add;
-  Substract;
+  Subtract;
   Multiply;
   Divide;
 
@@ -64,7 +64,7 @@ enum VirtualKey {
   Home;
   End;
 
-  Enter;
+  Return;
   Escape;
   Space;
   Tab;

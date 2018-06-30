@@ -17,15 +17,18 @@ class Input {
     }
   }
 
-  public static function isPressed(vk:VirtualKey):Bool {
-    return (pressed[vk] == true);
+  public static function isPressed(vk:VirtualKey, ?repeat:Bool = false):Bool {
+    var result = pressed[vk] == true;
+    if (!repeat) {
+      pressed[vk] = false;
+    }
+    return result;
   }
 
   //
   // Keyboard
   //
 
-  // @Incomplete
   static var KeyCodeToVirtualKey:Map<KeyCode, VirtualKey> = [
     KeyCode.A => VirtualKey.A,
     KeyCode.B => VirtualKey.B,
@@ -53,6 +56,7 @@ class Input {
     KeyCode.X => VirtualKey.X,
     KeyCode.Y => VirtualKey.Y,
     KeyCode.Z => VirtualKey.Z,
+
     KeyCode.Numpad0 => VirtualKey.Number0,
     KeyCode.Numpad1 => VirtualKey.Number1,
     KeyCode.Numpad2 => VirtualKey.Number2,
@@ -63,7 +67,37 @@ class Input {
     KeyCode.Numpad7 => VirtualKey.Number7,
     KeyCode.Numpad8 => VirtualKey.Number8,
     KeyCode.Numpad9 => VirtualKey.Number9,
+
     KeyCode.Decimal => VirtualKey.Decimal,
+    KeyCode.Colon => VirtualKey.Colon,
+    KeyCode.Semicolon => VirtualKey.Semicolon,
+
+    KeyCode.Add => VirtualKey.Add,
+    KeyCode.Subtract => VirtualKey.Subtract,
+    KeyCode.Multiply => VirtualKey.Multiply,
+    KeyCode.Divide => VirtualKey.Divide,
+
+    KeyCode.Insert => VirtualKey.Insert,
+    KeyCode.Delete => VirtualKey.Decimal,
+
+    KeyCode.Left => VirtualKey.Left,
+    KeyCode.Up => VirtualKey.Up,
+    KeyCode.Right => VirtualKey.Right,
+    KeyCode.Down => VirtualKey.Down,
+
+    KeyCode.PageUp => VirtualKey.PageUp,
+    KeyCode.PageDown => VirtualKey.PageDown,
+    KeyCode.Home => VirtualKey.Home,
+    KeyCode.End => VirtualKey.End,
+
+    KeyCode.Return => VirtualKey.Return,
+    KeyCode.Escape => VirtualKey.Escape,
+    KeyCode.Space => VirtualKey.Space,
+    KeyCode.Tab => VirtualKey.Tab,
+    KeyCode.Backspace => VirtualKey.Backspace,
+
+    KeyCode.Pause => VirtualKey.Pause,
+
     KeyCode.Alt => VirtualKey.Alt,
     KeyCode.Control => VirtualKey.Control,
     KeyCode.Shift => VirtualKey.Shift,

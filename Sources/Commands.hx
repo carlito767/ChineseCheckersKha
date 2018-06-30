@@ -3,7 +3,6 @@
 typedef Command = {
   var f:Void->Void;
   var repeat:Bool;
-  var active:Bool;
 }
 
 typedef CommandId = String;
@@ -14,7 +13,7 @@ class Commands {
   static var commands:Map<CommandId, Command> = new Map();
 
   public static function map(id:CommandId, f:Void->Void, ?repeat:Bool = false) {
-    commands.set(id, { f:f, repeat:repeat, active:false });
+    commands.set(id, { f:f, repeat:repeat });
   }
 
   public static function update(context:InputContext) {
@@ -24,11 +23,9 @@ class Commands {
       if (command == null) {
         continue;
       }
-      var active = Input.isPressed(vk);
-      if (active && (command.repeat || !command.active)) {
+      if (Input.isPressed(vk, command.repeat)) {
         command.f();
       }
-      command.active = active;
     }
   }
 }
