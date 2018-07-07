@@ -23,9 +23,9 @@ class Game {
   @:allow(Main)
   static function initialize() {
     var keymap = new Keymap();
-    keymap[VirtualKey.L] = "ChangeLanguage";
-    keymap[VirtualKey.Decimal] = "ShowHitbox";
-    keymaps["game"] = keymap;
+    keymap[VirtualKey.L] = 'ChangeLanguage';
+    keymap[VirtualKey.Decimal] = 'ShowHitbox';
+    keymaps['game'] = keymap;
 
     Input.initialize();
     Sequencer.initialize();
@@ -33,8 +33,8 @@ class Game {
     loadSettings();
 
     scenes = [
-      "title" => new SceneTitle(),
-      "play" => new ScenePlay(),
+      'title' => new SceneTitle(),
+      'play' => new ScenePlay(),
     ];
 
     scene = 'title';
@@ -57,39 +57,39 @@ class Game {
     for (id in commands.keys()) {
       var repeat = commands[id];
       switch id {
-      case "ChangeLanguage":
+      case 'ChangeLanguage':
         if (!repeat) {
           Game.changeLanguage();
         }
-      case "ShowHitbox":
+      case 'ShowHitbox':
         if (!repeat) {
           UI.showHitbox = !UI.showHitbox;
         }
-      case "ShowTileId":
+      case 'ShowTileId':
         if (!repeat) {
           showTileId = !showTileId;
         }
-      case "QuickLoad1":
+      case 'QuickLoad1':
         if (!repeat) {
           Game.quickLoad(1);
         }
-      case "QuickLoad2":
+      case 'QuickLoad2':
         if (!repeat) {
           Game.quickLoad(2);
         }
-      case "QuickLoad3":
+      case 'QuickLoad3':
         if (!repeat) {
           Game.quickLoad(3);
         }
-      case "QuickSave1":
+      case 'QuickSave1':
         if (!repeat) {
           Game.quickSave(1);
         }
-      case "QuickSave2":
+      case 'QuickSave2':
         if (!repeat) {
           Game.quickSave(2);
         }
-      case "QuickSave3":
+      case 'QuickSave3':
         if (!repeat) {
           Game.quickSave(3);
         }

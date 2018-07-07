@@ -8,17 +8,17 @@ class SceneTitle implements IScene {
   var keymap:Keymap = new Keymap();
 
   public function new() {
-    keymap.set(VirtualKey.Number1, "QuickLoad1");
-    keymap.set(VirtualKey.Number2, "QuickLoad2");
-    keymap.set(VirtualKey.Number3, "QuickLoad3");
+    keymap.set(VirtualKey.Number1, 'QuickLoad1');
+    keymap.set(VirtualKey.Number2, 'QuickLoad2');
+    keymap.set(VirtualKey.Number3, 'QuickLoad3');
   }
 
   public function enter() {
-    Game.keymaps.set("title", keymap);
+    Game.keymaps.set('title', keymap);
   }
 
   public function leave() {
-    Game.keymaps.remove("title");
+    Game.keymaps.remove('title');
   }
 
   public function update() {

@@ -25,23 +25,23 @@ class ScenePlay implements IScene {
   }
 
   public function new() {
-    keymap.set(VirtualKey.Number0, "ShowTileId");
-    keymap.set(VirtualKey.Number1, "QuickLoad1");
-    keymap.set(VirtualKey.Number2, "QuickLoad2");
-    keymap.set(VirtualKey.Number3, "QuickLoad3");
-    keymap.set(VirtualKey.Number7, "QuickSave1");
-    keymap.set(VirtualKey.Number8, "QuickSave2");
-    keymap.set(VirtualKey.Number9, "QuickSave3");
+    keymap.set(VirtualKey.Number0, 'ShowTileId');
+    keymap.set(VirtualKey.Number1, 'QuickLoad1');
+    keymap.set(VirtualKey.Number2, 'QuickLoad2');
+    keymap.set(VirtualKey.Number3, 'QuickLoad3');
+    keymap.set(VirtualKey.Number7, 'QuickSave1');
+    keymap.set(VirtualKey.Number8, 'QuickSave2');
+    keymap.set(VirtualKey.Number9, 'QuickSave3');
 
     sequenceIndex = null;
   }
 
   public function enter() {
-    Game.keymaps.set("play", keymap);
+    Game.keymaps.set('play', keymap);
   }
 
   public function leave() {
-    Game.keymaps.remove("play");
+    Game.keymaps.remove('play');
     AI.reset();
   }
 
