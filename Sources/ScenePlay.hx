@@ -13,7 +13,6 @@ import UI.Dimensions;
 import UI.UITileEmphasis;
 import UI.UIWindow;
 
-@:final
 class ScenePlay extends Scene {
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
@@ -157,7 +156,7 @@ class ScenePlay extends Scene {
 
     if (ui.button({ text:tr.quit, x:Game.WIDTH * 0.85, y:Game.WIDTH * 0.025, w:Game.WIDTH * 0.125, h:Game.HEIGHT * 0.067 }).hit) {
       sequenceIndex = null;
-      Game.scene = 'title';
+      Game.scene = Game.sceneTitle;
     }
   }
 }

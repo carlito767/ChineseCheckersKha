@@ -20,6 +20,22 @@ class Game {
   public static var keymaps:Map<String, Keymap> = new Map();
   public static var commands:Map<String, Bool> = new Map();
 
+  public static var scene(default, set):Scene;
+  static function set_scene(value) {
+    if (scene != value) {
+      if (scene != null) {
+        scene.leave();
+      }
+      if (value != null) {
+        value.enter();
+      }
+    }
+    return scene = value;
+  }
+
+  public static var sceneTitle(default, null) = new SceneTitle();
+  public static var scenePlay(default, null) = new ScenePlay();
+
   @:allow(Main)
   static function initialize() {
     var keymap = new Keymap();
@@ -32,12 +48,7 @@ class Game {
 
     loadSettings();
 
-    scenes = [
-      'title' => new SceneTitle(),
-      'play' => new ScenePlay(),
-    ];
-
-    scene = 'title';
+    scene = sceneTitle;
   }
 
   @:allow(Main)
@@ -99,10 +110,7 @@ class Game {
     }
 
     Sequencer.update();
-    var currentScene = scenes[scene];
-    if (currentScene != null) {
-      currentScene.update();
-    }
+    scene.update();
   }
 
   @:allow(Main)
@@ -113,10 +121,7 @@ class Game {
     var select = Input.isPressed(VirtualKey.MouseLeftButton);
     g.begin();
     ui.preRender(g, WIDTH, HEIGHT, { x:x, y:y, select:select });
-    var currentScene = scenes[scene];
-    if (currentScene != null) {
-      currentScene.render(ui);
-    }
+    scene.render(ui);
     ui.postRender();
     g.end();
   }
@@ -135,26 +140,6 @@ class Game {
   //
 
   public static var state:State;
-
-  //
-  // Scene
-  //
-
-  static var scenes:Map<String, Scene>;
-  public static var scene(default, set):String;
-  static function set_scene(value) {
-    if (scene != value) {
-      var currentScene = scenes[scene];
-      if (currentScene != null) {
-        currentScene.leave();
-      }
-      var newScene = scenes[value];
-      if (newScene != null) {
-        newScene.enter();
-      }
-    }
-    return scene = value;
-  }
 
   //
   // UI
@@ -209,7 +194,7 @@ class Game {
 
     trace('Quick Load $id');
     state = gamesave;
-    scene = 'play';
+    scene = scenePlay;
   }
 
   public static function quickSave(id:Int) {
