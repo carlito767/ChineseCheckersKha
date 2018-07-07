@@ -7,7 +7,7 @@ import Board.PlayerKind;
 import Board.Sequence;
 import Board.State;
 import BoardChineseCheckers as GameBoard;
-import Commands.InputContext;
+import Game.Keymap;
 import Translations.language;
 import Translations.tr;
 import UI.Dimensions;
@@ -15,7 +15,7 @@ import UI.UITileEmphasis;
 import UI.UIWindow;
 
 class ScenePlay implements IScene {
-  var context:InputContext;
+  var keymap:Keymap = new Keymap();
 
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
@@ -25,29 +25,27 @@ class ScenePlay implements IScene {
   }
 
   public function new() {
-    context = new InputContext();
-    context.set(VirtualKey.L, "ChangeLanguage");
-    context.set(VirtualKey.Decimal, "ShowHitbox");
-    context.set(VirtualKey.Number0, "ShowTileId");
-    context.set(VirtualKey.Number1, "QuickLoad1");
-    context.set(VirtualKey.Number2, "QuickLoad2");
-    context.set(VirtualKey.Number3, "QuickLoad3");
-    context.set(VirtualKey.Number7, "QuickSave1");
-    context.set(VirtualKey.Number8, "QuickSave2");
-    context.set(VirtualKey.Number9, "QuickSave3");
+    keymap.set(VirtualKey.Number0, "ShowTileId");
+    keymap.set(VirtualKey.Number1, "QuickLoad1");
+    keymap.set(VirtualKey.Number2, "QuickLoad2");
+    keymap.set(VirtualKey.Number3, "QuickLoad3");
+    keymap.set(VirtualKey.Number7, "QuickSave1");
+    keymap.set(VirtualKey.Number8, "QuickSave2");
+    keymap.set(VirtualKey.Number9, "QuickSave3");
 
     sequenceIndex = null;
   }
 
   public function enter() {
+    Game.keymaps.set("play", keymap);
   }
 
   public function leave() {
+    Game.keymaps.remove("play");
     AI.reset();
   }
 
   public function update() {
-    Commands.update(context);
     if (Game.state.currentPlayer != null && Game.state.currentPlayer.kind != Human) {
       AI.initialize(Game.state);
     }

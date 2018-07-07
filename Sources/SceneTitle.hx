@@ -1,29 +1,27 @@
 import kha.Assets;
 
-import Commands.InputContext;
+import Game.Keymap;
 import Translations.language;
 import Translations.tr;
 
 class SceneTitle implements IScene {
-  var context:InputContext;
+  var keymap:Keymap = new Keymap();
 
   public function new() {
-    context = new InputContext();
-    context.set(VirtualKey.L, "ChangeLanguage");
-    context.set(VirtualKey.Decimal, "ShowHitbox");
-    context.set(VirtualKey.Number1, "QuickLoad1");
-    context.set(VirtualKey.Number2, "QuickLoad2");
-    context.set(VirtualKey.Number3, "QuickLoad3");
+    keymap.set(VirtualKey.Number1, "QuickLoad1");
+    keymap.set(VirtualKey.Number2, "QuickLoad2");
+    keymap.set(VirtualKey.Number3, "QuickLoad3");
   }
 
   public function enter() {
+    Game.keymaps.set("title", keymap);
   }
 
   public function leave() {
+    Game.keymaps.remove("title");
   }
 
   public function update() {
-    Commands.update(context);
   }
 
   public function render(ui:UI) {

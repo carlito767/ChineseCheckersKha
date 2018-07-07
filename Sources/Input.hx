@@ -17,12 +17,20 @@ class Input {
     }
   }
 
-  public static function isPressed(vk:VirtualKey, ?repeat:Bool = false):Bool {
-    var result = pressed[vk] == true;
-    if (!repeat) {
+  public static function isPressed(vk:VirtualKey):Bool {
+    return (pressed[vk] == true);
+  }
+
+  static inline function onPressed(vk:Null<VirtualKey>) {
+    if (vk != null) {
+      pressed[vk] = true;
+    }
+  }
+
+  static inline function onReleased(vk:Null<VirtualKey>) {
+    if (vk != null) {
       pressed[vk] = false;
     }
-    return result;
   }
 
   //
@@ -104,17 +112,11 @@ class Input {
   ];
 
   static function onKeyDown(key:KeyCode) {
-    var vk = KeyCodeToVirtualKey.get(key);
-    if (vk != null) {
-      pressed[vk] = true;
-    }
+    onPressed(KeyCodeToVirtualKey.get(key));
   }
 
   static function onKeyUp(key:KeyCode) {
-    var vk = KeyCodeToVirtualKey.get(key);
-    if (vk != null) {
-      pressed[vk] = false;
-    }
+    onReleased(KeyCodeToVirtualKey.get(key));
   }
 
   //
@@ -136,18 +138,12 @@ class Input {
   static function onMouseDown(button:Int, x:Int, y:Int) {
     mouseX = x;
     mouseY = y;
-    var vk = mouseButtonToVirtualKey(button);
-    if (vk != null) {
-      pressed[vk] = true;
-    }
+    onPressed(mouseButtonToVirtualKey(button));
   }
 
   static function onMouseUp(button:Int, x:Int, y:Int) {
     mouseX = x;
     mouseY = y;
-    var vk = mouseButtonToVirtualKey(button);
-    if (vk != null) {
-      pressed[vk] = false;
-    }
+    onReleased(mouseButtonToVirtualKey(button));
   }
 }

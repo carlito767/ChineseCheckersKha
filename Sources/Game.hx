@@ -5,6 +5,8 @@ import Board.Move;
 import Board.State;
 import Translations.language;
 
+typedef Keymap = Map<VirtualKey, String>; 
+
 typedef Settings = {
   var version:Int;
   var language:String;
@@ -15,17 +17,15 @@ class Game {
   public static inline var WIDTH = 800;
   public static inline var HEIGHT = 600;
 
+  public static var keymaps:Map<String, Keymap> = new Map();
+  public static var commands:Map<String, Bool> = new Map();
+
   @:allow(Main)
   static function initialize() {
-    Commands.map("ChangeLanguage", Game.changeLanguage);
-    Commands.map("ShowHitbox", function() { UI.showHitbox = !UI.showHitbox; });
-    Commands.map("ShowTileId", function() { showTileId = !showTileId; });
-    Commands.map("QuickLoad1", function() { Game.quickLoad(1); });
-    Commands.map("QuickLoad2", function() { Game.quickLoad(2); });
-    Commands.map("QuickLoad3", function() { Game.quickLoad(3); });
-    Commands.map("QuickSave1", function() { Game.quickSave(1); });
-    Commands.map("QuickSave2", function() { Game.quickSave(2); });
-    Commands.map("QuickSave3", function() { Game.quickSave(3); });
+    var keymap = new Keymap();
+    keymap[VirtualKey.L] = "ChangeLanguage";
+    keymap[VirtualKey.Decimal] = "ShowHitbox";
+    keymaps["game"] = keymap;
 
     Input.initialize();
     Sequencer.initialize();
@@ -42,6 +42,62 @@ class Game {
 
   @:allow(Main)
   static function update() {
+    var currentCommands:Map<String, Bool> = new Map();
+    for (keymap in keymaps) {
+      for (vk in keymap.keys()) {
+        if (Input.isPressed(vk)) {
+          var id = keymap[vk];
+          var repeat = commands.exists(id);
+          currentCommands[id] = repeat; 
+        }
+      }
+    }
+    commands = currentCommands;
+
+    for (id in commands.keys()) {
+      var repeat = commands[id];
+      switch id {
+      case "ChangeLanguage":
+        if (!repeat) {
+          Game.changeLanguage();
+        }
+      case "ShowHitbox":
+        if (!repeat) {
+          UI.showHitbox = !UI.showHitbox;
+        }
+      case "ShowTileId":
+        if (!repeat) {
+          showTileId = !showTileId;
+        }
+      case "QuickLoad1":
+        if (!repeat) {
+          Game.quickLoad(1);
+        }
+      case "QuickLoad2":
+        if (!repeat) {
+          Game.quickLoad(2);
+        }
+      case "QuickLoad3":
+        if (!repeat) {
+          Game.quickLoad(3);
+        }
+      case "QuickSave1":
+        if (!repeat) {
+          Game.quickSave(1);
+        }
+      case "QuickSave2":
+        if (!repeat) {
+          Game.quickSave(2);
+        }
+      case "QuickSave3":
+        if (!repeat) {
+          Game.quickSave(3);
+        }
+      default:
+        trace('Unknown command: $id');
+      }
+    }
+
     Sequencer.update();
     var currentScene = scenes[scene];
     if (currentScene != null) {
