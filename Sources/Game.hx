@@ -17,6 +17,8 @@ class Game {
   public static inline var WIDTH = 800;
   public static inline var HEIGHT = 600;
 
+  static inline var SETTINGS_VERSION = 1;
+
   public static var keymaps:Map<String, Keymap> = new Map();
   public static var commands:Map<String, Bool> = new Map();
 
@@ -35,6 +37,11 @@ class Game {
 
   public static var sceneTitle(default, null) = new SceneTitle();
   public static var scenePlay(default, null) = new ScenePlay();
+
+  static var ui:UI = new UI();
+  public static var showTileId:Bool = false;
+
+  public static var state:State;
 
   @:allow(Main)
   static function initialize() {
@@ -136,24 +143,8 @@ class Game {
   }
 
   //
-  // State
-  //
-
-  public static var state:State;
-
-  //
-  // UI
-  //
-
-  static var ui:UI = new UI();
-
-  public static var showTileId:Bool = false;
-
-  //
   // Settings
   //
-
-  static inline var SETTINGS_VERSION = 1;
 
   static function checkSettings(settings:Null<Settings>):Settings {
     var defaults:Settings = { version:SETTINGS_VERSION, language:'en' };
