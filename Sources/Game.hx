@@ -25,7 +25,7 @@ class Game {
     var keymap = new Keymap();
     keymap[VirtualKey.L] = 'ChangeLanguage';
     keymap[VirtualKey.Decimal] = 'ShowHitbox';
-    keymaps['game'] = keymap;
+    keymaps[''] = keymap;
 
     Input.initialize();
     Sequencer.initialize();
@@ -140,7 +140,7 @@ class Game {
   // Scene
   //
 
-  static var scenes:Map<String, IScene>;
+  static var scenes:Map<String, Scene>;
   public static var scene(default, set):String;
   static function set_scene(value) {
     if (scene != value) {

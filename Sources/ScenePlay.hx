@@ -7,16 +7,14 @@ import Board.PlayerKind;
 import Board.Sequence;
 import Board.State;
 import BoardChineseCheckers as GameBoard;
-import Game.Keymap;
 import Translations.language;
 import Translations.tr;
 import UI.Dimensions;
 import UI.UITileEmphasis;
 import UI.UIWindow;
 
-class ScenePlay implements IScene {
-  var keymap:Keymap = new Keymap();
-
+@:final
+class ScenePlay extends Scene {
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
     var sequence = (value == null) ? null : GameBoard.sequences[value];
@@ -25,6 +23,7 @@ class ScenePlay implements IScene {
   }
 
   public function new() {
+    super();
     keymap.set(VirtualKey.Number0, 'ShowTileId');
     keymap.set(VirtualKey.Number1, 'QuickLoad1');
     keymap.set(VirtualKey.Number2, 'QuickLoad2');
@@ -36,22 +35,18 @@ class ScenePlay implements IScene {
     sequenceIndex = null;
   }
 
-  public function enter() {
-    Game.keymaps.set('play', keymap);
-  }
-
-  public function leave() {
-    Game.keymaps.remove('play');
+  override public function leave() {
+    super.leave();
     AI.reset();
   }
 
-  public function update() {
+  override public function update() {
     if (Game.state.currentPlayer != null && Game.state.currentPlayer.kind != Human) {
       AI.initialize(Game.state);
     }
   }
 
-  public function render(ui:UI) {
+  override public function render(ui:UI) {
     var state = Game.state;
 
     ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT, disabled:true });
