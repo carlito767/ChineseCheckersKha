@@ -5,7 +5,7 @@ import Board.Move;
 import Board.State;
 import Translations.language;
 
-typedef Keymap = Map<VirtualKey, String>; 
+typedef Keymap = Map<VirtualKey, String>;
 
 typedef Settings = {
   var version:Int;
@@ -19,8 +19,8 @@ class Game {
 
   static inline var SETTINGS_VERSION = 1;
 
-  public static var keymaps:Map<String, Keymap> = new Map();
-  public static var commands:Map<String, Bool> = new Map();
+  public static var keymaps:Map<String, Keymap>;
+  public static var commands:Map<String, Bool>;
 
   public static var scene(default, set):Scene;
   static function set_scene(value) {
@@ -35,26 +35,32 @@ class Game {
     return scene = value;
   }
 
-  public static var sceneTitle(default, null) = new SceneTitle();
-  public static var scenePlay(default, null) = new ScenePlay();
+  public static var sceneTitle:SceneTitle;
+  public static var scenePlay:ScenePlay;
 
-  static var ui:UI = new UI();
-  public static var showTileId:Bool = false;
+  static var ui:UI;
+  public static var showTileId:Bool;
 
   public static var state:State;
 
   @:allow(Main)
   static function initialize() {
+    loadSettings();
+    Input.initialize();
+    Sequencer.initialize();
+
+    ui = new UI();
+    showTileId = false;
+
+    keymaps = new Map();
+    commands = new Map();
     var keymap = new Keymap();
     keymap[VirtualKey.L] = 'ChangeLanguage';
     keymap[VirtualKey.Decimal] = 'ShowHitbox';
     keymaps[''] = keymap;
 
-    Input.initialize();
-    Sequencer.initialize();
-
-    loadSettings();
-
+    sceneTitle = new SceneTitle();
+    scenePlay = new ScenePlay();
     scene = sceneTitle;
   }
 
