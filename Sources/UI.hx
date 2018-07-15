@@ -2,7 +2,7 @@ import kha.Assets;
 import kha.Color;
 import kha.Font;
 import kha.Image;
-import kha.graphics2.Graphics;
+import kha.graphics2.Graphics as Graphics2;
 using kha.graphics2.GraphicsExtension;
 import kha.System;
 
@@ -24,12 +24,6 @@ typedef Dimensions = {
   var right:Float;
   var top:Float;
   var bottom:Float;
-}
-
-typedef Scaling = {
-  var scale:Float;
-  var dx:Float;
-  var dy:Float;
 }
 
 //
@@ -90,50 +84,17 @@ typedef UIWindow = {
 class UI extends Mui {
   public static var showHitbox = false;
 
-  var g:Graphics;
-  var scaling:Scaling;
-
-  public function new() {
-    super();
-  }
-
-  public function preRender(graphics:Graphics, gameWidth:Int, gameHeight:Int) {
-    g = graphics;
-    scale(gameWidth, gameHeight);
-    g.scissor(Std.int(scaling.dx), Std.int(scaling.dy), Std.int(gameWidth * scaling.scale), Std.int(gameHeight * scaling.scale));
-    begin();
-  }
-
-  public function postRender() {
-    end();
-    g.disableScissor();
-  }
+  public var g:Graphics2;
 
   //
   // Scaling
   //
 
-  function scale(gameWidth:Int, gameHeight:Int) {
-    var width = System.windowWidth();
-    var height = System.windowHeight();
-
-    var gameAspectRatio = gameWidth / gameHeight;
-    var screenAspectRatio = width / height;
-    var scaleHorizontal = width / gameWidth;
-    var scaleVertical = height / gameHeight;
-
-    var scale = (gameAspectRatio > screenAspectRatio) ? scaleHorizontal : scaleVertical;
-    var dx = (width - (gameWidth * scale)) * 0.5;
-    var dy = (height - (gameHeight * scale)) * 0.5;
-
-    scaling = { scale:scale, dx:dx, dy:dy };
-  }
-
   function scaleObject(object:MuiObject) {
-    object.x = object.x * scaling.scale + scaling.dx;
-    object.y = object.y * scaling.scale + scaling.dy;
-    object.w = object.w * scaling.scale;
-    object.h = object.h * scaling.scale;
+    object.x = object.x * Scaling.scale + Scaling.dx;
+    object.y = object.y * Scaling.scale + Scaling.dy;
+    object.w = object.w * Scaling.scale;
+    object.h = object.h * Scaling.scale;
   }
 
   //

@@ -1,5 +1,6 @@
 import kha.Assets;
 import kha.Framebuffer;
+import kha.graphics2.Graphics as Graphics2;
 
 import Board.Move;
 import Board.State;
@@ -11,6 +12,8 @@ class Game {
   public static inline var TITLE = 'ChineseCheckersKha';
   public static inline var WIDTH = 800;
   public static inline var HEIGHT = 600;
+
+  public static var g2(default, null):Graphics2 = null;
 
   public static var keymaps:Map<String, Keymap>;
   public static var commands:Map<String, Bool>;
@@ -122,12 +125,19 @@ class Game {
 
   @:allow(Main)
   static function render(framebuffer:Framebuffer) {
-    var g = framebuffer.g2;
-    g.begin();
-    ui.preRender(g, WIDTH, HEIGHT);
+    Scaling.update(WIDTH, HEIGHT);
+
+    g2 = framebuffer.g2;
+    g2.begin();
+    g2.scissor(Std.int(Scaling.dx), Std.int(Scaling.dy), Std.int(WIDTH * Scaling.scale), Std.int(HEIGHT * Scaling.scale));
+
+    ui.g = g2;
+    ui.begin();
     scene.render(ui);
-    ui.postRender();
-    g.end();
+    ui.end();
+  
+    g2.disableScissor();
+    g2.end();
   }
 
   //
