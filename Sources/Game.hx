@@ -7,17 +7,10 @@ import Translations.language;
 
 typedef Keymap = Map<VirtualKey, String>;
 
-typedef Settings = {
-  var version:Int;
-  var language:String;
-}
-
 class Game {
   public static inline var TITLE = 'ChineseCheckersKha';
   public static inline var WIDTH = 800;
   public static inline var HEIGHT = 600;
-
-  static inline var SETTINGS_VERSION = 1;
 
   public static var keymaps:Map<String, Keymap>;
   public static var commands:Map<String, Bool>;
@@ -45,7 +38,10 @@ class Game {
 
   @:allow(Main)
   static function initialize() {
-    loadSettings();
+    // Settings
+    Settings.load();
+    language = Settings.language;
+
     Input.initialize();
     Sequencer.initialize();
 
@@ -145,38 +141,8 @@ class Game {
 
   public static function changeLanguage() {
     language = (language == 'en') ? 'fr' : 'en';
-    saveSettings();
-  }
-
-  //
-  // Settings
-  //
-
-  static function checkSettings(settings:Null<Settings>):Settings {
-    var defaults:Settings = { version:SETTINGS_VERSION, language:'en' };
-
-    if (settings == null) {
-      return defaults;
-    }
-
-    switch settings.version {
-    case SETTINGS_VERSION:
-    default:
-      trace('Settings: unknown version');
-      return defaults;
-    }
-
-    return settings;
-  }
-
-  static function loadSettings() {
-    var settings:Settings = checkSettings(Storage.read('settings'));
-    language = settings.language;
-  }
-
-  static function saveSettings() {
-    var settings:Settings = { version:SETTINGS_VERSION, language:language };
-    Storage.write('settings', settings);
+    Settings.language = language;
+    Settings.save();
   }
 
   //
