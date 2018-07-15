@@ -1,6 +1,7 @@
 import kha.Assets;
 import kha.Framebuffer;
 import kha.graphics2.Graphics as Graphics2;
+import kha.graphics4.Graphics as Graphics4;
 
 import Board.Move;
 import Board.State;
@@ -14,6 +15,7 @@ class Game {
   public static inline var HEIGHT = 600;
 
   public static var g2(default, null):Graphics2 = null;
+  public static var g4(default, null):Graphics4 = null;
 
   public static var keymaps:Map<String, Keymap>;
   public static var commands:Map<String, Bool>;
@@ -125,9 +127,11 @@ class Game {
 
   @:allow(Main)
   static function render(framebuffer:Framebuffer) {
+    g2 = framebuffer.g2;
+    g4 = framebuffer.g4;
+
     Scaling.update(WIDTH, HEIGHT);
 
-    g2 = framebuffer.g2;
     g2.begin();
     g2.scissor(Std.int(Scaling.dx), Std.int(Scaling.dy), Std.int(WIDTH * Scaling.scale), Std.int(HEIGHT * Scaling.scale));
 
