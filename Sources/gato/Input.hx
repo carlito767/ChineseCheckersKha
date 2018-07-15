@@ -1,6 +1,10 @@
+package gato;
+
 import kha.input.Keyboard as KhaKeyboard;
 import kha.input.KeyCode;
 import kha.input.Mouse as KhaMouse;
+
+import gato.VirtualKey;
 
 class Input {
   static var pressed:Map<VirtualKey, Bool> = new Map();

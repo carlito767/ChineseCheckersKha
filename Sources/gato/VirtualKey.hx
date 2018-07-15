@@ -1,3 +1,5 @@
+package gato;
+
 // @Incomplete
 enum VirtualKey {
   //

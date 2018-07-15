@@ -1,3 +1,5 @@
+package gato;
+
 import kha.Storage as KhaStorage;
 
 class Storage {

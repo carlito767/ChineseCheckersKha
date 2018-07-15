@@ -3,6 +3,11 @@ import kha.Framebuffer;
 import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
 
+import gato.Input;
+import gato.Scaling;
+import gato.Storage;
+import gato.VirtualKey;
+
 import Board.Move;
 import Board.State;
 import Translations.language;

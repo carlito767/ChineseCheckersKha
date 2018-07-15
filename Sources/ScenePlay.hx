@@ -1,6 +1,8 @@
 import kha.Assets;
 import kha.input.KeyCode;
 
+import gato.VirtualKey;
+
 import Board.Move;
 import Board.Player;
 import Board.PlayerKind;

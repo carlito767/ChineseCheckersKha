@@ -6,6 +6,8 @@ import kha.graphics2.Graphics as Graphics2;
 using kha.graphics2.GraphicsExtension;
 import kha.System;
 
+import gato.Scaling;
+
 import Board.Player;
 import Mui.MuiEval;
 import Mui.MuiInput;

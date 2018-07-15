@@ -10,6 +10,8 @@ import js.Browser.window;
 import kha.Scheduler;
 import kha.System;
 
+import gato.Loader;
+
 class Main {
   public static function main() {
     // https://github.com/Kode/Kha/issues/94

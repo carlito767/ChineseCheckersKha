@@ -2,7 +2,7 @@
 
 import kha.Scheduler;
 
-import Timer;
+import gato.Timer;
 
 class Sequencer {
   static var timer:Timer;

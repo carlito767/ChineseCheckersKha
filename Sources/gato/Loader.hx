@@ -1,4 +1,6 @@
-// Inspired by: https://github.com/BlazingMammothGames/tundra
+// Inspired by: https://github.com/FuzzyWuzzie/tundra
+
+package gato;
 
 import kha.Assets;
 import kha.Color;

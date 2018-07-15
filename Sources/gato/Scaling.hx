@@ -1,3 +1,5 @@
+package gato;
+
 import kha.System;
 
 class Scaling {
