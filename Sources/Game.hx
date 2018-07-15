@@ -32,7 +32,6 @@ class Game {
   public static var scenePlay:ScenePlay;
 
   static var ui:UI;
-  public static var showTileId:Bool;
 
   public static var state:State;
 
@@ -46,7 +45,6 @@ class Game {
     Sequencer.initialize();
 
     ui = new UI();
-    showTileId = false;
 
     keymaps = new Map();
     commands = new Map();
@@ -87,7 +85,7 @@ class Game {
         }
       case 'ShowTileId':
         if (!repeat) {
-          showTileId = !showTileId;
+          Settings.showTileId = !Settings.showTileId;
         }
       case 'QuickLoad1':
         if (!repeat) {

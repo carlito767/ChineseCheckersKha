@@ -7,7 +7,8 @@ class Settings {
   static inline var FILENAME = 'settings';
   static inline var VERSION = 1;
 
-  public static var language = 'en';
+  public static var language:String = 'en';
+  public static var showTileId:Bool = false;
 
   public static function load() {
     var settings:Null<SettingsData> = Storage.read(FILENAME);

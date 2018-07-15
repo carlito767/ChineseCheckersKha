@@ -73,7 +73,7 @@ class ScenePlay extends Scene {
         emphasis = Selected;
       }
       var player = (tile.piece == null) ? null : state.players[tile.piece];
-      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Game.showTileId) ? Std.string(tile.id) : null, disabled:!human }).hit) {
+      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Settings.showTileId) ? Std.string(tile.id) : null, disabled:!human }).hit) {
         if (tile == state.selectedTile) {
           state.selectedTile = null;
         }
