@@ -18,17 +18,14 @@ class Loader {
     });
   }
 
-  static var backgroundColor:Color = 0xFF2B343D;
-  static var barColor:Color = 0xFF3EE8AF;
-
   static function render(framebuffer:Framebuffer) {
-    var g = framebuffer.g2;
-    g.begin(true, backgroundColor);
+    var g2 = framebuffer.g2;
+    g2.begin();
     var w = Assets.progress * System.windowWidth();
     var h = System.windowHeight() * 0.02;
     var y = (System.windowHeight() - h) * 0.5;
-    g.color = barColor;
-    g.fillRect(0, y, w, h);
-    g.end();
+    g2.color = Color.White;
+    g2.fillRect(0, y, w, h);
+    g2.end();
   }
 }
