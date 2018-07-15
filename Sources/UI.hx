@@ -97,11 +97,11 @@ class UI extends Mui {
     super();
   }
 
-  public function preRender(graphics:Graphics, gameWidth:Int, gameHeight:Int, input:MuiInput) {
+  public function preRender(graphics:Graphics, gameWidth:Int, gameHeight:Int) {
     g = graphics;
     scale(gameWidth, gameHeight);
     g.scissor(Std.int(scaling.dx), Std.int(scaling.dy), Std.int(gameWidth * scaling.scale), Std.int(gameHeight * scaling.scale));
-    begin(input);
+    begin();
   }
 
   public function postRender() {

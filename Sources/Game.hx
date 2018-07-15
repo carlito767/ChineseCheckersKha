@@ -123,11 +123,8 @@ class Game {
   @:allow(Main)
   static function render(framebuffer:Framebuffer) {
     var g = framebuffer.g2;
-    var x = Input.mouseX;
-    var y = Input.mouseY;
-    var select = Input.isPressed(VirtualKey.MouseLeftButton);
     g.begin();
-    ui.preRender(g, WIDTH, HEIGHT, { x:x, y:y, select:select });
+    ui.preRender(g, WIDTH, HEIGHT);
     scene.render(ui);
     ui.postRender();
     g.end();

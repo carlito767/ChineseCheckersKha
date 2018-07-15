@@ -55,10 +55,10 @@ class Mui {
   var y:Float = 0.0;
   var select:Bool = false;
 
-  public function begin(input:MuiInput) {
-    x = input.x;
-    y = input.y;
-    select = input.select;
+  public function begin() {
+    x = Input.mouseX;
+    y = Input.mouseY;
+    select = Input.isPressed(VirtualKey.MouseLeftButton);
 
     idCounter = 0;
     next = null;
