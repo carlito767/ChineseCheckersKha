@@ -4,6 +4,8 @@ import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
 
 import gato.Input;
+import gato.Keymapper;
+import gato.Keymapper.Keymap;
 import gato.Scaling;
 import gato.Storage;
 import gato.VirtualKey;
@@ -11,8 +13,6 @@ import gato.VirtualKey;
 import Board.Move;
 import Board.State;
 import Translations.language;
-
-typedef Keymap = Map<VirtualKey, String>;
 
 class Game {
   public static inline var TITLE = 'ChineseCheckersKha';
@@ -22,7 +22,6 @@ class Game {
   public static var g2(default, null):Graphics2 = null;
   public static var g4(default, null):Graphics4 = null;
 
-  public static var keymaps:Map<String, Keymap>;
   public static var commands:Map<String, Bool>;
 
   public static var scene(default, set):Scene;
@@ -56,12 +55,11 @@ class Game {
 
     ui = new UI();
 
-    keymaps = new Map();
     commands = new Map();
     var keymap = new Keymap();
     keymap[VirtualKey.L] = 'ChangeLanguage';
     keymap[VirtualKey.Decimal] = 'ShowHitbox';
-    keymaps[''] = keymap;
+    Keymapper.keymaps[''] = keymap;
 
     sceneTitle = new SceneTitle();
     scenePlay = new ScenePlay();
@@ -71,7 +69,7 @@ class Game {
   @:allow(Main)
   static function update() {
     var currentCommands:Map<String, Bool> = new Map();
-    for (keymap in keymaps) {
+    for (keymap in Keymapper.keymaps) {
       for (vk in keymap.keys()) {
         if (Input.isPressed(vk)) {
           var id = keymap[vk];

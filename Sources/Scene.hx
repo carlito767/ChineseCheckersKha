@@ -1,4 +1,5 @@
-import Game.Keymap;
+import gato.Keymapper;
+import gato.Keymapper.Keymap;
 
 class Scene {
   var id:String;
@@ -9,10 +10,10 @@ class Scene {
   }
 
   public function enter():Void {
-    Game.keymaps.set(id, keymap);
+    Keymapper.keymaps.set(id, keymap);
   }
   public function leave():Void {
-    Game.keymaps.remove(id);
+    Keymapper.keymaps.remove(id);
   }
 
   public function update():Void {
