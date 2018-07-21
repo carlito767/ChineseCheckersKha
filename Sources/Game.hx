@@ -5,6 +5,7 @@ import kha.graphics4.Graphics as Graphics4;
 
 import gato.Input;
 import gato.Keymapper;
+import gato.Keymapper.Command;
 import gato.Keymapper.Keymap;
 import gato.Scaling;
 import gato.Storage;
@@ -21,8 +22,6 @@ class Game {
 
   public static var g2(default, null):Graphics2 = null;
   public static var g4(default, null):Graphics4 = null;
-
-  public static var commands:Map<String, Bool>;
 
   public static var scene(default, set):Scene;
   static function set_scene(value) {
@@ -55,11 +54,10 @@ class Game {
 
     ui = new UI();
 
-    commands = new Map();
-    var keymap = new Keymap();
-    keymap[VirtualKey.L] = 'ChangeLanguage';
-    keymap[VirtualKey.Decimal] = 'ShowHitbox';
-    Keymapper.keymaps[''] = keymap;
+    Keymapper.keymaps[''] = [
+      VirtualKey.L => Action('ChangeLanguage'),
+      VirtualKey.Decimal => Action('ShowHitbox'),
+    ];
 
     sceneTitle = new SceneTitle();
     scenePlay = new ScenePlay();
@@ -68,59 +66,30 @@ class Game {
 
   @:allow(Main)
   static function update() {
-    var currentCommands:Map<String, Bool> = new Map();
-    for (keymap in Keymapper.keymaps) {
-      for (vk in keymap.keys()) {
-        if (Input.isPressed(vk)) {
-          var id = keymap[vk];
-          var repeat = commands.exists(id);
-          currentCommands[id] = repeat; 
-        }
-      }
-    }
-    commands = currentCommands;
+    Keymapper.update();
 
-    for (id in commands.keys()) {
-      var repeat = commands[id];
-      switch id {
-      case 'ChangeLanguage':
-        if (!repeat) {
-          Game.changeLanguage();
-        }
-      case 'ShowHitbox':
-        if (!repeat) {
-          UI.showHitbox = !UI.showHitbox;
-        }
-      case 'ShowTileId':
-        if (!repeat) {
-          Settings.showTileId = !Settings.showTileId;
-        }
-      case 'QuickLoad1':
-        if (!repeat) {
-          Game.quickLoad(1);
-        }
-      case 'QuickLoad2':
-        if (!repeat) {
-          Game.quickLoad(2);
-        }
-      case 'QuickLoad3':
-        if (!repeat) {
-          Game.quickLoad(3);
-        }
-      case 'QuickSave1':
-        if (!repeat) {
-          Game.quickSave(1);
-        }
-      case 'QuickSave2':
-        if (!repeat) {
-          Game.quickSave(2);
-        }
-      case 'QuickSave3':
-        if (!repeat) {
-          Game.quickSave(3);
-        }
+    for (command in Keymapper.commands.keys()) {
+      switch command {
+      case Action('ChangeLanguage'):
+        Game.changeLanguage();
+      case Action('ShowHitbox'):
+        UI.showHitbox = !UI.showHitbox;
+      case Action('ShowTileId'):
+        Settings.showTileId = !Settings.showTileId;
+      case Action('QuickLoad1'):
+        Game.quickLoad(1);
+      case Action('QuickLoad2'):
+        Game.quickLoad(2);
+      case Action('QuickLoad3'):
+        Game.quickLoad(3);
+      case Action('QuickSave1'):
+        Game.quickSave(1);
+      case Action('QuickSave2'):
+        Game.quickSave(2);
+      case Action('QuickSave3'):
+        Game.quickSave(3);
       default:
-        trace('Unknown command: $id');
+        trace('Unknown command: $command');
       }
     }
 

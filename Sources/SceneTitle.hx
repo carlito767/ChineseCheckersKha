@@ -8,9 +8,11 @@ import Translations.tr;
 class SceneTitle extends Scene {
   public function new() {
     super();
-    keymap.set(VirtualKey.Number1, 'QuickLoad1');
-    keymap.set(VirtualKey.Number2, 'QuickLoad2');
-    keymap.set(VirtualKey.Number3, 'QuickLoad3');
+    keymap = [
+      VirtualKey.Number1 => Action('QuickLoad1'),
+      VirtualKey.Number2 => Action('QuickLoad2'),
+      VirtualKey.Number3 => Action('QuickLoad3'),
+    ];
   }
 
   override public function update() {
