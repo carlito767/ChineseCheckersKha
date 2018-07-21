@@ -25,15 +25,13 @@ class ScenePlay extends Scene {
 
   public function new() {
     super();
-    keymap = [
-      VirtualKey.Number0 => Action('ShowTileId'),
-      VirtualKey.Number1 => Action('QuickLoad1'),
-      VirtualKey.Number2 => Action('QuickLoad2'),
-      VirtualKey.Number3 => Action('QuickLoad3'),
-      VirtualKey.Number7 => Action('QuickSave1'),
-      VirtualKey.Number8 => Action('QuickSave2'),
-      VirtualKey.Number9 => Action('QuickSave3'),
-    ];
+    keymap.set(VirtualKey.Number0, Action('ShowTileId'));
+    keymap.set(VirtualKey.Number1, Action('QuickLoad1'));
+    keymap.set(VirtualKey.Number2, Action('QuickLoad2'));
+    keymap.set(VirtualKey.Number3, Action('QuickLoad3'));
+    keymap.set(VirtualKey.Number7, Action('QuickSave1'));
+    keymap.set(VirtualKey.Number8, Action('QuickSave2'));
+    keymap.set(VirtualKey.Number9, Action('QuickSave3'));
 
     sequenceIndex = null;
   }
@@ -44,6 +42,27 @@ class ScenePlay extends Scene {
   }
 
   override public function update() {
+    for (command in keymap.commands()) {
+      switch command {
+      case Action('ShowTileId'):
+        Settings.showTileId = !Settings.showTileId;
+      case Action('QuickLoad1'):
+        Game.quickLoad(1);
+      case Action('QuickLoad2'):
+        Game.quickLoad(2);
+      case Action('QuickLoad3'):
+        Game.quickLoad(3);
+      case Action('QuickSave1'):
+        Game.quickSave(1);
+      case Action('QuickSave2'):
+        Game.quickSave(2);
+      case Action('QuickSave3'):
+        Game.quickSave(3);
+      default:
+        trace('Unknown command: $command');
+      }
+    }
+
     if (Game.state.currentPlayer != null && Game.state.currentPlayer.kind != Human) {
       AI.initialize(Game.state);
     }

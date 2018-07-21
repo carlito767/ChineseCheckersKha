@@ -4,9 +4,8 @@ import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
 
 import gato.Input;
-import gato.Keymapper;
-import gato.Keymapper.Command;
-import gato.Keymapper.Keymap;
+import gato.Keymap;
+import gato.Keymap.Command;
 import gato.Scaling;
 import gato.Storage;
 import gato.VirtualKey;
@@ -39,6 +38,8 @@ class Game {
   public static var sceneTitle:SceneTitle;
   public static var scenePlay:ScenePlay;
 
+  static var keymap:Keymap;
+
   static var ui:UI;
 
   public static var state:State;
@@ -54,10 +55,9 @@ class Game {
 
     ui = new UI();
 
-    Keymapper.keymaps[''] = [
-      VirtualKey.L => Action('ChangeLanguage'),
-      VirtualKey.Decimal => Action('ShowHitbox'),
-    ];
+    keymap = new Keymap();
+    keymap.set(VirtualKey.L, Action('ChangeLanguage'));
+    keymap.set(VirtualKey.Decimal, Action('ShowHitbox'));
 
     sceneTitle = new SceneTitle();
     scenePlay = new ScenePlay();
@@ -66,28 +66,12 @@ class Game {
 
   @:allow(Main)
   static function update() {
-    Keymapper.update();
-
-    for (command in Keymapper.commands.keys()) {
+    for (command in keymap.commands()) {
       switch command {
       case Action('ChangeLanguage'):
         Game.changeLanguage();
       case Action('ShowHitbox'):
         UI.showHitbox = !UI.showHitbox;
-      case Action('ShowTileId'):
-        Settings.showTileId = !Settings.showTileId;
-      case Action('QuickLoad1'):
-        Game.quickLoad(1);
-      case Action('QuickLoad2'):
-        Game.quickLoad(2);
-      case Action('QuickLoad3'):
-        Game.quickLoad(3);
-      case Action('QuickSave1'):
-        Game.quickSave(1);
-      case Action('QuickSave2'):
-        Game.quickSave(2);
-      case Action('QuickSave3'):
-        Game.quickSave(3);
       default:
         trace('Unknown command: $command');
       }

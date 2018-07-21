@@ -8,14 +8,24 @@ import Translations.tr;
 class SceneTitle extends Scene {
   public function new() {
     super();
-    keymap = [
-      VirtualKey.Number1 => Action('QuickLoad1'),
-      VirtualKey.Number2 => Action('QuickLoad2'),
-      VirtualKey.Number3 => Action('QuickLoad3'),
-    ];
+    keymap.set(VirtualKey.Number1, Action('QuickLoad1'));
+    keymap.set(VirtualKey.Number2, Action('QuickLoad2'));
+    keymap.set(VirtualKey.Number3, Action('QuickLoad3'));
   }
 
   override public function update() {
+    for (command in keymap.commands()) {
+      switch command {
+      case Action('QuickLoad1'):
+        Game.quickLoad(1);
+      case Action('QuickLoad2'):
+        Game.quickLoad(2);
+      case Action('QuickLoad3'):
+        Game.quickLoad(3);
+      default:
+        trace('Unknown command: $command');
+      }
+    }
   }
 
   override public function render(ui:UI) {
