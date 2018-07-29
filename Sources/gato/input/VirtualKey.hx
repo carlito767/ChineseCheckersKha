@@ -1,4 +1,4 @@
-package gato;
+package gato.input;
 
 // @Incomplete
 enum VirtualKey {

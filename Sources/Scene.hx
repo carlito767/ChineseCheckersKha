@@ -1,4 +1,4 @@
-import gato.Keymap;
+import gato.input.Keymap;
 
 class Scene {
   var keymap:Keymap;

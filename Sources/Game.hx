@@ -3,12 +3,12 @@ import kha.Framebuffer;
 import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
 
-import gato.Input;
-import gato.Keymap;
-import gato.Keymap.Command;
 import gato.Scaling;
 import gato.Storage;
-import gato.VirtualKey;
+import gato.input.Input;
+import gato.input.Keymap;
+import gato.input.Keymap.Command;
+import gato.input.VirtualKey;
 
 import Board.Move;
 import Board.State;

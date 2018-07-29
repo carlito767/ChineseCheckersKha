@@ -6,8 +6,8 @@
 
 import kha.Scheduler;
 
-import gato.Input;
-import gato.VirtualKey;
+import gato.input.Input;
+import gato.input.VirtualKey;
 
 typedef MuiEval = {
   var hot:Bool;

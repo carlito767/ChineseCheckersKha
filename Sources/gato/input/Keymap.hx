@@ -1,6 +1,6 @@
-package gato;
+package gato.input;
 
-import gato.VirtualKey;
+import gato.input.VirtualKey;
 
 enum Command {
   Action(id:String);

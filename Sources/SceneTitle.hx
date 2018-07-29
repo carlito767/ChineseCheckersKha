@@ -1,6 +1,6 @@
 import kha.Assets;
 
-import gato.VirtualKey;
+import gato.input.VirtualKey;
 
 import Translations.language;
 import Translations.tr;
