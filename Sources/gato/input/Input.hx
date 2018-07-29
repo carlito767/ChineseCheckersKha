@@ -4,8 +4,6 @@ import kha.input.Keyboard;
 import kha.input.KeyCode;
 import kha.input.Mouse;
 
-import gato.input.VirtualKey;
-
 class Input {
   static var pressed:Map<VirtualKey, Bool> = new Map();
 

@@ -1,7 +1,5 @@
 package gato.input;
 
-import gato.input.VirtualKey;
-
 enum Command {
   Action(id:String);
   State(id:String);
