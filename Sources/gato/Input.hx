@@ -1,8 +1,8 @@
 package gato;
 
-import kha.input.Keyboard as KhaKeyboard;
+import kha.input.Keyboard;
 import kha.input.KeyCode;
-import kha.input.Mouse as KhaMouse;
+import kha.input.Mouse;
 
 import gato.VirtualKey;
 
@@ -10,14 +10,14 @@ class Input {
   static var pressed:Map<VirtualKey, Bool> = new Map();
 
   public static function initialize() {
-    var khaKeyboard = KhaKeyboard.get();
-    if (khaKeyboard != null) {
-      khaKeyboard.notify(onKeyDown, onKeyUp, null);
+    var keyboard = Keyboard.get();
+    if (keyboard != null) {
+      keyboard.notify(onKeyDown, onKeyUp, null);
     }
 
-    var khaMouse = KhaMouse.get();
-    if (khaMouse != null) {
-      khaMouse.notify(onMouseDown, onMouseUp, null, null);
+    var mouse = Mouse.get();
+    if (mouse != null) {
+      mouse.notify(onMouseDown, onMouseUp, null, null);
     }
   }
 
