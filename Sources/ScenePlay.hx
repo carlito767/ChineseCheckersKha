@@ -5,7 +5,6 @@ import gato.input.VirtualKey;
 
 import Board.Move;
 import Board.Player;
-import Board.PlayerKind;
 import Board.Sequence;
 import Board.State;
 import BoardChineseCheckers as GameBoard;
@@ -22,6 +21,8 @@ class ScenePlay extends Scene {
     Game.state = Board.create(GameBoard.tiles, GameBoard.players, sequence);
     return sequenceIndex = value;
   }
+
+  var aiTurn:Bool = false;
 
   public function new() {
     super();
@@ -63,7 +64,8 @@ class ScenePlay extends Scene {
       }
     }
 
-    if (Game.state.currentPlayer != null && Game.state.currentPlayer.kind != Human) {
+    aiTurn = Game.state.sequence.length == 2 && Game.state.currentPlayer != null && Game.state.currentPlayer.id != 1;
+    if (aiTurn) {
       AI.initialize(Game.state);
     }
   }
@@ -82,21 +84,20 @@ class ScenePlay extends Scene {
     var dx = (Game.WIDTH - boardWidth) * 0.5;
     var dy = (Game.HEIGHT - boardHeight) * 0.5;
     var moves = state.allowedMoves;
-    var human = Board.isRunning(state) && state.currentPlayer.kind == Human;
     for (tile in state.tiles) {
       var tx = dx + (tile.x - 1) * distanceX;
       var ty = dy + (tile.y - 1) * distanceY;
       var selectable = (moves.indexOf(tile) > -1);
       var selected = (state.selectedTile == tile);
       var emphasis:UITileEmphasis = None;
-      if (human && !Sequencer.busy() && selectable) {
+      if (!aiTurn && !Sequencer.busy() && selectable) {
         emphasis = (state.selectedTile == null) ? Selectable : AllowedMove;
       }
       else if (selected) {
         emphasis = Selected;
       }
       var player = (tile.piece == null) ? null : state.players[tile.piece];
-      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Settings.showTileId) ? Std.string(tile.id) : null, disabled:!human }).hit) {
+      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Settings.showTileId) ? Std.string(tile.id) : null, disabled:aiTurn }).hit) {
         if (tile == state.selectedTile) {
           state.selectedTile = null;
         }

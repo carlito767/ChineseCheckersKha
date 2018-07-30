@@ -13,13 +13,6 @@ typedef Gamesave = {
 // State
 //
 
-enum PlayerKind {
-  Human;
-  AiEasy;
-  AiMedium;
-  AiHard;
-}
-
 typedef Move = {
   var from:Int;
   var to:Int;
@@ -28,7 +21,6 @@ typedef Move = {
 typedef Player = {
   var id:Int;
   var color:Int;
-  @:optional var kind:PlayerKind;
 }
 
 typedef Tile = {
@@ -57,7 +49,7 @@ typedef State = {
 //
 
 class Board {
-  static inline var GAMESAVE_VERSION = 7;
+  static inline var GAMESAVE_VERSION = 8;
 
   public static function create(sourceTiles:Array<Tile>, sourcePlayers:Array<Player>, ?sourceSequence:Sequence):State {
     var sequence:Sequence = (sourceSequence == null) ? [] : sourceSequence;
@@ -76,7 +68,6 @@ class Board {
           players[player.id] = {
             id:player.id,
             color:player.color,
-            kind:(sequence.length == 2 && player.id != 1) ? AiEasy : Human,
           }
         }
       }
@@ -143,10 +134,7 @@ class Board {
     };
 
     switch gamesave.version {
-    case 1|2|3|4|5|6:
-      for (player in state.players) {
-        player.kind = Human;
-      }
+    case 1|2|3|4|5|6|7:
     case GAMESAVE_VERSION:
     default:
       trace('Gamesave: unknown version');
