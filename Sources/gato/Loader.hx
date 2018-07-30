@@ -23,11 +23,11 @@ class Loader {
   static function render(framebuffer:Framebuffer) {
     var g2 = framebuffer.g2;
     g2.begin();
-    var w = Assets.progress * System.windowWidth();
-    var h = System.windowHeight() * 0.02;
-    var y = (System.windowHeight() - h) * 0.5;
+    var width = Assets.progress * System.windowWidth();
+    var height = System.windowHeight() * 0.02;
+    var y = (System.windowHeight() - height) * 0.5;
     g2.color = Color.White;
-    g2.fillRect(0, y, w, h);
+    g2.fillRect(0, y, width, height);
     g2.end();
   }
 }
