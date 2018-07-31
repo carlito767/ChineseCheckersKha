@@ -11,7 +11,6 @@ class BoardBuilder {
       players.push({
         id:++id,
         color:home.color,
-        kind:0,
       });
       owners[id] = home.owner;
     }
@@ -68,7 +67,6 @@ class BoardBuilder {
       kind:FVar(macro:Array<{
         var id:Int;
         var color:Int;
-        var kind:Int;
       }>, macro $v{players}),
     });
 
