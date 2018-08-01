@@ -1,14 +1,5 @@
 import kha.Color;
 
-typedef Gamesave = {
-  var version:Int;
-  var sequence:Sequence;
-  var players:Map<Int, Player>;
-  var tiles:Map<Int, Tile>;
-  var moves:Array<Move>;
-  var standings:Array<Int>;
-}
-
 //
 // State
 //
@@ -34,14 +25,15 @@ typedef Tile = {
 typedef Sequence = Array<Int>;
 
 typedef State = {
+  var version:Int;
   var sequence:Sequence;
   var players:Map<Int, Player>;
   var tiles:Map<Int, Tile>;
   var moves:Array<Move>;
   var standings:Array<Int>;
-  var currentPlayer:Null<Player>;
-  var allowedMoves:Array<Tile>;
-  var selectedTile:Null<Tile>;
+  var currentPlayer:Null<Player>; // @StoreOnlyId
+  var allowedMoves:Array<Tile>;   // @StoreOnlyId
+  var selectedTile:Null<Tile>;    // @StoreOnlyId
 }
 
 //
@@ -49,7 +41,7 @@ typedef State = {
 //
 
 class Board {
-  static inline var GAMESAVE_VERSION = 8;
+  public static inline var GAMESAVE_VERSION = 9;
 
   public static function create(sourceTiles:Array<Tile>, sourcePlayers:Array<Player>, ?sourceSequence:Sequence):State {
     var sequence:Sequence = (sourceSequence == null) ? [] : sourceSequence;
@@ -85,6 +77,7 @@ class Board {
     }
 
     return {
+      version:GAMESAVE_VERSION,
       sequence:sequence,
       players:players,
       tiles:tiles,
@@ -110,51 +103,6 @@ class Board {
 
   public static function victory(state:State, id:Int):Bool {
     return (state.standings.indexOf(id) != -1);
-  }
-
-  //
-  // Gamesave
-  //
-
-  public static function load(gamesave:Null<Gamesave>):Null<State> {
-    if (gamesave == null) {
-      return null;
-    }
-
-    var state:State = {
-      sequence:gamesave.sequence,
-      players:gamesave.players,
-      tiles:gamesave.tiles,
-      moves:gamesave.moves,
-      standings:gamesave.standings,
-
-      selectedTile:null,
-      currentPlayer:null,
-      allowedMoves:[],
-    };
-
-    switch gamesave.version {
-    case 1|2|3|4|5|6|7:
-    case GAMESAVE_VERSION:
-    default:
-      trace('Gamesave: unknown version');
-      return null;
-    }
-
-    start(state);
-
-    return state;
-  }
-
-  public static function save(state:State):Gamesave {
-    return {
-      version:GAMESAVE_VERSION,
-      sequence:state.sequence,
-      players:state.players,
-      tiles:state.tiles,
-      moves:state.moves,
-      standings:state.standings,
-    };
   }
 
   //

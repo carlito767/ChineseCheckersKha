@@ -87,8 +87,14 @@ class ScenePlay extends Scene {
     for (tile in state.tiles) {
       var tx = dx + (tile.x - 1) * distanceX;
       var ty = dy + (tile.y - 1) * distanceY;
-      var selectable = (moves.indexOf(tile) > -1);
-      var selected = (state.selectedTile == tile);
+      var selectable = false;
+      for (move in moves) {
+        selectable = (tile.id == move.id);
+        if (selectable) {
+          break;
+        }
+      }
+      var selected = (state.selectedTile != null && state.selectedTile.id == tile.id);
       var emphasis:UITileEmphasis = None;
       if (!aiTurn && !Sequencer.busy() && selectable) {
         emphasis = (state.selectedTile == null) ? Selectable : AllowedMove;

@@ -115,8 +115,8 @@ class Game {
   //
 
   public static function quickLoad(id:Int) {
-    var gamesave:Null<State> = Board.load(Storage.read('gamesave$id'));
-    if (gamesave == null) {
+    var gamesave:Null<State> = Storage.read('gamesave$id');
+    if (gamesave == null || gamesave.version != Board.GAMESAVE_VERSION) {
       return;
     }
 
@@ -128,7 +128,7 @@ class Game {
   public static function quickSave(id:Int) {
     if (Board.isRunning(state)) {
       trace('Quick Save $id');
-      Storage.write('gamesave$id', Board.save(state));
+      Storage.write('gamesave$id', state);
     }
   }
 }
