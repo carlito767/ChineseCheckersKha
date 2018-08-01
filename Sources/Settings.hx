@@ -14,9 +14,11 @@ class Settings {
 
   public static function load() {
     var settings:Null<SettingsData> = Storage.read(FILENAME);
-    if (settings != null && settings.version == VERSION) {
-      language = settings.language;
+    if (settings == null || settings.version != VERSION) {
+      return;
     }
+
+    language = settings.language;
   }
 
   public static function save() {
