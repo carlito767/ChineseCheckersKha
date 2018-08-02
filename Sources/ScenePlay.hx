@@ -107,7 +107,7 @@ class ScenePlay extends Scene {
         if (tile == state.selectedTile) {
           state.selectedTile = null;
         }
-        else if (state.allowedMoves.indexOf(tile) == -1) {
+        else if (!state.allowedMoves.contains(tile)) {
           state.selectedTile = null;
           if (tile.piece == state.currentPlayer.id) {
             if (Board.allowedMovesForTile(state, tile).length > 0) {
@@ -133,7 +133,7 @@ class ScenePlay extends Scene {
       }
       // Who is the great loser?
       for (player in state.players) {
-        if (state.standings.indexOf(player.id) == -1) {
+        if (!state.standings.contains(player.id)) {
           standings.push(player);
         }
       }

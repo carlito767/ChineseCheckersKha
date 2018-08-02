@@ -56,7 +56,7 @@ class Board {
     // Players
     if (sequence.length > 0) {
       for (player in sourcePlayers) {
-        if (sequence.indexOf(player.id) != -1) {
+        if (sequence.contains(player.id)) {
           players[player.id] = {
             id:player.id,
             color:player.color,
@@ -102,7 +102,7 @@ class Board {
   }
 
   public static function victory(state:State, id:Int):Bool {
-    return (state.standings.indexOf(id) != -1);
+    return (state.standings.contains(id));
   }
 
   //
@@ -243,7 +243,7 @@ class Board {
     for (neighbor in neighbors(state, tile)) {
       if (neighbor.piece != null) {
         var jumpTile = jump(state, tile, neighbor);
-        if (jumpTile != null && jumpTile.piece == null && tiles.indexOf(jumpTile) == -1) {
+        if (jumpTile != null && jumpTile.piece == null && !tiles.contains(jumpTile)) {
           tiles.push(jumpTile);
           jumps(state, jumpTile, tiles);
         }
