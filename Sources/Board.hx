@@ -31,9 +31,9 @@ typedef State = {
   var tiles:Map<Int, Tile>;
   var moves:Array<Move>;
   var standings:Array<Int>;
-  var currentPlayer:Null<Player>; // @StoreOnlyId
-  var allowedMoves:Array<Tile>;   // @StoreOnlyId
-  var selectedTile:Null<Tile>;    // @StoreOnlyId
+  var currentPlayer:Null<Player>; // @Improvement: store only id?
+  var allowedMoves:Array<Tile>;   // @Improvement: store only id?
+  var selectedTile:Null<Tile>;    // @Improvement: store only id?
 }
 
 //
@@ -179,7 +179,7 @@ class Board {
     return moves;
   }
 
-  public static function allowedMovesForTile(state:State, tile:Tile) {
+  public static function allowedMovesForTile(state:State, tile:Tile):Array<Tile> {
     var moves:Array<Tile> = [];
 
     jumps(state, tile, moves);
@@ -206,6 +206,7 @@ class Board {
     return moves;
   }
 
+  // @Improvement: build with BoardBuilder?
   static function neighbors(state:State, tile:Tile):Array<Tile> {
     //    (1) (2)
     //      \ /
