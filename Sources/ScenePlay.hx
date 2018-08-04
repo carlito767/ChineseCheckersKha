@@ -22,8 +22,6 @@ class ScenePlay extends Scene {
     return sequenceIndex = value;
   }
 
-  var aiTurn:Bool = false;
-
   public function new() {
     super();
     keymap.set(VirtualKey.Number0, Action('ShowTileId'));
@@ -35,11 +33,6 @@ class ScenePlay extends Scene {
     keymap.set(VirtualKey.Number9, Action('QuickSave3'));
 
     sequenceIndex = null;
-  }
-
-  override public function leave() {
-    super.leave();
-    AI.reset();
   }
 
   override public function update() {
@@ -62,11 +55,6 @@ class ScenePlay extends Scene {
       default:
         trace('Unknown command: $command');
       }
-    }
-
-    aiTurn = Game.state.sequence.length == 2 && Game.state.currentPlayer != null && Game.state.currentPlayer.id != 1;
-    if (aiTurn) {
-      AI.initialize(Game.state);
     }
   }
 
@@ -96,14 +84,14 @@ class ScenePlay extends Scene {
       }
       var selected = (state.selectedTile != null && state.selectedTile.id == tile.id);
       var emphasis:UITileEmphasis = None;
-      if (!aiTurn && !Sequencer.busy() && selectable) {
+      if (selectable) {
         emphasis = (state.selectedTile == null) ? Selectable : AllowedMove;
       }
       else if (selected) {
         emphasis = Selected;
       }
       var player = (tile.piece == null) ? null : state.players[tile.piece];
-      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Settings.showTileId) ? Std.string(tile.id) : null, disabled:aiTurn }).hit) {
+      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Settings.showTileId) ? Std.string(tile.id) : null }).hit) {
         if (tile == state.selectedTile) {
           state.selectedTile = null;
         }

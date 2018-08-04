@@ -51,7 +51,6 @@ class Game {
     language = Settings.language;
 
     Input.initialize();
-    Sequencer.initialize();
 
     ui = new UI();
 
@@ -77,7 +76,6 @@ class Game {
       }
     }
 
-    Sequencer.update();
     scene.update();
   }
 
