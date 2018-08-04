@@ -10,8 +10,8 @@ import gato.input.Keymap;
 import gato.input.Keymap.Command;
 import gato.input.VirtualKey;
 
-import Board.Move;
-import Board.State;
+import types.State;
+
 import Translations.language;
 
 class Game {

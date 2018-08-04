@@ -1,44 +1,10 @@
 import kha.Color;
 
-//
-// State
-//
-
-typedef Move = {
-  var from:Int;
-  var to:Int;
-}
-
-typedef Player = {
-  var id:Int;
-  var color:Int;
-}
-
-typedef Tile = {
-  var id:Int;
-  var x:Int;
-  var y:Int;
-  var owner:Null<Int>;
-  var piece:Null<Int>;
-}
-
-typedef Sequence = Array<Int>;
-
-typedef State = {
-  var version:Int;
-  var sequence:Sequence;
-  var players:Map<Int, Player>;
-  var tiles:Map<Int, Tile>;
-  var moves:Array<Move>;
-  var standings:Array<Int>;
-  var currentPlayer:Null<Player>; // @Improvement: store only id?
-  var allowedMoves:Array<Tile>;   // @Improvement: store only id?
-  var selectedTile:Null<Tile>;    // @Improvement: store only id?
-}
-
-//
-// Board
-//
+import types.Move;
+import types.Player;
+import types.Sequence;
+import types.State;
+import types.Tile;
 
 class Board {
   public static inline var GAMESAVE_VERSION = 9;
