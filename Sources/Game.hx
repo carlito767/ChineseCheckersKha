@@ -10,7 +10,7 @@ import gato.input.Keymap;
 import gato.input.Keymap.Command;
 import gato.input.VirtualKey;
 
-import types.State;
+import types.Gamestate;
 
 import Translations.language;
 

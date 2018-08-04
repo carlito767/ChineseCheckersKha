@@ -1,9 +1,9 @@
 import kha.Color;
 
+import types.Gamestate;
 import types.Move;
 import types.Player;
 import types.Sequence;
-import types.State;
 import types.Tile;
 
 class Board {
