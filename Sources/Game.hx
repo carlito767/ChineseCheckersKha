@@ -22,18 +22,7 @@ class Game {
   public static var g2(default, null):Graphics2 = null;
   public static var g4(default, null):Graphics4 = null;
 
-  public static var scene(default, set):Scene;
-  static function set_scene(value) {
-    if (scene != value) {
-      if (scene != null) {
-        scene.leave();
-      }
-      if (value != null) {
-        value.enter();
-      }
-    }
-    return scene = value;
-  }
+  public static var scene:Scene;
 
   public static var sceneTitle:SceneTitle;
   public static var scenePlay:ScenePlay;

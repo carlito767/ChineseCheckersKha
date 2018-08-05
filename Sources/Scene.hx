@@ -7,12 +7,6 @@ class Scene {
     keymap = new Keymap();
   }
 
-  public function enter():Void {
-  }
-
-  public function leave():Void {
-  }
-
   public function update():Void {
   }
 
