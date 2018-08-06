@@ -82,12 +82,8 @@ class Board {
   }
 
   public static function cancelLastMove(state:State) {
-    if (state.selectedTile != null) {
-      state.selectedTile = null;
-      return;
-    }
-
     cancelMove(state);
+    state.selectedTile = null;
     update(state);
   }
 

@@ -32,6 +32,7 @@ class ScenePlay extends Scene {
     keymap.set(VirtualKey.Number7, Action('QuickSave1'));
     keymap.set(VirtualKey.Number8, Action('QuickSave2'));
     keymap.set(VirtualKey.Number9, Action('QuickSave3'));
+    keymap.set(VirtualKey.Backspace, Action('Undo'));
 
     sequenceIndex = null;
   }
@@ -53,6 +54,10 @@ class ScenePlay extends Scene {
         Game.quickSave(2);
       case Action('QuickSave3'):
         Game.quickSave(3);
+      case Action('Undo'):
+        if (Board.isRunning(Game.state)) {
+          Board.cancelLastMove(Game.state);
+        }
       default:
         trace('Unknown command: $command');
       }
