@@ -12,8 +12,6 @@ import gato.input.VirtualKey;
 
 import types.State;
 
-import Translations.language;
-
 class Game {
   public static inline var TITLE = 'ChineseCheckersKha';
   public static inline var WIDTH = 800;
@@ -37,7 +35,7 @@ class Game {
   static function initialize() {
     // Settings
     Settings.load();
-    language = Settings.language;
+    Translations.language = Settings.language;
 
     Input.initialize();
 
@@ -45,7 +43,7 @@ class Game {
 
     keymap = new Keymap();
     keymap.set(VirtualKey.L, Action('ChangeLanguage'));
-    keymap.set(VirtualKey.Decimal, Action('ShowHitbox'));
+    keymap.set(VirtualKey.Decimal, Action('ToggleHitbox'));
 
     sceneTitle = new SceneTitle();
     scenePlay = new ScenePlay();
@@ -57,9 +55,9 @@ class Game {
     for (command in keymap.commands()) {
       switch command {
       case Action('ChangeLanguage'):
-        Game.changeLanguage();
-      case Action('ShowHitbox'):
-        UI.showHitbox = !UI.showHitbox;
+        Commands.changeLanguage();
+      case Action('ToggleHitbox'):
+        Commands.toggleHitbox();
       default:
         trace('Unknown command: $command');
       }
@@ -85,37 +83,5 @@ class Game {
   
     g2.disableScissor();
     g2.end();
-  }
-
-  //
-  // Language
-  //
-
-  public static function changeLanguage() {
-    language = (language == 'en') ? 'fr' : 'en';
-    Settings.language = language;
-    Settings.save();
-  }
-
-  //
-  // Quick Load/Save
-  //
-
-  public static function quickLoad(id:Int) {
-    var gamesave:Null<State> = Storage.read('gamesave$id');
-    if (gamesave == null || gamesave.version != Board.GAMESAVE_VERSION) {
-      return;
-    }
-
-    trace('Quick Load $id');
-    state = gamesave;
-    scene = scenePlay;
-  }
-
-  public static function quickSave(id:Int) {
-    if (Board.isRunning(state)) {
-      trace('Quick Save $id');
-      Storage.write('gamesave$id', state);
-    }
   }
 }

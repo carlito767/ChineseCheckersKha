@@ -2,7 +2,6 @@ import kha.Assets;
 
 import gato.input.VirtualKey;
 
-import Translations.language;
 import Translations.tr;
 
 class SceneTitle extends Scene {
@@ -17,11 +16,11 @@ class SceneTitle extends Scene {
     for (command in keymap.commands()) {
       switch command {
       case Action('QuickLoad1'):
-        Game.quickLoad(1);
+        Commands.quickLoad(1);
       case Action('QuickLoad2'):
-        Game.quickLoad(2);
+        Commands.quickLoad(2);
       case Action('QuickLoad3'):
-        Game.quickLoad(3);
+        Commands.quickLoad(3);
       default:
         trace('Unknown command: $command');
       }
@@ -37,8 +36,8 @@ class SceneTitle extends Scene {
     if (ui.button({ text:tr.newGame, x:Game.WIDTH * 0.63, y:Game.HEIGHT * 0.58, w:Game.WIDTH * 0.38, h:Game.HEIGHT * 0.08 }).hit) {
       Game.scene = Game.scenePlay;
     }
-    if (ui.button({ text:'${tr.language} ${language.toUpperCase()}', x:Game.WIDTH * 0.63, y:Game.HEIGHT * 0.7, w:Game.WIDTH * 0.38, h:Game.HEIGHT * 0.08 }).hit) {
-      Game.changeLanguage();
+    if (ui.button({ text:'${tr.language} ${Translations.language.toUpperCase()}', x:Game.WIDTH * 0.63, y:Game.HEIGHT * 0.7, w:Game.WIDTH * 0.38, h:Game.HEIGHT * 0.08 }).hit) {
+      Commands.changeLanguage();
     }
   }
 }

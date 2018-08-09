@@ -9,7 +9,6 @@ import types.Sequence;
 import types.State;
 
 import BoardChineseCheckers as GameBoard;
-import Translations.language;
 import Translations.tr;
 import UI.Dimensions;
 import UI.UITileEmphasis;
@@ -25,7 +24,7 @@ class ScenePlay extends Scene {
 
   public function new() {
     super();
-    keymap.set(VirtualKey.Number0, Action('ShowTileId'));
+    keymap.set(VirtualKey.Number0, Action('ToggleTileId'));
     keymap.set(VirtualKey.Number1, Action('QuickLoad1'));
     keymap.set(VirtualKey.Number2, Action('QuickLoad2'));
     keymap.set(VirtualKey.Number3, Action('QuickLoad3'));
@@ -40,24 +39,22 @@ class ScenePlay extends Scene {
   override public function update() {
     for (command in keymap.commands()) {
       switch command {
-      case Action('ShowTileId'):
-        Settings.showTileId = !Settings.showTileId;
+      case Action('ToggleTileId'):
+        Commands.toggleTileId();
       case Action('QuickLoad1'):
-        Game.quickLoad(1);
+        Commands.quickLoad(1);
       case Action('QuickLoad2'):
-        Game.quickLoad(2);
+        Commands.quickLoad(2);
       case Action('QuickLoad3'):
-        Game.quickLoad(3);
+        Commands.quickLoad(3);
       case Action('QuickSave1'):
-        Game.quickSave(1);
+        Commands.quickSave(1);
       case Action('QuickSave2'):
-        Game.quickSave(2);
+        Commands.quickSave(2);
       case Action('QuickSave3'):
-        Game.quickSave(3);
+        Commands.quickSave(3);
       case Action('Undo'):
-        if (Board.isRunning(Game.state)) {
-          Board.cancelLastMove(Game.state);
-        }
+        Commands.undo();
       default:
         trace('Unknown command: $command');
       }
