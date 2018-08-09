@@ -5,9 +5,9 @@ import kha.graphics4.Graphics as Graphics4;
 
 import gato.Scaling;
 import gato.Storage;
+import gato.input.Command;
 import gato.input.Input;
 import gato.input.Keymap;
-import gato.input.Keymap.Command;
 import gato.input.VirtualKey;
 
 import types.State;

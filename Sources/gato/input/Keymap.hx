@@ -1,10 +1,5 @@
 package gato.input;
 
-enum Command {
-  Action(id:String);
-  State(id:String);
-}
-
 class Keymap {
   var mapping:Map<VirtualKey, Command>;
   var pressed:Map<VirtualKey, Bool>;
