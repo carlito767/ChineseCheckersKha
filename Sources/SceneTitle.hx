@@ -7,24 +7,11 @@ import Translations.tr;
 class SceneTitle extends Scene {
   public function new() {
     super();
+    keymap.set(VirtualKey.L, Action('ChangeLanguage'));
+    keymap.set(VirtualKey.Decimal, Action('ToggleHitbox'));
     keymap.set(VirtualKey.Number1, Action('QuickLoad1'));
     keymap.set(VirtualKey.Number2, Action('QuickLoad2'));
     keymap.set(VirtualKey.Number3, Action('QuickLoad3'));
-  }
-
-  override public function update() {
-    for (command in keymap.commands()) {
-      switch command {
-      case Action('QuickLoad1'):
-        Commands.quickLoad(1);
-      case Action('QuickLoad2'):
-        Commands.quickLoad(2);
-      case Action('QuickLoad3'):
-        Commands.quickLoad(3);
-      default:
-        trace('Unknown command: $command');
-      }
-    }
   }
 
   override public function render(ui:UI) {

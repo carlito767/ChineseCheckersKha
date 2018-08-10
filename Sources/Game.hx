@@ -8,7 +8,6 @@ import gato.Storage;
 import gato.input.Command;
 import gato.input.Input;
 import gato.input.Keymap;
-import gato.input.VirtualKey;
 
 import types.State;
 
@@ -25,8 +24,6 @@ class Game {
   public static var sceneTitle:SceneTitle;
   public static var scenePlay:ScenePlay;
 
-  static var keymap:Keymap;
-
   static var ui:UI;
 
   public static var state:State;
@@ -41,10 +38,6 @@ class Game {
 
     ui = new UI();
 
-    keymap = new Keymap();
-    keymap.set(VirtualKey.L, Action('ChangeLanguage'));
-    keymap.set(VirtualKey.Decimal, Action('ToggleHitbox'));
-
     sceneTitle = new SceneTitle();
     scenePlay = new ScenePlay();
     scene = sceneTitle;
@@ -52,12 +45,29 @@ class Game {
 
   @:allow(Main)
   static function update() {
-    for (command in keymap.commands()) {
+    // @Improvement: use strings for commands (eg: 'quickload 1' should call Commands.quickload(1))
+    for (command in scene.keymap.commands()) {
       switch command {
       case Action('ChangeLanguage'):
         Commands.changeLanguage();
       case Action('ToggleHitbox'):
         Commands.toggleHitbox();
+      case Action('ToggleTileId'):
+        Commands.toggleTileId();
+      case Action('QuickLoad1'):
+        Commands.quickLoad(1);
+      case Action('QuickLoad2'):
+        Commands.quickLoad(2);
+      case Action('QuickLoad3'):
+        Commands.quickLoad(3);
+      case Action('QuickSave1'):
+        Commands.quickSave(1);
+      case Action('QuickSave2'):
+        Commands.quickSave(2);
+      case Action('QuickSave3'):
+        Commands.quickSave(3);
+      case Action('Undo'):
+        Commands.undo();
       default:
         trace('Unknown command: $command');
       }

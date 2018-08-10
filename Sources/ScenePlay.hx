@@ -24,6 +24,8 @@ class ScenePlay extends Scene {
 
   public function new() {
     super();
+    keymap.set(VirtualKey.L, Action('ChangeLanguage'));
+    keymap.set(VirtualKey.Decimal, Action('ToggleHitbox'));
     keymap.set(VirtualKey.Number0, Action('ToggleTileId'));
     keymap.set(VirtualKey.Number1, Action('QuickLoad1'));
     keymap.set(VirtualKey.Number2, Action('QuickLoad2'));
@@ -34,31 +36,6 @@ class ScenePlay extends Scene {
     keymap.set(VirtualKey.Backspace, Action('Undo'));
 
     sequenceIndex = null;
-  }
-
-  override public function update() {
-    for (command in keymap.commands()) {
-      switch command {
-      case Action('ToggleTileId'):
-        Commands.toggleTileId();
-      case Action('QuickLoad1'):
-        Commands.quickLoad(1);
-      case Action('QuickLoad2'):
-        Commands.quickLoad(2);
-      case Action('QuickLoad3'):
-        Commands.quickLoad(3);
-      case Action('QuickSave1'):
-        Commands.quickSave(1);
-      case Action('QuickSave2'):
-        Commands.quickSave(2);
-      case Action('QuickSave3'):
-        Commands.quickSave(3);
-      case Action('Undo'):
-        Commands.undo();
-      default:
-        trace('Unknown command: $command');
-      }
-    }
   }
 
   override public function render(ui:UI) {
