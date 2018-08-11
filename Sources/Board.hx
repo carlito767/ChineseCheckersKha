@@ -168,7 +168,7 @@ class Board {
     return moves;
   }
 
-  // @Improvement: build with BoardBuilder?
+  // @@Improvement: build with BoardBuilder?
   static function neighbors(state:State, tile:Tile):Array<Tile> {
     //    (1) (2)
     //      \ /

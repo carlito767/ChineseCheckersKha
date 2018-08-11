@@ -45,7 +45,7 @@ class Game {
 
   @:allow(Main)
   static function update() {
-    // @Improvement: use strings for commands (eg: 'quickload 1' should call Commands.quickload(1))
+    // @@Improvement: use strings for commands (eg: 'quickload 1' should call Commands.quickload(1))
     for (command in scene.keymap.commands()) {
       switch command {
       case Action('ChangeLanguage'):
