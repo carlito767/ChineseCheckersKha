@@ -1,6 +1,7 @@
 import gato.Storage;
 import gato.input.Command;
 
+import types.Settings;
 import types.State;
 
 class Commands {
@@ -36,26 +37,31 @@ class Commands {
 
   public static function changeLanguage() {
     Translations.language = (Translations.language == 'en') ? 'fr' : 'en';
-    Settings.language = Translations.language;
-    Settings.save();
+    Game.settings.data.language = Translations.language;
+    Game.settings.save(Game.SETTINGS_FILENAME);
   }
 
   public static function quickLoad(id:Int) {
-    var gamesave:Null<State> = Storage.read('gamesave$id');
-    if (gamesave == null || gamesave.version != Board.GAMESAVE_VERSION) {
+    var gamesave = new Storage<State>();
+    gamesave.load('gamesave$id', Board.GAMESAVE_VERSION);
+    if (gamesave.data == null) {
       return;
     }
 
     trace('Quick Load $id');
-    Game.state = gamesave;
+    Game.state = gamesave.data;
     Game.scene = Game.scenePlay;
   }
 
   public static function quickSave(id:Int) {
-    if (Board.isRunning(Game.state)) {
-      trace('Quick Save $id');
-      Storage.write('gamesave$id', Game.state);
+    if (!Board.isRunning(Game.state)) {
+      return;
     }
+
+    trace('Quick Save $id');
+    var gamesave = new Storage<State>();
+    gamesave.data = Game.state;
+    gamesave.save('gamesave$id');
   }
 
   public static function toggleHitbox() {
@@ -63,7 +69,7 @@ class Commands {
   }
 
   public static function toggleTileId() {
-    Settings.showTileId = !Settings.showTileId;
+    Game.settings.data.showTileId = !Game.settings.data.showTileId;
   }
 
   public static function undo() {

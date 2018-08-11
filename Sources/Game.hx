@@ -4,8 +4,10 @@ import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
 
 import gato.Scaling;
+import gato.Storage;
 import gato.input.Input;
 
+import types.Settings;
 import types.State;
 
 class Game {
@@ -13,8 +15,13 @@ class Game {
   public static inline var WIDTH = 800;
   public static inline var HEIGHT = 600;
 
+  public static inline var SETTINGS_FILENAME = 'settings';
+  public static inline var SETTINGS_VERSION = 1;
+
   public static var g2(default, null):Graphics2 = null;
   public static var g4(default, null):Graphics4 = null;
+
+  public static var settings:Storage<Settings>;
 
   public static var scene:Scene;
 
@@ -27,9 +34,16 @@ class Game {
 
   @:allow(Main)
   static function initialize() {
-    // Settings
-    Settings.load();
-    Translations.language = Settings.language;
+    settings = new Storage<Settings>();
+    settings.load(SETTINGS_FILENAME, SETTINGS_VERSION);
+    if (settings.data == null) {
+      settings.data = {
+        version:SETTINGS_VERSION,
+        language:'en',
+        showTileId:false,
+      }
+    }
+    Translations.language = settings.data.language;
 
     Input.initialize();
 

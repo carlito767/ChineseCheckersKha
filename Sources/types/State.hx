@@ -1,7 +1,9 @@
 package types;
 
+import gato.StorageObject;
+
 typedef State = {
-  var version:Int;
+  > StorageObject,
   var sequence:Sequence;
   var players:Map<Int, Player>;
   var tiles:Map<Int, Tile>;
