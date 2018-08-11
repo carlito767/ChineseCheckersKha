@@ -1,8 +1,6 @@
 import gato.input.Keymap;
 
 class Scene {
-  // @@Improvement: Game should not access to Scene fields
-  @:allow(Game)
   var keymap:Keymap;
 
   public function new() {
@@ -10,6 +8,7 @@ class Scene {
   }
 
   public function update():Void {
+    Commands.call(keymap.commands());
   }
 
   public function render(ui:UI):Void {

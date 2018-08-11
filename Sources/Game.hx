@@ -4,10 +4,7 @@ import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
 
 import gato.Scaling;
-import gato.Storage;
-import gato.input.Command;
 import gato.input.Input;
-import gato.input.Keymap;
 
 import types.State;
 
@@ -45,34 +42,6 @@ class Game {
 
   @:allow(Main)
   static function update() {
-    // @@Improvement: use strings for commands (eg: 'quickload 1' should call Commands.quickload(1))
-    for (command in scene.keymap.commands()) {
-      switch command {
-      case Action('ChangeLanguage'):
-        Commands.changeLanguage();
-      case Action('ToggleHitbox'):
-        Commands.toggleHitbox();
-      case Action('ToggleTileId'):
-        Commands.toggleTileId();
-      case Action('QuickLoad1'):
-        Commands.quickLoad(1);
-      case Action('QuickLoad2'):
-        Commands.quickLoad(2);
-      case Action('QuickLoad3'):
-        Commands.quickLoad(3);
-      case Action('QuickSave1'):
-        Commands.quickSave(1);
-      case Action('QuickSave2'):
-        Commands.quickSave(2);
-      case Action('QuickSave3'):
-        Commands.quickSave(3);
-      case Action('Undo'):
-        Commands.undo();
-      default:
-        trace('Unknown command: $command');
-      }
-    }
-
     scene.update();
   }
 
