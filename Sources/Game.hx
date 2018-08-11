@@ -16,7 +16,11 @@ class Game {
   public static inline var HEIGHT = 600;
 
   public static inline var SETTINGS_FILENAME = 'settings';
+  public static inline var SETTINGS_FILENAME_JSON = 'settings.json';
+  public static inline var SETTINGS_FILENAME_LOCAL_JSON = 'settings.local.json';
   public static inline var SETTINGS_VERSION = 1;
+
+  public static var localSettings(default, null):Bool = false;
 
   public static var g2(default, null):Graphics2 = null;
   public static var g4(default, null):Graphics4 = null;
@@ -35,13 +39,21 @@ class Game {
   @:allow(Main)
   static function initialize() {
     settings = new Storage<Settings>();
-    settings.load(SETTINGS_FILENAME, SETTINGS_VERSION);
+    settings.model = {
+      version:SETTINGS_VERSION,
+      language:'en',
+      showTileId:false,
+    };
+    // @@Improvement: validate settings.json at compile time
+    settings.loadJson(SETTINGS_FILENAME_JSON, SETTINGS_VERSION);
+    if (settings.mergeJson(SETTINGS_FILENAME_LOCAL_JSON)) {
+      localSettings = true;
+    }
+    else {
+      settings.load(SETTINGS_FILENAME, SETTINGS_VERSION);
+    }
     if (settings.data == null) {
-      settings.data = {
-        version:SETTINGS_VERSION,
-        language:'en',
-        showTileId:false,
-      }
+      settings.data = settings.model;
     }
     Translations.language = settings.data.language;
 

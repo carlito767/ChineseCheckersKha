@@ -38,7 +38,9 @@ class Commands {
   public static function changeLanguage() {
     Translations.language = (Translations.language == 'en') ? 'fr' : 'en';
     Game.settings.data.language = Translations.language;
-    Game.settings.save(Game.SETTINGS_FILENAME);
+    if (!Game.localSettings) {
+      Game.settings.save(Game.SETTINGS_FILENAME);
+    }
   }
 
   public static function quickLoad(id:Int) {
