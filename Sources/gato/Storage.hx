@@ -7,6 +7,7 @@ import kha.Storage as KhaStorage;
 
 class Storage<T:(StorageObject)> {
   public var data:Null<T> = null;
+  // @@Improvement: how to check fields without model?
   public var model:Null<T> = null;
 
   public function new() {
@@ -85,6 +86,11 @@ class Storage<T:(StorageObject)> {
 
   public function mergeJson(filename:String):Bool {
     trace('Merging JSON $filename...');
+    if (model == null) {
+      trace('Missing model');
+      return false;
+    }
+
     if (data == null) {
       trace('Missing data');
       return false;
@@ -108,7 +114,6 @@ class Storage<T:(StorageObject)> {
         Reflect.setField(data, field, value);
       }
     }
-    trace('Fields merged: $n');
     return (n > 0);
   }
 
