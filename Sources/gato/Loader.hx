@@ -12,16 +12,16 @@ class Loader {
   static var onDone:Void->Void = null;
 
   @:allow(Main)
-  static function load() {
-    System.notifyOnRender(render);
+  static function load(_) {
+    System.notifyOnFrames(render);
     Assets.loadEverything(function() {
-      System.removeRenderListener(render);
+      System.removeFramesListener(render);
       onDone();
     });
   }
 
-  static function render(framebuffer:Framebuffer) {
-    var g2 = framebuffer.g2;
+  static function render(framebuffers:Array<Framebuffer>) {
+    var g2 = framebuffers[0].g2;
     g2.begin();
     var width = Assets.progress * System.windowWidth();
     var height = System.windowHeight() * 0.02;

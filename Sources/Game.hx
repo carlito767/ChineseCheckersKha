@@ -72,9 +72,9 @@ class Game {
   }
 
   @:allow(Main)
-  static function render(framebuffer:Framebuffer) {
-    g2 = framebuffer.g2;
-    g4 = framebuffer.g4;
+  static function render(framebuffers:Array<Framebuffer>) {
+    g2 = framebuffers[0].g2;
+    g4 = framebuffers[0].g4;
 
     Scaling.update(WIDTH, HEIGHT);
 

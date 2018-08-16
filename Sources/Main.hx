@@ -36,8 +36,8 @@ class Main {
     Loader.onDone = function() {
       Game.initialize();
       Scheduler.addTimeTask(Game.update, 0, 1 / 60);
-      System.notifyOnRender(Game.render);
+      System.notifyOnFrames(Game.render);
     }
-    System.init({ title:Game.TITLE, width:Game.WIDTH, height:Game.HEIGHT, samplesPerPixel:4 }, Loader.load);
+    System.start({ title:Game.TITLE, width:Game.WIDTH, height:Game.HEIGHT, framebuffer:{ samplesPerPixel:4 } }, Loader.load);
   }
 }
