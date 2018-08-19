@@ -6,8 +6,6 @@ import board.Sequence;
 import board.Tile;
 
 class Board {
-  public static inline var GAMESAVE_VERSION = 9;
-
   public static function create(tiles:Array<Tile>, players:Array<Player>, ?sequence:Sequence):Gamesave {
     var gamesave = new Gamesave();
   
