@@ -17,7 +17,7 @@ class ScenePlay extends Scene {
   var sequenceIndex(default, set):Null<Int>;
   function set_sequenceIndex(value) {
     var sequence = (value == null) ? null : GameBoard.sequences[value];
-    Game.state = Board.create(GameBoard.tiles, GameBoard.players, sequence);
+    Game.gamesave = Board.create(GameBoard.tiles, GameBoard.players, sequence);
     return sequenceIndex = value;
   }
 
@@ -38,7 +38,7 @@ class ScenePlay extends Scene {
   }
 
   override public function render(ui:UI) {
-    var state = Game.state;
+    var gamesave = Game.gamesave;
 
     ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT, disabled:true });
 
@@ -50,8 +50,8 @@ class ScenePlay extends Scene {
     var boardHeight = (GameBoard.HEIGHT - 1) * distanceY + radius * 2;
     var dx = (Game.WIDTH - boardWidth) * 0.5;
     var dy = (Game.HEIGHT - boardHeight) * 0.5;
-    var moves = state.allowedMoves;
-    for (tile in state.tiles) {
+    var moves = gamesave.allowedMoves;
+    for (tile in gamesave.tiles) {
       var tx = dx + (tile.x - 1) * distanceX;
       var ty = dy + (tile.y - 1) * distanceY;
       var selectable = false;
@@ -61,46 +61,46 @@ class ScenePlay extends Scene {
           break;
         }
       }
-      var selected = (state.selectedTile != null && state.selectedTile.id == tile.id);
+      var selected = (gamesave.selectedTile != null && gamesave.selectedTile.id == tile.id);
       var emphasis:UITileEmphasis = None;
       if (selectable) {
-        emphasis = (state.selectedTile == null) ? Selectable : AllowedMove;
+        emphasis = (gamesave.selectedTile == null) ? Selectable : AllowedMove;
       }
       else if (selected) {
         emphasis = Selected;
       }
-      var player = (tile.piece == null) ? null : state.players[tile.piece];
+      var player = (tile.piece == null) ? null : gamesave.players[tile.piece];
       if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Game.settings.showTileId) ? Std.string(tile.id) : null }).hit) {
         if (selected) {
-          state.selectedTile = null;
+          gamesave.selectedTile = null;
         }
-        else if (!state.allowedMoves.contains(tile)) {
-          state.selectedTile = null;
-          if (tile.piece == state.currentPlayer.id) {
-            if (Board.allowedMovesForTile(state, tile).length > 0) {
-              state.selectedTile = tile;
+        else if (!gamesave.allowedMoves.contains(tile)) {
+          gamesave.selectedTile = null;
+          if (tile.piece == gamesave.currentPlayer.id) {
+            if (Board.allowedMovesForTile(gamesave, tile).length > 0) {
+              gamesave.selectedTile = tile;
             }
           }
         }
-        else if (state.selectedTile == null) {
-          state.selectedTile = tile;
+        else if (gamesave.selectedTile == null) {
+          gamesave.selectedTile = tile;
         }
         else {
-          Board.applyMove(state, state.selectedTile, tile);
-          state.selectedTile = null;
+          Board.applyMove(gamesave, gamesave.selectedTile, tile);
+          gamesave.selectedTile = null;
         }
-        Board.update(state);
+        Board.update(gamesave);
       }
     }
 
-    if (Board.isOver(state)) {
+    if (Board.isOver(gamesave)) {
       var standings:Array<Player> = [];
-      for (playerId in state.standings) {
-        standings.push(state.players[playerId]);
+      for (playerId in gamesave.standings) {
+        standings.push(gamesave.players[playerId]);
       }
       // Who is the great loser?
-      for (player in state.players) {
-        if (!state.standings.contains(player.id)) {
+      for (player in gamesave.players) {
+        if (!gamesave.standings.contains(player.id)) {
           standings.push(player);
         }
       }
@@ -123,7 +123,7 @@ class ScenePlay extends Scene {
         });
       }
     }
-    else if (!Board.isRunning(state)) {
+    else if (!Board.isRunning(gamesave)) {
       var window:UIWindow = { x:Game.WIDTH * 0.3, y:Game.HEIGHT * 0.33, w:Game.WIDTH * 0.4, h:Game.HEIGHT * 0.34, title:tr.numberOfPlayers };
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);
@@ -147,7 +147,7 @@ class ScenePlay extends Scene {
       }
 
       if (ui.button({ text:tr.play, disabled:(sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - Game.HEIGHT * 0.067, w:dimensions.width, h:Game.HEIGHT * 0.067 }).hit) {
-        Board.start(state);
+        Board.start(gamesave);
       }
     }
 

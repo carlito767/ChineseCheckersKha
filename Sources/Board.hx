@@ -8,21 +8,15 @@ import board.Tile;
 class Board {
   public static inline var GAMESAVE_VERSION = 9;
 
-  public static function create(sourceTiles:Array<Tile>, sourcePlayers:Array<Player>, ?sourceSequence:Sequence):State {
-    var sequence:Sequence = (sourceSequence == null) ? [] : sourceSequence;
-    var players:Map<Int, Player> = new Map();
-    var tiles:Map<Int, Tile> = new Map();
-    var moves:Array<Move> = [];
-    var standings:Array<Int> = [];
-    var currentPlayer:Null<Player> = null;
-    var allowedMoves:Array<Tile> = [];
-    var selectedTile:Null<Tile> = null;
-
+  public static function create(tiles:Array<Tile>, players:Array<Player>, ?sequence:Sequence):Gamesave {
+    var gamesave = new Gamesave();
+  
     // Players
-    if (sequence.length > 0) {
-      for (player in sourcePlayers) {
+    if (sequence != null) {
+      gamesave.sequence = sequence;
+      for (player in players) {
         if (sequence.contains(player.id)) {
-          players[player.id] = {
+          gamesave.players[player.id] = {
             id:player.id,
             color:player.color,
           }
@@ -31,8 +25,8 @@ class Board {
     }
 
     // Tiles
-    for (tile in sourceTiles) {
-      tiles[tile.id] = {
+    for (tile in tiles) {
+      gamesave.tiles[tile.id] = {
         id:tile.id,
         x:tile.x,
         y:tile.y,
@@ -41,83 +35,73 @@ class Board {
       }
     }
 
-    return {
-      version:GAMESAVE_VERSION,
-      sequence:sequence,
-      players:players,
-      tiles:tiles,
-      moves:moves,
-      standings:standings,
-      currentPlayer:currentPlayer,
-      selectedTile:selectedTile,
-      allowedMoves:allowedMoves,
-    }
+    return gamesave;
   }
 
-  public static function start(state:State) {
-    update(state);
+  public static function start(gamesave:Gamesave) {
+    update(gamesave);
   }
 
-  public static function isOver(state:State):Bool {
-    return (state.standings.length > 0 && state.standings.length == state.sequence.length - 1);
+  public static function isOver(gamesave:Gamesave):Bool {
+    return (gamesave.standings.length > 0 && gamesave.standings.length == gamesave.sequence.length - 1);
   }
 
-  public static function isRunning(state:State):Bool {
-    return (state.currentPlayer != null);
+  public static function isRunning(gamesave:Gamesave):Bool {
+    return (gamesave.currentPlayer != null);
   }
 
-  public static function victory(state:State, id:Int):Bool {
-    return (state.standings.contains(id));
+  public static function victory(gamesave:Gamesave, id:Int):Bool {
+    return (gamesave.standings.contains(id));
   }
 
   //
   // Moves
   //
 
-  public static function move(state:State, from:Tile, to:Tile) {
-    applyMove(state, from, to);
-    state.selectedTile = null;
-    update(state);
+  public static function move(gamesave:Gamesave, from:Tile, to:Tile) {
+    applyMove(gamesave, from, to);
+    gamesave.selectedTile = null;
+    update(gamesave);
   }
 
-  public static function cancelLastMove(state:State) {
-    cancelMove(state);
-    state.selectedTile = null;
-    update(state);
+  public static function cancelLastMove(gamesave:Gamesave) {
+    cancelMove(gamesave);
+    gamesave.selectedTile = null;
+    update(gamesave);
   }
 
-  public static function applyMove(state:State, from:Tile, to:Tile) {
+  public static function applyMove(gamesave:Gamesave, from:Tile, to:Tile) {
     to.piece = from.piece;
     from.piece = null;
-    state.moves.push({from:from.id, to:to.id});
+    gamesave.moves.push({from:from.id, to:to.id});
 
     // Update Standings
     var victory = true;
-    for (tile in state.tiles) {
+    for (tile in gamesave.tiles) {
       if (tile.piece == to.piece && tile.owner != to.piece) {
         victory = false;
         break;
       }
     }
     if (victory) {
-      state.standings.push(to.piece);
+      gamesave.standings.push(to.piece);
     }
   }
 
-  public static function cancelMove(state:State) {
-    if (state.moves.length == 0) {
+  public static function cancelMove(gamesave:Gamesave) {
+    if (gamesave.moves.length == 0) {
       return;
     }
 
-    var move = state.moves.pop();
-    var from = state.tiles[move.from];
-    var to = state.tiles[move.to];
+    var move = gamesave.moves.pop();
+    var from = gamesave.tiles[move.from];
+    var to = gamesave.tiles[move.to];
     from.piece = to.piece;
     to.piece = null;
 
     // Update Standings
-    if (state.standings.length > 0 && state.standings[state.standings.length-1] == from.piece) {
-      state.standings.pop();
+    if (gamesave.standings.length > 0 && gamesave.standings[gamesave.standings.length-1] == from.piece) {
+      gamesave.standings.pop();
     }
   }
 
@@ -125,26 +109,26 @@ class Board {
   // Allowed moves
   //
 
-  public static function allowedMoves(state:State):Array<Tile> {
+  public static function allowedMoves(gamesave:Gamesave):Array<Tile> {
     var moves:Array<Tile> = [];
-    if (state.currentPlayer == null) {
+    if (gamesave.currentPlayer == null) {
       return moves;
     }
 
-    var player = state.currentPlayer; 
-    for (tile in state.tiles) {
-      if (tile.piece == player.id && allowedMovesForTile(state, tile).length > 0) {
+    var player = gamesave.currentPlayer; 
+    for (tile in gamesave.tiles) {
+      if (tile.piece == player.id && allowedMovesForTile(gamesave, tile).length > 0) {
         moves.push(tile);
       }
     }
     return moves;
   }
 
-  public static function allowedMovesForTile(state:State, tile:Tile):Array<Tile> {
+  public static function allowedMovesForTile(gamesave:Gamesave, tile:Tile):Array<Tile> {
     var moves:Array<Tile> = [];
 
-    jumps(state, tile, moves);
-    for (neighbor in neighbors(state, tile)) {
+    jumps(gamesave, tile, moves);
+    for (neighbor in neighbors(gamesave, tile)) {
       if (neighbor.piece == null) {
         moves.push(neighbor);
       }
@@ -168,14 +152,14 @@ class Board {
   }
 
   // @@Improvement: build with BoardBuilder?
-  static function neighbors(state:State, tile:Tile):Array<Tile> {
+  static function neighbors(gamesave:Gamesave, tile:Tile):Array<Tile> {
     //    (1) (2)
     //      \ /
     //  (3)- * -(4)
     //      / \
     //    (5) (6)
     var tiles:Array<Tile> = [];
-    for (neighbor in state.tiles) {
+    for (neighbor in gamesave.tiles) {
       if (
         ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y - 1)) || // (1)
         ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y - 1)) || // (2)
@@ -190,10 +174,10 @@ class Board {
     return tiles;
   }
 
-  static function jump(state:State, from:Tile, via:Tile):Null<Tile> {
+  static function jump(gamesave:Gamesave, from:Tile, via:Tile):Null<Tile> {
     var x = via.x + (via.x - from.x);
     var y = via.y + (via.y - from.y);
-    for (tile in state.tiles) {
+    for (tile in gamesave.tiles) {
       if (tile.x == x && tile.y == y) {
         return tile;
       }
@@ -201,13 +185,13 @@ class Board {
     return null;
   }
 
-  static function jumps(state:State, tile:Tile, tiles:Array<Tile>) {
-    for (neighbor in neighbors(state, tile)) {
+  static function jumps(gamesave:Gamesave, tile:Tile, tiles:Array<Tile>) {
+    for (neighbor in neighbors(gamesave, tile)) {
       if (neighbor.piece != null) {
-        var jumpTile = jump(state, tile, neighbor);
+        var jumpTile = jump(gamesave, tile, neighbor);
         if (jumpTile != null && jumpTile.piece == null && !tiles.contains(jumpTile)) {
           tiles.push(jumpTile);
-          jumps(state, jumpTile, tiles);
+          jumps(gamesave, jumpTile, tiles);
         }
       }
     }
@@ -217,35 +201,35 @@ class Board {
   // Update
   //
 
-  public static function update(state:State) {
-    updateCurrentPlayer(state);
-    updateAllowedMoves(state);
+  public static function update(gamesave:Gamesave) {
+    updateCurrentPlayer(gamesave);
+    updateAllowedMoves(gamesave);
   }
 
-  static function updateCurrentPlayer(state:State) {
+  static function updateCurrentPlayer(gamesave:Gamesave) {
     var player:Null<Player> = null;
-    if (!isOver(state)) {
-      if (state.moves.length == 0) {
-        player = state.players[state.sequence[0]];
+    if (!isOver(gamesave)) {
+      if (gamesave.moves.length == 0) {
+        player = gamesave.players[gamesave.sequence[0]];
       }
       else {
-        var move = state.moves[state.moves.length-1];
-        var index = state.sequence.indexOf(state.tiles[move.to].piece);
+        var move = gamesave.moves[gamesave.moves.length-1];
+        var index = gamesave.sequence.indexOf(gamesave.tiles[move.to].piece);
         if (index > -1) {
           do {
             index++;
-            if (index == state.sequence.length) {
+            if (index == gamesave.sequence.length) {
               index = 0;
             }
-            player = state.players[state.sequence[index]];
-          } while(state.standings.indexOf(player.id) > -1);
+            player = gamesave.players[gamesave.sequence[index]];
+          } while(gamesave.standings.indexOf(player.id) > -1);
         }
       }
     }
-    state.currentPlayer = player;
+    gamesave.currentPlayer = player;
   }
 
-  static function updateAllowedMoves(state:State) {
-    state.allowedMoves = (state.selectedTile == null) ? allowedMoves(state) : allowedMovesForTile(state, state.selectedTile);
+  static function updateAllowedMoves(gamesave:Gamesave) {
+    gamesave.allowedMoves = (gamesave.selectedTile == null) ? allowedMoves(gamesave) : allowedMovesForTile(gamesave, gamesave.selectedTile);
   }
 }

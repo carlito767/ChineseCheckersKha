@@ -3,7 +3,7 @@ import board.Player;
 import board.Sequence;
 import board.Tile;
 
-typedef State = {
+typedef GamesaveData = {
   var version:Int;
   var sequence:Sequence;
   var players:Map<Int, Player>;

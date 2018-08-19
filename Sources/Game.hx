@@ -16,14 +16,13 @@ class Game {
 
   public static var settings:Settings;
 
-  public static var scene:Scene;
+  public static var gamesave:Gamesave;
 
+  public static var scene:Scene;
   public static var sceneTitle:SceneTitle;
   public static var scenePlay:ScenePlay;
 
   static var ui:UI;
-
-  public static var state:State;
 
   @:allow(Main)
   static function initialize() {
@@ -31,13 +30,15 @@ class Game {
     settings.load();
     Translations.language = settings.language;
 
-    Input.initialize();
-
-    ui = new UI();
+    gamesave = new Gamesave();
 
     sceneTitle = new SceneTitle();
     scenePlay = new ScenePlay();
     scene = sceneTitle;
+
+    ui = new UI();
+
+    Input.initialize();
   }
 
   @:allow(Main)

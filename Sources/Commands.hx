@@ -39,23 +39,17 @@ class Commands {
   }
 
   public static function quickLoad(id:Int) {
-    var gamesave:Null<State> = Storage.load('gamesave$id');
-    if (gamesave == null || gamesave.version != Board.GAMESAVE_VERSION) {
-      return;
+    if (Game.gamesave.load(id)) {
+      Game.scene = Game.scenePlay;  
     }
-
-    trace('Quick Load $id');
-    Game.state = gamesave;
-    Game.scene = Game.scenePlay;
   }
 
   public static function quickSave(id:Int) {
-    if (!Board.isRunning(Game.state)) {
+    if (!Board.isRunning(Game.gamesave)) {
       return;
     }
 
-    trace('Quick Save $id');
-    Storage.save('gamesave$id', Game.state);
+    Game.gamesave.save(id);
   }
 
   public static function toggleHitbox() {
@@ -67,8 +61,8 @@ class Commands {
   }
 
   public static function undo() {
-    if (Board.isRunning(Game.state)) {
-      Board.cancelLastMove(Game.state);
+    if (Board.isRunning(Game.gamesave)) {
+      Board.cancelLastMove(Game.gamesave);
     }
   }
 }
