@@ -1,4 +1,4 @@
-package types;
+package board;
 
 typedef Tile = {
   var id:Int;

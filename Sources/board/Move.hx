@@ -1,4 +1,4 @@
-package types;
+package board;
 
 typedef Move = {
   var from:Int;

@@ -1,4 +1,7 @@
-package types;
+import board.Move;
+import board.Player;
+import board.Sequence;
+import board.Tile;
 
 typedef State = {
   var version:Int;

@@ -8,7 +8,7 @@ import kha.System;
 
 import gato.Scaling;
 
-import types.Player;
+import board.Player;
 
 import Mui.MuiEval;
 import Mui.MuiInput;

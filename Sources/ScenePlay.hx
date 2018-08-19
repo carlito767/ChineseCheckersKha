@@ -3,10 +3,9 @@ import kha.input.KeyCode;
 
 import gato.input.VirtualKey;
 
-import types.Move;
-import types.Player;
-import types.Sequence;
-import types.State;
+import board.Move;
+import board.Player;
+import board.Sequence;
 
 import BoardChineseCheckers as GameBoard;
 import Translations.tr;

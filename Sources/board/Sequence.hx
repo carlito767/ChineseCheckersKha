@@ -1,3 +1,3 @@
-package types;
+package board;
 
 typedef Sequence = Array<Int>;

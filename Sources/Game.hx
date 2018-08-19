@@ -6,8 +6,6 @@ import kha.graphics4.Graphics as Graphics4;
 import gato.Scaling;
 import gato.input.Input;
 
-import types.State;
-
 class Game {
   public static inline var TITLE = 'ChineseCheckersKha';
   public static inline var WIDTH = 800;

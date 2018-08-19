@@ -1,10 +1,9 @@
 import kha.Color;
 
-import types.Move;
-import types.Player;
-import types.Sequence;
-import types.State;
-import types.Tile;
+import board.Move;
+import board.Player;
+import board.Sequence;
+import board.Tile;
 
 class Board {
   public static inline var GAMESAVE_VERSION = 9;

@@ -1,8 +1,6 @@
 import gato.Storage;
 import gato.input.Command;
 
-import types.State;
-
 class Commands {
   public static function call(commands:Array<Command>) {
     // @@Improvement: use strings for commands (eg: 'quickload 1' should call Commands.quickload(1))
