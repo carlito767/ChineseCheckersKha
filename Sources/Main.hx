@@ -1,7 +1,3 @@
-// TODO: AI
-// TODO: Sounds
-// TODO: UI refresh
-
 #if kha_html5
 import js.html.CanvasElement;
 import js.Browser.document;
