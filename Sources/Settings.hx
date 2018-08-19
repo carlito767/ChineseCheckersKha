@@ -3,7 +3,7 @@ import gato.Storage;
 @:forward(language, showTileId)
 abstract Settings(SettingsData) {
   static inline var SETTINGS_FILENAME = 'settings';
-  static inline var SETTINGS_FILENAME_JSON = '$SETTINGS_FILENAME.json';
+  static inline var SETTINGS_FILENAME_JSON = 'settings.json';
   static inline var SETTINGS_VERSION = 1;
 
   public inline function new() {
