@@ -31,7 +31,7 @@ class Board {
         x:tile.x,
         y:tile.y,
         owner:tile.owner,
-        piece:(tile.piece != null && players[tile.piece] != null) ? tile.piece : null,
+        piece:(tile.piece != null && gamesave.players[tile.piece] != null) ? tile.piece : null,
       }
     }
 
