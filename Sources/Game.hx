@@ -4,10 +4,8 @@ import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
 
 import gato.Scaling;
-import gato.Storage;
 import gato.input.Input;
 
-import types.Settings;
 import types.State;
 
 class Game {
@@ -15,15 +13,10 @@ class Game {
   public static inline var WIDTH = 800;
   public static inline var HEIGHT = 600;
 
-  public static inline var SETTINGS_FILENAME = 'settings';
-  public static inline var SETTINGS_FILENAME_JSON = 'settings.json';
-  public static inline var SETTINGS_FILENAME_LOCAL_JSON = 'settings.local.json';
-  public static inline var SETTINGS_VERSION = 1;
-
   public static var g2(default, null):Graphics2 = null;
   public static var g4(default, null):Graphics4 = null;
 
-  public static var settings:Storage<Settings>;
+  public static var settings:Settings;
 
   public static var scene:Scene;
 
@@ -36,21 +29,9 @@ class Game {
 
   @:allow(Main)
   static function initialize() {
-    settings = new Storage<Settings>();
-    settings.model = {
-      version:SETTINGS_VERSION,
-      language:'en',
-      showTileId:false,
-    };
-    // @@Improvement: validate settings.json at compile time
-    settings.loadJson(SETTINGS_FILENAME_JSON, SETTINGS_VERSION);
-    if (!settings.mergeJson(SETTINGS_FILENAME_LOCAL_JSON)) {
-      settings.load(SETTINGS_FILENAME, SETTINGS_VERSION);
-    }
-    if (settings.data == null) {
-      settings.data = settings.model;
-    }
-    Translations.language = settings.data.language;
+    settings = new Settings();
+    settings.load();
+    Translations.language = settings.language;
 
     Input.initialize();
 
