@@ -6,11 +6,11 @@ class ProcessQueue {
   public function new() {
   }
 
-  public function add(process:Process) {
+  public function add(process:Process):Void {
     processQueue.push(process);
   }
 
-  public function update(dt:Float) {
+  public function update(dt:Float):Void {
     if (processQueue.length == 0) {
       return;
     }

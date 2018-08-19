@@ -2,7 +2,7 @@ import gato.Storage;
 import gato.input.Command;
 
 class Commands {
-  public static function call(commands:Array<Command>) {
+  public static function call(commands:Array<Command>):Void {
     // @@Improvement: use strings for commands (eg: 'quickload 1' should call Commands.quickload(1))
     for (command in commands) {
       switch command {
@@ -32,19 +32,19 @@ class Commands {
     }
   }
 
-  public static function changeLanguage() {
+  public static function changeLanguage():Void {
     Translations.language = (Translations.language == 'en') ? 'fr' : 'en';
     Game.settings.language = Translations.language;
     Game.settings.save();
   }
 
-  public static function quickLoad(id:Int) {
+  public static function quickLoad(id:Int):Void {
     if (Game.gamesave.load(id)) {
       Game.scene = Game.scenePlay;  
     }
   }
 
-  public static function quickSave(id:Int) {
+  public static function quickSave(id:Int):Void {
     if (!Board.isRunning(Game.gamesave)) {
       return;
     }
@@ -52,15 +52,15 @@ class Commands {
     Game.gamesave.save(id);
   }
 
-  public static function toggleHitbox() {
+  public static function toggleHitbox():Void {
     UI.showHitbox = !UI.showHitbox;
   }
 
-  public static function toggleTileId() {
+  public static function toggleTileId():Void {
     Game.settings.showTileId = !Game.settings.showTileId;
   }
 
-  public static function undo() {
+  public static function undo():Void {
     if (Board.isRunning(Game.gamesave)) {
       Board.cancelLastMove(Game.gamesave);
     }

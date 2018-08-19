@@ -37,7 +37,7 @@ class ScenePlay extends Scene {
     sequenceIndex = null;
   }
 
-  override public function render(ui:UI) {
+  override public function render(ui:UI):Void {
     var gamesave = Game.gamesave;
 
     ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT, disabled:true });

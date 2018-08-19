@@ -12,7 +12,7 @@ class Loader {
   static var onDone:Void->Void = null;
 
   @:allow(Main)
-  static function load(_) {
+  static function load(_):Void {
     System.notifyOnFrames(render);
     Assets.loadEverything(function() {
       System.removeFramesListener(render);
@@ -20,7 +20,7 @@ class Loader {
     });
   }
 
-  static function render(framebuffers:Array<Framebuffer>) {
+  static function render(framebuffers:Array<Framebuffer>):Void {
     var g2 = framebuffers[0].g2;
     g2.begin();
     var width = Assets.progress * System.windowWidth();

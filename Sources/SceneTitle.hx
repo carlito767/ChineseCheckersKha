@@ -14,7 +14,7 @@ class SceneTitle extends Scene {
     keymap.set(VirtualKey.Number3, Action('QuickLoad3'));
   }
 
-  override public function render(ui:UI) {
+  override public function render(ui:UI):Void {
     ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT, disabled:true });
 
     ui.title({ text:tr.title1, x:Game.WIDTH * 0.45, y:Game.HEIGHT * 0.13, w:0, h:Game.HEIGHT * 0.167, disabled:true });

@@ -7,7 +7,7 @@ class Scaling {
   static public var dx(default, null):Float = 0.0;
   static public var dy(default, null):Float = 0.0;
 
-  static public function update(gameWidth:Int, gameHeight:Int) {
+  static public function update(gameWidth:Int, gameHeight:Int):Void {
     var width = System.windowWidth();
     var height = System.windowHeight();
 

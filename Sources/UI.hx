@@ -93,7 +93,7 @@ class UI extends Mui {
   // Scaling
   //
 
-  function scaleObject(object:MuiObject) {
+  function scaleObject(object:MuiObject):Void {
     object.x = object.x * Scaling.scale + Scaling.dx;
     object.y = object.y * Scaling.scale + Scaling.dy;
     object.w = object.w * Scaling.scale;
@@ -144,7 +144,7 @@ class UI extends Mui {
   // Background
   //
 
-  function background<T:(MuiObject)>(object:T, ?color:Color) {
+  function background<T:(MuiObject)>(object:T, ?color:Color):Void {
     if (color == null) {
       color = Color.fromBytes(0, 0, 0, 200);
     }
@@ -166,7 +166,7 @@ class UI extends Mui {
   //
 
   @ui
-  function button(object:UIButton) {
+  function button(object:UIButton):MuiEval {
     background(object);
 
     var color:Color = Color.White;
@@ -193,7 +193,7 @@ class UI extends Mui {
   //
 
   @ui
-  function image(object:UIImage) {
+  function image(object:UIImage):MuiEval {
     g.color = Color.White;
     g.drawScaledImage(object.image, object.x, object.y, object.w, object.h);
   }
@@ -203,7 +203,7 @@ class UI extends Mui {
   //
 
   @ui
-  function rank(object:UIRank) {
+  function rank(object:UIRank):MuiEval {
     // Slot
     background(object);
     // Separator
@@ -231,7 +231,7 @@ class UI extends Mui {
   //
 
   @ui
-  function tile(object:UITile) {
+  function tile(object:UITile):MuiEval {
     var radius = object.h * 0.5;
     var cx = object.x + radius;
     var cy = object.y + radius;
@@ -275,7 +275,7 @@ class UI extends Mui {
   //
 
   @ui
-  function title(object:UITitle) {
+  function title(object:UITitle):MuiEval {
     g.color = Color.White;
     g.font = Assets.fonts.BatikGangster;
     g.fontSize = Std.int(object.h);
@@ -287,7 +287,7 @@ class UI extends Mui {
   //
 
   @ui
-  function window(object:UIWindow) {
+  function window(object:UIWindow):MuiEval {
     background(object);
     if (object.title != null) {
       var h = object.h * 0.2;

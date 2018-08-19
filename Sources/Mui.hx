@@ -58,7 +58,10 @@ class Mui {
   var y:Float = 0.0;
   var select:Bool = false;
 
-  public function begin() {
+  public function new() {
+  }
+
+  public function begin():Void {
     x = Input.mouseX;
     y = Input.mouseY;
     select = Input.isPressed(VirtualKey.MouseLeftButton);
@@ -67,10 +70,7 @@ class Mui {
     next = null;
   }
 
-  public function new() {
-  }
-
-  public function end() {
+  public function end():Void {
     var currentTime = Scheduler.time();
     var dt = currentTime - lastTime;
     lastTime = currentTime;

@@ -25,7 +25,7 @@ class Game {
   static var ui:UI;
 
   @:allow(Main)
-  static function initialize() {
+  static function initialize():Void {
     settings = new Settings();
     settings.load();
     Translations.language = settings.language;
@@ -47,7 +47,7 @@ class Game {
   }
 
   @:allow(Main)
-  static function render(framebuffers:Array<Framebuffer>) {
+  static function render(framebuffers:Array<Framebuffer>):Void {
     g2 = framebuffers[0].g2;
     g4 = framebuffers[0].g4;
 

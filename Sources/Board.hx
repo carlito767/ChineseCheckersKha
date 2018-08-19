@@ -38,7 +38,7 @@ class Board {
     return gamesave;
   }
 
-  public static function start(gamesave:Gamesave) {
+  public static function start(gamesave:Gamesave):Void {
     update(gamesave);
   }
 
@@ -58,19 +58,19 @@ class Board {
   // Moves
   //
 
-  public static function move(gamesave:Gamesave, from:Tile, to:Tile) {
+  public static function move(gamesave:Gamesave, from:Tile, to:Tile):Void {
     applyMove(gamesave, from, to);
     gamesave.selectedTile = null;
     update(gamesave);
   }
 
-  public static function cancelLastMove(gamesave:Gamesave) {
+  public static function cancelLastMove(gamesave:Gamesave):Void {
     cancelMove(gamesave);
     gamesave.selectedTile = null;
     update(gamesave);
   }
 
-  public static function applyMove(gamesave:Gamesave, from:Tile, to:Tile) {
+  public static function applyMove(gamesave:Gamesave, from:Tile, to:Tile):Void {
     to.piece = from.piece;
     from.piece = null;
     gamesave.moves.push({from:from.id, to:to.id});
@@ -88,7 +88,7 @@ class Board {
     }
   }
 
-  public static function cancelMove(gamesave:Gamesave) {
+  public static function cancelMove(gamesave:Gamesave):Void {
     if (gamesave.moves.length == 0) {
       return;
     }
@@ -185,7 +185,7 @@ class Board {
     return null;
   }
 
-  static function jumps(gamesave:Gamesave, tile:Tile, tiles:Array<Tile>) {
+  static function jumps(gamesave:Gamesave, tile:Tile, tiles:Array<Tile>):Void {
     for (neighbor in neighbors(gamesave, tile)) {
       if (neighbor.piece != null) {
         var jumpTile = jump(gamesave, tile, neighbor);
@@ -201,12 +201,12 @@ class Board {
   // Update
   //
 
-  public static function update(gamesave:Gamesave) {
+  public static function update(gamesave:Gamesave):Void {
     updateCurrentPlayer(gamesave);
     updateAllowedMoves(gamesave);
   }
 
-  static function updateCurrentPlayer(gamesave:Gamesave) {
+  static function updateCurrentPlayer(gamesave:Gamesave):Void {
     var player:Null<Player> = null;
     if (!isOver(gamesave)) {
       if (gamesave.moves.length == 0) {
@@ -229,7 +229,7 @@ class Board {
     gamesave.currentPlayer = player;
   }
 
-  static function updateAllowedMoves(gamesave:Gamesave) {
+  static function updateAllowedMoves(gamesave:Gamesave):Void {
     gamesave.allowedMoves = (gamesave.selectedTile == null) ? allowedMoves(gamesave) : allowedMovesForTile(gamesave, gamesave.selectedTile);
   }
 }
