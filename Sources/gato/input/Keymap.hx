@@ -9,11 +9,11 @@ class Keymap {
     pressed = new Map();
   }
 
-  public function set(vk:VirtualKey, command:Command) {
+  public function set(vk:VirtualKey, command:Command):Void {
     mapping.set(vk, command);
   }
 
-  public function remove(vk:VirtualKey) {
+  public function remove(vk:VirtualKey):Void {
     mapping.remove(vk);
   }
 

@@ -7,7 +7,7 @@ import kha.input.Mouse;
 class Input {
   static var pressed:Map<VirtualKey, Bool> = new Map();
 
-  public static function initialize() {
+  public static function initialize():Void {
     var keyboard = Keyboard.get();
     if (keyboard != null) {
       keyboard.notify(onKeyDown, onKeyUp, null);
@@ -23,13 +23,13 @@ class Input {
     return (pressed[vk] == true);
   }
 
-  static inline function onPressed(vk:Null<VirtualKey>) {
+  static inline function onPressed(vk:Null<VirtualKey>):Void {
     if (vk != null) {
       pressed[vk] = true;
     }
   }
 
-  static inline function onReleased(vk:Null<VirtualKey>) {
+  static inline function onReleased(vk:Null<VirtualKey>):Void {
     if (vk != null) {
       pressed[vk] = false;
     }
@@ -113,11 +113,11 @@ class Input {
     KeyCode.Shift => VirtualKey.Shift,
   ];
 
-  static function onKeyDown(key:KeyCode) {
+  static function onKeyDown(key:KeyCode):Void {
     onPressed(KeyCodeToVirtualKey.get(key));
   }
 
-  static function onKeyUp(key:KeyCode) {
+  static function onKeyUp(key:KeyCode):Void {
     onReleased(KeyCodeToVirtualKey.get(key));
   }
 
@@ -137,13 +137,13 @@ class Input {
     }
   }
 
-  static function onMouseDown(button:Int, x:Int, y:Int) {
+  static function onMouseDown(button:Int, x:Int, y:Int):Void {
     mouseX = x;
     mouseY = y;
     onPressed(mouseButtonToVirtualKey(button));
   }
 
-  static function onMouseUp(button:Int, x:Int, y:Int) {
+  static function onMouseUp(button:Int, x:Int, y:Int):Void {
     mouseX = x;
     mouseY = y;
     onReleased(mouseButtonToVirtualKey(button));
