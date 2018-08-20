@@ -5,6 +5,9 @@ import kha.graphics4.Graphics as Graphics4;
 
 import gato.Scaling;
 import gato.input.Input;
+import gato.input.VirtualKey;
+
+import Mui.MuiInput;
 
 class Game {
   public static inline var TITLE = 'ChineseCheckersKha';
@@ -57,7 +60,11 @@ class Game {
     g2.scissor(Std.int(Scaling.dx), Std.int(Scaling.dy), Std.int(WIDTH * Scaling.scale), Std.int(HEIGHT * Scaling.scale));
 
     ui.g = g2;
-    ui.begin();
+    ui.begin({
+      x:Input.mouseX,
+      y:Input.mouseY,
+      select:Input.isPressed(VirtualKey.MouseLeftButton),
+    });
     scene.render(ui);
     ui.end();
   

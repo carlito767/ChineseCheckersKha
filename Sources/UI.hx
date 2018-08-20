@@ -11,7 +11,6 @@ import gato.Scaling;
 import board.Player;
 
 import Mui.MuiEval;
-import Mui.MuiInput;
 import Mui.MuiObject;
 
 typedef Coordinates = {

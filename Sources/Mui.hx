@@ -6,9 +6,6 @@
 
 import kha.Scheduler;
 
-import gato.input.Input;
-import gato.input.VirtualKey;
-
 typedef MuiEval = {
   var hot:Bool;
   var active:Bool;
@@ -61,10 +58,10 @@ class Mui {
   public function new() {
   }
 
-  public function begin():Void {
-    x = Input.mouseX;
-    y = Input.mouseY;
-    select = Input.isPressed(VirtualKey.MouseLeftButton);
+  public function begin(input:MuiInput):Void {
+    x = input.x;
+    y = input.y;
+    select = input.select;
 
     idCounter = 0;
     next = null;
