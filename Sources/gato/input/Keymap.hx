@@ -2,11 +2,11 @@ package gato.input;
 
 class Keymap {
   var mapping:Map<VirtualKey, Command>;
-  var pressed:Map<VirtualKey, Bool>;
+  var down:Map<VirtualKey, Bool>;
 
   public function new() {
     mapping = new Map();
-    pressed = new Map();
+    down = new Map();
   }
 
   public function set(vk:VirtualKey, command:Command):Void {
@@ -17,15 +17,15 @@ class Keymap {
     mapping.remove(vk);
   }
 
-  public function commands():Array<Command> {
+  public function commands(input:Input):Array<Command> {
     var commands = new Array<Command>();
     for (vk in mapping.keys()) {
-      var isPressed = Input.isPressed(vk);
-      if (isPressed) {
+      var isDown = input.isDown(vk);
+      if (isDown) {
         var command = mapping[vk];
         var active:Bool = switch command {
         case Action(id):
-          pressed[vk] != true;
+          down[vk] != true;
         case State(id):
           true;
         }
@@ -33,7 +33,7 @@ class Keymap {
           commands.push(command);
         }
       }
-      pressed[vk] = isPressed;
+      down[vk] = isDown;
     }
     return commands;
   }

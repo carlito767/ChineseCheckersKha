@@ -25,6 +25,8 @@ class Game {
   public static var sceneTitle:SceneTitle;
   public static var scenePlay:ScenePlay;
 
+  public static var input:Input;
+
   static var ui:UI;
 
   @:allow(Main)
@@ -39,9 +41,10 @@ class Game {
     scenePlay = new ScenePlay();
     scene = sceneTitle;
 
-    ui = new UI();
+    input = new Input();
+    input.start();
 
-    Input.initialize();
+    ui = new UI();
   }
 
   @:allow(Main)
@@ -61,9 +64,9 @@ class Game {
 
     ui.g = g2;
     ui.begin({
-      x:Input.mouseX,
-      y:Input.mouseY,
-      select:Input.isPressed(VirtualKey.MouseLeftButton),
+      x:input.mouse.x,
+      y:input.mouse.y,
+      select:input.isDown(VirtualKey.MouseLeftButton),
     });
     scene.render(ui);
     ui.end();

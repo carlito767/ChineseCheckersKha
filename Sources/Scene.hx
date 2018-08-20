@@ -8,7 +8,7 @@ class Scene {
   }
 
   public function update():Void {
-    Commands.call(keymap.commands());
+    Commands.call(keymap.commands(Game.input));
   }
 
   public function render(ui:UI):Void {
