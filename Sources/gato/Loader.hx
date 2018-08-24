@@ -1,4 +1,4 @@
-// Inspired by: https://github.com/FuzzyWuzzie/tundra
+// Inspired by: https://github.com/hamaluik/tundra
 
 package gato;
 
