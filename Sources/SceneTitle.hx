@@ -5,11 +5,6 @@ import gato.input.VirtualKey;
 class SceneTitle extends Scene {
   public function new() {
     super();
-    keymap.set(VirtualKey.L, Action('ChangeLanguage'));
-    keymap.set(VirtualKey.Decimal, Action('ToggleHitbox'));
-    keymap.set(VirtualKey.Number1, Action('QuickLoad1'));
-    keymap.set(VirtualKey.Number2, Action('QuickLoad2'));
-    keymap.set(VirtualKey.Number3, Action('QuickLoad3'));
   }
 
   override public function render(ui:UI):Void {
@@ -24,7 +19,7 @@ class SceneTitle extends Scene {
       Game.scene = Game.scenePlay;
     }
     if (ui.button({ text:'${locale.language} ${Game.settings.language.toUpperCase()}', x:Game.WIDTH * 0.63, y:Game.HEIGHT * 0.7, w:Game.WIDTH * 0.38, h:Game.HEIGHT * 0.08 }).hit) {
-      Commands.changeLanguage();
+      // @@TODO: changeLanguage
     }
   }
 }

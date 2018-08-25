@@ -22,17 +22,6 @@ class ScenePlay extends Scene {
 
   public function new() {
     super();
-    keymap.set(VirtualKey.L, Action('ChangeLanguage'));
-    keymap.set(VirtualKey.Decimal, Action('ToggleHitbox'));
-    keymap.set(VirtualKey.Number0, Action('ToggleTileId'));
-    keymap.set(VirtualKey.Number1, Action('QuickLoad1'));
-    keymap.set(VirtualKey.Number2, Action('QuickLoad2'));
-    keymap.set(VirtualKey.Number3, Action('QuickLoad3'));
-    keymap.set(VirtualKey.Number7, Action('QuickSave1'));
-    keymap.set(VirtualKey.Number8, Action('QuickSave2'));
-    keymap.set(VirtualKey.Number9, Action('QuickSave3'));
-    keymap.set(VirtualKey.Backspace, Action('Undo'));
-
     sequenceIndex = null;
   }
 
