@@ -8,7 +8,6 @@ import board.Player;
 import board.Sequence;
 
 import BoardChineseCheckers as GameBoard;
-import Translations.tr;
 import UI.Dimensions;
 import UI.UITileEmphasis;
 import UI.UIWindow;
@@ -39,6 +38,7 @@ class ScenePlay extends Scene {
 
   override public function render(ui:UI):Void {
     var gamesave = Game.gamesave;
+    var locale = Game.locale;
 
     ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT, disabled:true });
 
@@ -105,7 +105,7 @@ class ScenePlay extends Scene {
         }
       }
 
-      var window:UIWindow = { x:Game.WIDTH * 0.2, y:Game.HEIGHT * 0.1, w:Game.WIDTH * 0.6, h:Game.HEIGHT * 0.8, title:tr.standings };
+      var window:UIWindow = { x:Game.WIDTH * 0.2, y:Game.HEIGHT * 0.1, w:Game.WIDTH * 0.6, h:Game.HEIGHT * 0.8, title:locale.standings };
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);
 
@@ -124,7 +124,7 @@ class ScenePlay extends Scene {
       }
     }
     else if (!Board.isRunning(gamesave)) {
-      var window:UIWindow = { x:Game.WIDTH * 0.3, y:Game.HEIGHT * 0.33, w:Game.WIDTH * 0.4, h:Game.HEIGHT * 0.34, title:tr.numberOfPlayers };
+      var window:UIWindow = { x:Game.WIDTH * 0.3, y:Game.HEIGHT * 0.33, w:Game.WIDTH * 0.4, h:Game.HEIGHT * 0.34, title:locale.numberOfPlayers };
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);
 
@@ -146,12 +146,12 @@ class ScenePlay extends Scene {
         }
       }
 
-      if (ui.button({ text:tr.play, disabled:(sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - Game.HEIGHT * 0.067, w:dimensions.width, h:Game.HEIGHT * 0.067 }).hit) {
+      if (ui.button({ text:locale.play, disabled:(sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - Game.HEIGHT * 0.067, w:dimensions.width, h:Game.HEIGHT * 0.067 }).hit) {
         Board.start(gamesave);
       }
     }
 
-    if (ui.button({ text:tr.quit, x:Game.WIDTH * 0.85, y:Game.WIDTH * 0.025, w:Game.WIDTH * 0.125, h:Game.HEIGHT * 0.067 }).hit) {
+    if (ui.button({ text:locale.quit, x:Game.WIDTH * 0.85, y:Game.WIDTH * 0.025, w:Game.WIDTH * 0.125, h:Game.HEIGHT * 0.067 }).hit) {
       sequenceIndex = null;
       Game.scene = Game.sceneTitle;
     }

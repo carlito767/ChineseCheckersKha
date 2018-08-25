@@ -19,6 +19,8 @@ class Game {
 
   public static var settings:Settings;
 
+  public static var locale:Localization;
+
   public static var gamesave:Gamesave;
 
   public static var scene:Scene;
@@ -33,7 +35,9 @@ class Game {
   static function initialize():Void {
     settings = new Settings();
     settings.load();
-    Translations.language = settings.language;
+
+    locale = new Localization();
+    locale.load(settings.language);
 
     gamesave = new Gamesave();
 
