@@ -37,7 +37,7 @@ class Game {
     settings.load();
 
     locale = new Localization();
-    settings.language = locale.load(settings.language);
+    locale.load(settings.language);
 
     gamesave = new Gamesave();
 

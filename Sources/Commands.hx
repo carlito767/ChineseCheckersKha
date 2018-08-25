@@ -34,8 +34,10 @@ class Commands {
 
   public static function changeLanguage():Void {
     var newLanguage = (Game.settings.language == 'en') ? 'fr' : 'en';
-    Game.settings.language = Game.locale.load(newLanguage);
-    Game.settings.save();
+    if (Game.locale.load(newLanguage)) {
+      Game.settings.language = newLanguage;
+      Game.settings.save();
+    }
   }
 
   public static function quickLoad(id:Int):Void {

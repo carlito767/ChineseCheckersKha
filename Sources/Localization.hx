@@ -5,22 +5,18 @@ abstract Localization(LocalizationData) {
   public static inline var LOCALIZATION_DEFAULT = 'en';
 
   public inline function new() {
-    load();
+    this = Storage.loadJson('language_${LOCALIZATION_DEFAULT}.json');
   }
 
   // @@TODO: check language_*.json files at compile time
-  public inline function load(?id:String):String {
-    var data:Null<LocalizationData> = null;
-    if (id != null) {
-      trace('Loading user localization ($id)...');
-      data = Storage.loadJson('language_$id.json');
-    }
+  public inline function load(id:String):Bool {
+    trace('Loading localization ($id)...');
+    var data:Null<LocalizationData> = Storage.loadJson('language_$id.json');
     if (data == null) {
-      id = LOCALIZATION_DEFAULT;
-      trace('Loading default localization ($id)...');
-      data = Storage.loadJson('language_$id.json');
+      trace('Localization not found ($id)');
+      return false;
     }
     this = data;
-    return id;
+    return true;
   }
 }
