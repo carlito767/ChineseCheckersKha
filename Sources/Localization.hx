@@ -9,7 +9,7 @@ abstract Localization(LocalizationData) {
   }
 
   // @@TODO: check language_*.json files at compile time
-  public inline function load(?id:String):Void {
+  public inline function load(?id:String):String {
     var data:Null<LocalizationData> = null;
     if (id != null) {
       trace('Loading user localization ($id)...');
@@ -21,5 +21,6 @@ abstract Localization(LocalizationData) {
       data = Storage.loadJson('language_$id.json');
     }
     this = data;
+    return id;
   }
 }

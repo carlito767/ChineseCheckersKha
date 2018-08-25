@@ -33,8 +33,8 @@ class Commands {
   }
 
   public static function changeLanguage():Void {
-    Game.settings.language = (Game.settings.language == 'en') ? 'fr' : 'en';
-    Game.locale.load(Game.settings.language);
+    var newLanguage = (Game.settings.language == 'en') ? 'fr' : 'en';
+    Game.settings.language = Game.locale.load(newLanguage);
     Game.settings.save();
   }
 
