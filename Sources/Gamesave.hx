@@ -1,6 +1,6 @@
 import gato.Storage;
 
-@:forward(sequence, players, tiles, moves, standings, currentPlayer, allowedMoves, selectedTile)
+@:forward
 abstract Gamesave(GamesaveData) {
   // @@TODO: reset to 1 when the game is ready
   public static inline var GAMESAVE_VERSION = 9;

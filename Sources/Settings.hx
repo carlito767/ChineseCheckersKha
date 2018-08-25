@@ -1,6 +1,6 @@
 import gato.Storage;
 
-@:forward(language, showTileId)
+@:forward
 abstract Settings(SettingsData) {
   static inline var SETTINGS_FILENAME = 'settings';
   static inline var SETTINGS_FILENAME_JSON = 'settings.json';
