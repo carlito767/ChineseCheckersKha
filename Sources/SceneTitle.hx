@@ -2,6 +2,8 @@ import kha.Assets;
 
 import gato.input.VirtualKey;
 
+import process.ChangeLanguageProcess;
+
 class SceneTitle extends Scene {
   public function new() {
     super();
@@ -19,7 +21,7 @@ class SceneTitle extends Scene {
       Game.scene = Game.scenePlay;
     }
     if (ui.button({ text:'${locale.language} ${Game.settings.language.toUpperCase()}', x:Game.WIDTH * 0.63, y:Game.HEIGHT * 0.7, w:Game.WIDTH * 0.38, h:Game.HEIGHT * 0.08 }).hit) {
-      // @@TODO: changeLanguage
+      Game.processQueue.add(new ChangeLanguageProcess());
     }
   }
 }

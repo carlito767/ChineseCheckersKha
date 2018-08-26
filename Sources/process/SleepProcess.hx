@@ -11,7 +11,7 @@ class SleepProcess implements Process {
     this.duration = duration;
   };
 
-  public function update(dt:Float) {
+  public function update(dt:Float):Void {
     duration -= dt;
     if (duration <= 0) {
       finished = true;

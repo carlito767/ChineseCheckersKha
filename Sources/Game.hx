@@ -3,9 +3,15 @@ import kha.Framebuffer;
 import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
 
+import gato.Process;
+import gato.ProcessQueue;
+import gato.Timer;
 import gato.Scaling;
 import gato.input.Input;
+import gato.input.Keymap;
 import gato.input.VirtualKey;
+
+import process.*;
 
 import Mui.MuiInput;
 
@@ -17,6 +23,9 @@ class Game {
   public static var g2(default, null):Graphics2 = null;
   public static var g4(default, null):Graphics4 = null;
 
+  public static var timer:Timer;
+  public static var processQueue:ProcessQueue;
+
   public static var settings:Settings;
 
   public static var locale:Localization;
@@ -27,12 +36,15 @@ class Game {
   public static var sceneTitle:SceneTitle;
   public static var scenePlay:ScenePlay;
 
+  public static var keymap:Keymap;
   public static var input:Input;
 
   static var ui:UI;
 
   @:allow(Main)
   static function initialize():Void {
+    processQueue = new ProcessQueue();
+
     settings = new Settings();
     settings.load();
 
@@ -45,14 +57,32 @@ class Game {
     scenePlay = new ScenePlay();
     scene = sceneTitle;
 
+    // @@TODO: load keymap at compile time using macro and json
+    keymap = new Keymap();
+    keymap.set(VirtualKey.L, new ChangeLanguageProcess());
+    keymap.set(VirtualKey.Decimal, new ToggleHitboxProcess());
+    keymap.set(VirtualKey.Number0, new ToggleTileIdProcess());
+    keymap.set(VirtualKey.Number1, new QuickLoadProcess(1));
+    keymap.set(VirtualKey.Number2, new QuickLoadProcess(2));
+    keymap.set(VirtualKey.Number3, new QuickLoadProcess(3));
+    keymap.set(VirtualKey.Number7, new QuickSaveProcess(1));
+    keymap.set(VirtualKey.Number8, new QuickSaveProcess(2));
+    keymap.set(VirtualKey.Number9, new QuickSaveProcess(3));
+    keymap.set(VirtualKey.Backspace, new UndoProcess());
+
     input = new Input();
     input.start();
 
     ui = new UI();
+
+    timer = new Timer();
   }
 
   @:allow(Main)
   static function update() {
+    var dt = timer.update();
+    keymap.update(processQueue, input);
+    processQueue.update(dt);
     scene.update();
   }
 
