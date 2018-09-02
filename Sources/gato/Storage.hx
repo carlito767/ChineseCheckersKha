@@ -1,7 +1,6 @@
 package gato;
 
 import haxe.Json;
-
 import kha.Assets;
 import kha.Storage as KhaStorage;
 

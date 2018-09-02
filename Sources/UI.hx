@@ -8,10 +8,9 @@ import kha.System;
 
 import gato.Scaling;
 
-import board.Player;
-
 import Mui.MuiEval;
 import Mui.MuiObject;
+import board.Player;
 
 typedef Coordinates = {
   var x:Float;

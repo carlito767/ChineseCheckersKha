@@ -1,7 +1,7 @@
 #if kha_html5
-import js.html.CanvasElement;
 import js.Browser.document;
 import js.Browser.window;
+import js.html.CanvasElement;
 #end
 import kha.Scheduler;
 import kha.System;

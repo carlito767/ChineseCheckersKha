@@ -5,15 +5,14 @@ import kha.graphics4.Graphics as Graphics4;
 
 import gato.Process;
 import gato.ProcessQueue;
-import gato.Timer;
 import gato.Scaling;
+import gato.Timer;
 import gato.input.Input;
 import gato.input.Keymap;
 import gato.input.VirtualKey;
 
-import process.*;
-
 import Mui.MuiInput;
+import process.*;
 
 class Game {
   public static inline var TITLE = 'ChineseCheckersKha';
