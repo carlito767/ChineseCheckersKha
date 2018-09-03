@@ -149,7 +149,7 @@ class Board {
     return moves;
   }
 
-  // @@Improvement: build with BoardBuilder?
+  // TODO: build with BoardBuilder?
   static function neighbors(gamesave:Gamesave, tile:Tile):Array<Tile> {
     //    (1) (2)
     //      \ /

@@ -22,7 +22,7 @@ class Keymap {
     for (vk in mapping.keys()) {
       var process = mapping[vk];
       var isDown = input.isDown(vk);
-      // @@TODO: allow to repeat process
+      // TODO: allow to repeat process
       if (isDown && down[vk] != true) {
         process.finished = false;
         processQueue.add(process);

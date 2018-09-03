@@ -1,6 +1,6 @@
 package gato.input;
 
-// @@Incomplete
+// TODO: handle all keys and controllers (gamepad)
 enum VirtualKey {
   //
   // Keyboard

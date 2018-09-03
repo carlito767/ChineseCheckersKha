@@ -60,7 +60,7 @@ class Game {
     scenePlay = new ScenePlay();
     scene = sceneTitle;
 
-    // @@TODO: load keymap at compile time using macro and json
+    // TODO: load keymap at compile time using macro and json
     keymap = new Keymap();
     keymap.set(VirtualKey.L, new ChangeLanguageProcess());
     keymap.set(VirtualKey.F, new ToggleFPSProcess());

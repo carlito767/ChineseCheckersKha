@@ -8,7 +8,7 @@ abstract Localization(LocalizationData) {
     this = Storage.loadJson('language_${LOCALIZATION_DEFAULT}.json');
   }
 
-  // @@TODO: check language_*.json files at compile time
+  // TODO: check language_*.json files at compile time
   public inline function load(id:String):Bool {
     trace('Loading localization ($id)...');
     var data:Null<LocalizationData> = Storage.loadJson('language_$id.json');
