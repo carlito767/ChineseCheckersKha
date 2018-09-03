@@ -1,4 +1,5 @@
 import kha.Assets;
+import kha.Color;
 import kha.Framebuffer;
 import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
@@ -40,6 +41,9 @@ class Game {
 
   static var ui:UI;
 
+  static var frames:Int;
+  static var fps:Int;
+
   @:allow(Main)
   static function initialize():Void {
     processQueue = new ProcessQueue();
@@ -74,19 +78,30 @@ class Game {
 
     ui = new UI();
 
+    frames = 0;
+    fps = 0;
+
     timer = new Timer();
   }
 
   @:allow(Main)
   static function update() {
-    var dt = timer.update();
+    timer.update();
     keymap.update(processQueue, input);
-    processQueue.update(dt);
+    processQueue.update(timer.deltaTime);
     scene.update();
   }
 
   @:allow(Main)
   static function render(framebuffers:Array<Framebuffer>):Void {
+    // FPS
+    if (timer.elapsedTime >= 1.0) {
+      fps = frames;
+      frames = 0;
+      timer.reset();
+    }
+    frames++;
+
     g2 = framebuffers[0].g2;
     g4 = framebuffers[0].g4;
 
@@ -103,8 +118,15 @@ class Game {
     });
     scene.render(ui);
     ui.end();
-  
+
     g2.disableScissor();
+
+    // FPS
+    g2.color = Color.White;
+    g2.font = Assets.fonts.ImpossibiliumBRK;
+    g2.fontSize = 30;
+    g2.drawString('FPS: $fps', 10, 10);
+
     g2.end();
   }
 }

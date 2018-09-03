@@ -3,16 +3,27 @@ package gato;
 import kha.Scheduler;
 
 class Timer {
-  var lastTime:Float;
+  public var deltaTime(default, null):Float;
+  public var elapsedTime(default, null):Float;
+
+  var startTime:Float;
+  var previousTime:Float;
 
   public function new() {
-    lastTime = Scheduler.time();
+    reset();
   }
 
-  public function update():Float {
-    var currentTime = Scheduler.time();
-    var dt = currentTime - lastTime;
-    lastTime = currentTime;
-    return dt;
+  public function reset():Void {
+    startTime = Scheduler.realTime();
+    previousTime = startTime;
+    deltaTime = 0.0;
+    elapsedTime = 0.0;
+  }
+
+  public function update():Void {
+    var currentTime = Scheduler.realTime();
+    deltaTime = currentTime - previousTime;
+    elapsedTime = currentTime - startTime;
+    previousTime = currentTime;
   }
 }
