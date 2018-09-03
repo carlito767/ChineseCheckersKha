@@ -2,8 +2,9 @@ import gato.Storage;
 
 @:forward
 abstract Gamesave(GamesaveData) {
+  static inline var GAMESAVE_FILENAME = 'gamesave';
   // @@TODO: reset to 1 when the game is ready
-  public static inline var GAMESAVE_VERSION = 9;
+  static inline var GAMESAVE_VERSION = 9;
 
   public inline function new() {
     this = {
@@ -20,7 +21,7 @@ abstract Gamesave(GamesaveData) {
   }
 
   public inline function load(id:Int):Bool {
-    var data:Null<GamesaveData> = Storage.load('gamesave$id');
+    var data:Null<GamesaveData> = Storage.load('$GAMESAVE_FILENAME$id');
     if (data == null || data.version != this.version) {
       return false;
     }
@@ -31,6 +32,6 @@ abstract Gamesave(GamesaveData) {
 
   public inline function save(id:Int):Void {
     trace('Saving gamesave $id...');
-    Storage.save('gamesave$id', this);
+    Storage.save('$GAMESAVE_FILENAME$id', this);
   }
 }

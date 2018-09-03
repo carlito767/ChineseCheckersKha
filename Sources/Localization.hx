@@ -2,7 +2,7 @@ import gato.Storage;
 
 @:forward
 abstract Localization(LocalizationData) {
-  public static inline var LOCALIZATION_DEFAULT = 'en';
+  static inline var LOCALIZATION_DEFAULT = 'en';
 
   public inline function new() {
     this = Storage.loadJson('language_${LOCALIZATION_DEFAULT}.json');
