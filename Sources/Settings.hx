@@ -1,49 +1,55 @@
 import gato.Storage;
 
+import SettingsData.DeveloperSettings;
+import SettingsData.UserSettings;
+
 @:forward
 abstract Settings(SettingsData) {
-  static inline var SETTINGS_FILENAME = 'settings';
-  static inline var SETTINGS_FILENAME_JSON = 'settings.json';
-  static inline var SETTINGS_VERSION = 1;
+  static inline var USER_SETTINGS_FILENAME = 'settings';
+  static inline var DEVELOPER_SETTINGS_FILENAME_JSON = 'developer.settings.json';
 
   public inline function new() {
     this = {
-      version:SETTINGS_VERSION,
+      // User settings
       language:'en',
+
+      // Developer settings
+      showHitbox:false,
       showTileId:false,
     }
   }
 
   public inline function load():Void {
-    var data:Null<SettingsData> = Storage.loadJson(SETTINGS_FILENAME_JSON);
-    if (data != null && check(data)) {
-      trace('Loading local settings...');
+    var developerSettings:Null<DeveloperSettings> = Storage.loadJson(DEVELOPER_SETTINGS_FILENAME_JSON);
+    if (developerSettings != null) {
+      trace('Loading developer settings...');
       var fields = Reflect.fields(this);
       for (field in fields) {
-        var value = Reflect.field(data, field);
+        var value = Reflect.field(developerSettings, field);
         if (value != null) {
           Reflect.setField(this, field, value);
         }
       }
-      return;
     }
 
-    data = Storage.load(SETTINGS_FILENAME);
-    if (data != null && check(data)) {
+    var userSettings:Null<UserSettings> = Storage.load(USER_SETTINGS_FILENAME);
+    if (userSettings != null) {
       trace('Loading user settings...');
-      this = data;
+      var fields = Reflect.fields(this);
+      for (field in fields) {
+        var value = Reflect.field(userSettings, field);
+        if (value != null) {
+          Reflect.setField(this, field, value);
+        }
+      }
     }
   }
 
   public inline function save():Void {
-    Storage.save(SETTINGS_FILENAME, this);
-  }
-
-  function check(data:SettingsData):Bool {
-    if (data.version != this.version) {
-      trace('Version mismatch (expected:${this.version}, got:${data.version})');
-      return false;
-    }
-    return true;
+    trace('Saving user settings...');
+    var userSettings:UserSettings = {
+      language:this.language,
+    };
+    Storage.save(USER_SETTINGS_FILENAME, userSettings);
   }
 }

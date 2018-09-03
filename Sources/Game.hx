@@ -77,6 +77,7 @@ class Game {
     input.start();
 
     ui = new UI();
+    UI.showHitbox = settings.showHitbox;
 
     frames = 0;
     fps = 0;

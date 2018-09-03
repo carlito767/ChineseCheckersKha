@@ -9,7 +9,8 @@ class ToggleHitboxProcess implements Process {
   };
 
   public function update(dt:Float):Void {
-    UI.showHitbox = !UI.showHitbox;
+    Game.settings.showHitbox = !Game.settings.showHitbox;
+    UI.showHitbox = Game.settings.showHitbox;
     finished = true;
   }
 }
