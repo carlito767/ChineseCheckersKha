@@ -14,6 +14,7 @@ abstract Settings(SettingsData) {
       language:'en',
 
       // Developer settings
+      showFPS:false,
       showHitbox:false,
       showTileId:false,
     }

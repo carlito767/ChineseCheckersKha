@@ -123,10 +123,12 @@ class Game {
     g2.disableScissor();
 
     // FPS
-    g2.color = Color.White;
-    g2.font = Assets.fonts.ImpossibiliumBRK;
-    g2.fontSize = 30;
-    g2.drawString('FPS: $fps', 10, 10);
+    if (settings.showFPS) {
+      g2.color = Color.White;
+      g2.font = Assets.fonts.ImpossibiliumBRK;
+      g2.fontSize = 30;
+      g2.drawString('FPS: $fps', 10, 10);
+    }
 
     g2.end();
   }
