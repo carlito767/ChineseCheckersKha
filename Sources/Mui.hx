@@ -1,7 +1,7 @@
 //
 // Minimal UI
 //
-// Inspired by: Immediate Mode GUI: https://mollyrocket.com/861
+// Inspired by: Immediate Mode GUI: https://caseymuratori.com/blog_0001
 //
 
 import kha.Scheduler;
