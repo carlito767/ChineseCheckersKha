@@ -3,7 +3,7 @@ typedef UserSettings = {
 }
 
 typedef DeveloperSettings = {
-  var showFPS:Bool;
+  var showDeveloperInfos:Bool;
   var showHitbox:Bool;
   var showTileId:Bool;
 }

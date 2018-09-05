@@ -61,9 +61,10 @@ class Game {
     scene = sceneTitle;
 
     // TODO: load keymap at compile time using macro and json
+    // TODO: allow developer actions only in debug mode
     keymap = new Keymap();
+    keymap.set(VirtualKey.D, new ToggleDeveloperInfosProcess());
     keymap.set(VirtualKey.L, new ChangeLanguageProcess());
-    keymap.set(VirtualKey.F, new ToggleFPSProcess());
     keymap.set(VirtualKey.Decimal, new ToggleHitboxProcess());
     keymap.set(VirtualKey.Number0, new ToggleTileIdProcess());
     keymap.set(VirtualKey.Number1, new QuickLoadProcess(1));
@@ -123,12 +124,16 @@ class Game {
 
     g2.disableScissor();
 
-    // FPS
-    if (settings.showFPS) {
+    // Developer Infos
+    if (settings.showDeveloperInfos) {
       g2.color = Color.White;
       g2.font = Assets.fonts.ImpossibiliumBRK;
       g2.fontSize = 20;
       g2.drawString('FPS: $fps', 10, 10);
+      g2.drawString('Mouse:', 10, 30);
+      g2.drawString('x: ${input.mouse.x}, y: ${input.mouse.y}', 15, 50);
+      g2.drawString('movementX: ${input.mouse.movementX}, movementY: ${input.mouse.movementY}', 15, 70);
+      g2.drawString('delta: ${input.mouse.delta}', 15, 90);
     }
 
     g2.end();
