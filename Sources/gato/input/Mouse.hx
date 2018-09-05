@@ -3,8 +3,11 @@ package gato.input;
 import kha.input.Mouse as KhaMouse;
 
 class Mouse extends Controller {
-  public var x(default, null):Float = 0.0;
-  public var y(default, null):Float = 0.0;
+  public var x(default, null):Int = 0;
+  public var y(default, null):Int = 0;
+  public var movementX(default, null):Int = 0;
+  public var movementY(default, null):Int = 0;
+  public var delta(default, null):Int = 0;
 
   var mouse:Null<KhaMouse> = null;
 
@@ -15,20 +18,20 @@ class Mouse extends Controller {
 
     mouse = KhaMouse.get();
     if (mouse != null) {
-      mouse.notify(onMouseDown, onMouseUp, null, null);
+      mouse.notify(onMouseDown, onMouseUp, onMouseMove, onMouseWheel);
     }
   }
 
   public function stop():Void {
     if (mouse != null) {
-      mouse.remove(onMouseDown, onMouseUp, null, null);
+      mouse.remove(onMouseDown, onMouseUp, onMouseMove, onMouseWheel);
       mouse = null;
       down = new Map();
     }
   }
 
   //
-  // Internal
+  // Callbacks
   //
 
   function mouseButtonToVirtualKey(button:Int):Null<VirtualKey> {
@@ -50,5 +53,16 @@ class Mouse extends Controller {
     this.x = x;
     this.y = y;
     onReleased(mouseButtonToVirtualKey(button));
+  }
+
+  function onMouseMove(x:Int, y:Int, movementX:Int, movementY:Int):Void {
+    this.x = x;
+    this.y = y;
+    this.movementX = movementX;
+    this.movementY = movementY;
+  }
+
+  function onMouseWheel(delta:Int):Void {
+    this.delta = delta;
   }
 }

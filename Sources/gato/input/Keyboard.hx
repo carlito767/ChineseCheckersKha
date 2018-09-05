@@ -26,7 +26,7 @@ class Keyboard extends Controller {
   }
 
   //
-  // Internal
+  // Callbacks
   //
 
   var KeyCodeToVirtualKey:Map<KeyCode, VirtualKey> = [
