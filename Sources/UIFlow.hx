@@ -1,0 +1,1 @@
+typedef UIFlow = UI->Void;

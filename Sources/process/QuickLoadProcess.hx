@@ -13,7 +13,7 @@ class QuickLoadProcess implements Process {
 
   public function update(dt:Float):Void {
     if (Game.gamesave.load(id)) {
-      Game.scene = Game.scenePlay;  
+      Game.scene = Scenes.play;
     }
     finished = true;
   }

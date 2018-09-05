@@ -37,9 +37,7 @@ class Game {
     return sequenceIndex = value;
   }
 
-  public static var scene:Scene;
-  public static var sceneTitle:SceneTitle;
-  public static var scenePlay:ScenePlay;
+  public static var scene:UIFlow;
 
   public static var keymap:Keymap;
   public static var input:Input;
@@ -62,9 +60,7 @@ class Game {
     gamesave = new Gamesave();
     sequenceIndex = null;
 
-    sceneTitle = new SceneTitle();
-    scenePlay = new ScenePlay();
-    scene = sceneTitle;
+    scene = Scenes.title;
 
     // TODO: load keymap at compile time using macro and json
     // TODO: allow developer actions only in debug mode
@@ -124,7 +120,7 @@ class Game {
       y:input.mouse.y,
       select:input.isDown(VirtualKey.MouseLeftButton),
     });
-    scene.render(ui);
+    scene(ui);
     ui.end();
 
     g2.disableScissor();

@@ -11,10 +11,27 @@ import BoardChineseCheckers as GameBoard;
 import UI.Dimensions;
 import UI.UITileEmphasis;
 import UI.UIWindow;
+import process.ChangeLanguageProcess;
 import process.SelectSequenceProcess;
 
-class ScenePlay extends Scene {
-  override public function render(ui:UI):Void {
+class Scenes {
+  public static function title(ui:UI):Void {
+    var locale = Game.locale;
+
+    ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT });
+
+    ui.title({ text:locale.title1, x:Game.WIDTH * 0.45, y:Game.HEIGHT * 0.13, w:0, h:Game.HEIGHT * 0.167 });
+    ui.title({ text:locale.title2, x:Game.WIDTH * 0.48, y:Game.HEIGHT * 0.3, w:0, h:Game.HEIGHT * 0.167 });
+
+    if (ui.button({ text:locale.newGame, x:Game.WIDTH * 0.63, y:Game.HEIGHT * 0.58, w:Game.WIDTH * 0.38, h:Game.HEIGHT * 0.08 }).hit) {
+      Game.scene = play;
+    }
+    if (ui.button({ text:'${locale.language} ${Game.settings.language.toUpperCase()}', x:Game.WIDTH * 0.63, y:Game.HEIGHT * 0.7, w:Game.WIDTH * 0.38, h:Game.HEIGHT * 0.08 }).hit) {
+      Game.processQueue.add(new ChangeLanguageProcess());
+    }
+  }
+
+  public static function play(ui:UI):Void {
     var gamesave = Game.gamesave;
     var locale = Game.locale;
 
@@ -130,7 +147,7 @@ class ScenePlay extends Scene {
     }
 
     if (ui.button({ text:locale.quit, x:Game.WIDTH * 0.85, y:Game.WIDTH * 0.025, w:Game.WIDTH * 0.125, h:Game.HEIGHT * 0.067 }).hit) {
-      Game.scene = Game.sceneTitle;
+      Game.scene = title;
       Game.sequenceIndex = null;
     }
   }
