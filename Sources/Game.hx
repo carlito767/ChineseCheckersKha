@@ -114,13 +114,12 @@ class Game {
     g2.begin();
     g2.scissor(Std.int(Scaling.dx), Std.int(Scaling.dy), Std.int(WIDTH * Scaling.scale), Std.int(HEIGHT * Scaling.scale));
 
-    ui.g = g2;
     ui.begin({
       x:input.mouse.x,
       y:input.mouse.y,
       select:input.isDown(VirtualKey.MouseLeftButton),
     });
-    scene(ui);
+    ui.render(g2, scene);
     ui.end();
 
     g2.disableScissor();

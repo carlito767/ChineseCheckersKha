@@ -90,7 +90,12 @@ typedef UIWindow = {
 class UI extends Mui {
   public static var showHitbox = false;
 
-  public var g:Graphics2;
+  var g:Graphics2;
+
+  public function render(g2:Graphics2, flow:UIFlow):Void {
+    g = g2;
+    flow(this);
+  }
 
   //
   // Scaling
