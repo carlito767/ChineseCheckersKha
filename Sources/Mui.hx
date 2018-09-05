@@ -27,7 +27,6 @@ typedef MuiObject = {
   var y:Float;
   var w:Float;
   var h:Float;
-  @:optional var disabled:Bool;
 }
 
 class Mui {
@@ -35,7 +34,7 @@ class Mui {
   static inline var LONG_PRESS_END = 0.6;
 
   // Time
-  var lastTime:Float = Scheduler.time();
+  var previousTime:Float = Scheduler.time();
 
   // Objects counter
   var idCounter:Int = 0;
@@ -69,8 +68,8 @@ class Mui {
 
   public function end():Void {
     var currentTime = Scheduler.time();
-    var dt = currentTime - lastTime;
-    lastTime = currentTime;
+    var dt = currentTime - previousTime;
+    previousTime = currentTime;
 
     hot = null;
     hit = null;
@@ -100,16 +99,6 @@ class Mui {
   }
 
   public function evaluate<T:(MuiObject)>(object:T):MuiEval {
-    if (object.disabled == true) {
-      return {
-        hot:false,
-        active:false,
-        hit:false,
-        longPress:false,
-        longPressRatio:0.0,
-      }
-    }
-
     var id:MuiId = ++idCounter;
 
     // Next frame

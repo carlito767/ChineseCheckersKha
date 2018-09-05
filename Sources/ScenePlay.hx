@@ -29,7 +29,7 @@ class ScenePlay extends Scene {
     var gamesave = Game.gamesave;
     var locale = Game.locale;
 
-    ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT, disabled:true });
+    ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:Game.WIDTH, h:Game.HEIGHT });
 
     // Board
     var radius = Game.HEIGHT * 0.027;

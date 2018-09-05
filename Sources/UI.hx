@@ -27,12 +27,17 @@ typedef Dimensions = {
   var bottom:Float;
 }
 
+typedef DisableableObject = {
+  > MuiObject,
+  @:optional var disabled:Bool;
+}
+
 //
 // Components
 //
 
 typedef UIButton = {
-  > MuiObject,
+  > DisableableObject,
   var text:String;
   @:optional var selected:Bool;
 }
@@ -48,7 +53,7 @@ typedef UIPlayer = {
 }
 
 typedef UIRank = {
-  > MuiObject,
+  > DisableableObject,
   var rank:String;
   @:optional var player:Player;
 }
@@ -73,7 +78,7 @@ typedef UITitle = {
 }
 
 typedef UIWindow = {
-  > MuiObject,
+  > DisableableObject,
   @:optional var title:String;
 }
 
@@ -142,7 +147,7 @@ class UI extends Mui {
   // Background
   //
 
-  function background<T:(MuiObject)>(object:T, ?color:Color):Void {
+  function background<T:(DisableableObject)>(object:T, ?color:Color):Void {
     if (color == null) {
       color = Color.fromBytes(0, 0, 0, 200);
     }
