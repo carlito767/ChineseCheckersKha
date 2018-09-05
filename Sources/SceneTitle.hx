@@ -5,10 +5,6 @@ import gato.input.VirtualKey;
 import process.ChangeLanguageProcess;
 
 class SceneTitle extends Scene {
-  public function new() {
-    super();
-  }
-
   override public function render(ui:UI):Void {
     var locale = Game.locale;
 

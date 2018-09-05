@@ -98,7 +98,6 @@ class Game {
     timer.update();
     keymap.update(processQueue, input);
     processQueue.update(timer.deltaTime);
-    scene.update();
   }
 
   @:allow(Main)

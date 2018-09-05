@@ -14,10 +14,6 @@ import UI.UIWindow;
 import process.SelectSequenceProcess;
 
 class ScenePlay extends Scene {
-  public function new() {
-    super();
-  }
-
   override public function render(ui:UI):Void {
     var gamesave = Game.gamesave;
     var locale = Game.locale;
