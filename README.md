@@ -27,5 +27,5 @@ node Kha/make --server
 
 * [Batik Gangster](http://www.fontspace.com/gunarta/batik-gangster) by [Gunarta](http://www.fontspace.com/gunarta) is [Freeware](https://en.wikipedia.org/wiki/Freeware)
 * [Chinese New Year Greeting Card Design with Lantern and Dragon Picture](http://allpicts.in/chinese-new-year-card-design-with-lantern-and-dragon-picture/) by [Allpicts.in](http://allpicts.in/) is free
-* [Impossibilium BRK](https://www.1001fonts.com/impossibilium-brk-font.html) by [Ænigma Fonts](https://www.1001fonts.com/users/kentpw/) is free
+* [Paytone One](https://www.1001fonts.com/paytone-one-font.html) by [Vernon Adams](https://www.1001fonts.com/users/newtypography/) is licensed under [SIL Open Font License (OFL)](https://en.wikipedia.org/wiki/SIL_Open_Font_License)
 * [StickRice](http://www.fontspace.com/fontden/stickrice) by [fontden](http://www.fontspace.com/fontden) is [Freeware](https://en.wikipedia.org/wiki/Freeware)

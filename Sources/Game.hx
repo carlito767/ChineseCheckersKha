@@ -127,8 +127,8 @@ class Game {
     // Developer Infos
     if (settings.showDeveloperInfos) {
       g2.color = Color.White;
-      g2.font = Assets.fonts.ImpossibiliumBRK;
-      g2.fontSize = 20;
+      g2.font = Assets.fonts.PaytoneOne;
+      g2.fontSize = 25;
       g2.drawString('FPS: $fps', 10, 10);
       g2.drawString('Mouse:', 10, 30);
       g2.drawString('x: ${input.mouse.x}, y: ${input.mouse.y}', 15, 50);
