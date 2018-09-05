@@ -18,8 +18,8 @@ class UIBuilder {
                   var eval:MuiEval = evaluate(object);
                   ${f.expr};
                   if (showHitbox) {
-                    g.color = Color.Green;
-                    g.drawRect(object.x, object.y, object.w, object.h);
+                    g2.color = Color.Green;
+                    g2.drawRect(object.x, object.y, object.w, object.h);
                   }
                   return eval;
                 }

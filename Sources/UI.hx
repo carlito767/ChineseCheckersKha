@@ -90,10 +90,10 @@ typedef UIWindow = {
 class UI extends Mui {
   public static var showHitbox = false;
 
-  var g:Graphics2;
+  var g2:Graphics2;
 
   public function render(g2:Graphics2, flow:UIFlow):Void {
-    g = g2;
+    this.g2 = g2;
     flow(this);
   }
 
@@ -140,8 +140,8 @@ class UI extends Mui {
   }
 
   function centerText(text:String, object:MuiObject):Coordinates {
-    var w = g.font.width(g.fontSize, Std.string(text));
-    var h = g.font.height(g.fontSize);
+    var w = g2.font.width(g2.fontSize, Std.string(text));
+    var h = g2.font.height(g2.fontSize);
     return {
       x:object.x + (object.w - w) * 0.5,
       y:object.y + (object.h - h) * 0.5,
@@ -157,16 +157,16 @@ class UI extends Mui {
       color = Color.fromBytes(0, 0, 0, 200);
     }
 
-    g.color = color;
-    g.fillRect(object.x, object.y, object.w, object.h);
+    g2.color = color;
+    g2.fillRect(object.x, object.y, object.w, object.h);
 
     if (object.disabled == true) {
-      g.color = Color.fromBytes(128, 128, 128); // gray
+      g2.color = Color.fromBytes(128, 128, 128); // gray
     }
     else {
-      g.color = Color.fromBytes(220, 20, 60); // crimson
+      g2.color = Color.fromBytes(220, 20, 60); // crimson
     }
-    g.drawRect(object.x + 2, object.y + 2, object.w - 4, object.h - 4);
+    g2.drawRect(object.x + 2, object.y + 2, object.w - 4, object.h - 4);
   }
 
   //
@@ -184,15 +184,15 @@ class UI extends Mui {
     else if (object.selected == true) {
       color = Color.Yellow;
     }
-    g.color = color;
-    g.font = Assets.fonts.StickRice;
-    g.fontSize = Std.int(object.h * 0.7);
+    g2.color = color;
+    g2.font = Assets.fonts.StickRice;
+    g2.fontSize = Std.int(object.h * 0.7);
     var coordinates = centerText(object.text, object);
-    g.drawString(object.text, coordinates.x, coordinates.y);
+    g2.drawString(object.text, coordinates.x, coordinates.y);
 
     if (showHitbox) {
-      g.color = Color.Green;
-      g.drawRect(coordinates.x, coordinates.y, g.font.width(g.fontSize, object.text), g.font.height(g.fontSize));
+      g2.color = Color.Green;
+      g2.drawRect(coordinates.x, coordinates.y, g2.font.width(g2.fontSize, object.text), g2.font.height(g2.fontSize));
     }
   }
 
@@ -202,8 +202,8 @@ class UI extends Mui {
 
   @ui
   function image(object:UIImage):MuiEval {
-    g.color = Color.White;
-    g.drawScaledImage(object.image, object.x, object.y, object.w, object.h);
+    g2.color = Color.White;
+    g2.drawScaledImage(object.image, object.x, object.y, object.w, object.h);
   }
 
   //
@@ -216,21 +216,21 @@ class UI extends Mui {
     background(object);
     // Separator
     var sw = object.w * 0.2;
-    g.drawLine(object.x + sw, object.y + 2, object.x + sw, object.y + object.h - 2, 2);
+    g2.drawLine(object.x + sw, object.y + 2, object.x + sw, object.y + object.h - 2, 2);
     // Rank
-    g.font = Assets.fonts.StickRice;
-    g.fontSize = Std.int(object.h * 0.7);
+    g2.font = Assets.fonts.StickRice;
+    g2.fontSize = Std.int(object.h * 0.7);
     var coordinates = centerText(object.rank, { x:object.x, y:object.y, w:sw, h:object.h });
-    g.color = Color.White;
-    g.drawString(object.rank, coordinates.x, coordinates.y);
+    g2.color = Color.White;
+    g2.drawString(object.rank, coordinates.x, coordinates.y);
     // Player
     if (object.player != null) {
       var coordinates = center(object);
       var radius = Math.min(object.w, object.h) * 0.5 * 0.7;
-      g.color = object.player.color;
-      g.fillCircle(coordinates.x, coordinates.y, radius);
-      g.color = Color.White;
-      g.drawCircle(coordinates.x, coordinates.y, radius, 2);
+      g2.color = object.player.color;
+      g2.fillCircle(coordinates.x, coordinates.y, radius);
+      g2.color = Color.White;
+      g2.drawCircle(coordinates.x, coordinates.y, radius, 2);
     }
   }
 
@@ -245,36 +245,36 @@ class UI extends Mui {
     var cy = object.y + radius;
 
     if (object.player != null) {
-      g.color = object.player.color;
-      g.fillCircle(cx, cy, radius);
+      g2.color = object.player.color;
+      g2.fillCircle(cx, cy, radius);
     }
 
     if (object.emphasis == Selectable) {
-      g.color = Color.Black;
-      g.drawCircle(cx, cy, radius, radius * 0.1);
+      g2.color = Color.Black;
+      g2.drawCircle(cx, cy, radius, radius * 0.1);
       var duration = 2;
       var delta = ((System.time % duration) + 1) / duration;
       var alpha = 0.7 + 0.3 * Math.cos(delta * 2 * Math.PI);
       var color = Color.White;
-      g.color = Color.fromBytes(color.Rb, color.Gb, color.Bb, Std.int(alpha * 255));
-      g.drawCircle(cx, cy, radius * 1.1, radius * 0.1);
+      g2.color = Color.fromBytes(color.Rb, color.Gb, color.Bb, Std.int(alpha * 255));
+      g2.drawCircle(cx, cy, radius * 1.1, radius * 0.1);
     }
     else if (object.emphasis == Selected || object.emphasis == AllowedMove) {
-      g.color = Color.White;
-      g.drawCircle(cx, cy, radius * 1.1, radius * 0.1);
+      g2.color = Color.White;
+      g2.drawCircle(cx, cy, radius * 1.1, radius * 0.1);
     }
     else {
-      g.color = Color.Black;
-      g.drawCircle(cx, cy, radius, radius * 0.1);
+      g2.color = Color.Black;
+      g2.drawCircle(cx, cy, radius, radius * 0.1);
     }
 
     if (object.id != null) {
       var color = (object.player == null) ? Color.Black : object.player.color;
-      g.color = Color.fromBytes(255 - color.Rb, 255 - color.Gb, 255 - color.Bb);
-      g.font = Assets.fonts.StickRice;
-      g.fontSize = Std.int(object.h * 0.7);
+      g2.color = Color.fromBytes(255 - color.Rb, 255 - color.Gb, 255 - color.Bb);
+      g2.font = Assets.fonts.StickRice;
+      g2.fontSize = Std.int(object.h * 0.7);
       var coordinates = centerText(object.id, object);
-      g.drawString(object.id, coordinates.x, coordinates.y);
+      g2.drawString(object.id, coordinates.x, coordinates.y);
     }
   }
 
@@ -284,10 +284,10 @@ class UI extends Mui {
 
   @ui
   function title(object:UITitle):MuiEval {
-    g.color = Color.White;
-    g.font = Assets.fonts.BatikGangster;
-    g.fontSize = Std.int(object.h);
-    g.drawString(object.text, object.x, object.y);
+    g2.color = Color.White;
+    g2.font = Assets.fonts.BatikGangster;
+    g2.fontSize = Std.int(object.h);
+    g2.drawString(object.text, object.x, object.y);
   }
 
   //
@@ -301,13 +301,13 @@ class UI extends Mui {
       var h = object.h * 0.2;
       var margin = h * 0.15;
       var title:MuiObject = { x:object.x + margin, y:object.y + margin, w:object.w - margin * 2, h:h - margin * 2 };
-      g.color = Color.Purple;
-      g.fillRect(title.x, title.y, title.w, title.h);
-      g.font = Assets.fonts.StickRice;
-      g.fontSize = Std.int(h * 0.7);
+      g2.color = Color.Purple;
+      g2.fillRect(title.x, title.y, title.w, title.h);
+      g2.font = Assets.fonts.StickRice;
+      g2.fontSize = Std.int(h * 0.7);
       var coordinates = centerText(object.title, title);
-      g.color = Color.White;
-      g.drawString(object.title, coordinates.x, coordinates.y);
+      g2.color = Color.White;
+      g2.drawString(object.title, coordinates.x, coordinates.y);
     }
   }
 }
