@@ -11,18 +11,11 @@ import BoardChineseCheckers as GameBoard;
 import UI.Dimensions;
 import UI.UITileEmphasis;
 import UI.UIWindow;
+import process.SelectSequenceProcess;
 
 class ScenePlay extends Scene {
-  var sequenceIndex(default, set):Null<Int>;
-  function set_sequenceIndex(value) {
-    var sequence = (value == null) ? null : GameBoard.sequences[value];
-    Game.gamesave = Board.create(GameBoard.tiles, GameBoard.players, sequence);
-    return sequenceIndex = value;
-  }
-
   public function new() {
     super();
-    sequenceIndex = null;
   }
 
   override public function render(ui:UI):Void {
@@ -125,24 +118,24 @@ class ScenePlay extends Scene {
         var sequence:Sequence = sequences[i];
         if (ui.button({
           text:Std.string(sequence.length),
-          selected:(sequenceIndex == i),
+          selected:(Game.sequenceIndex == i),
           x:dimensions.left + dx * i,
           y:dimensions.top,
           w:w,
           h:w,
         }).hit) {
-          sequenceIndex = i;
+          Game.sequenceIndex = i;
         }
       }
 
-      if (ui.button({ text:locale.play, disabled:(sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - Game.HEIGHT * 0.067, w:dimensions.width, h:Game.HEIGHT * 0.067 }).hit) {
+      if (ui.button({ text:locale.play, disabled:(Game.sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - Game.HEIGHT * 0.067, w:dimensions.width, h:Game.HEIGHT * 0.067 }).hit) {
         Board.start(gamesave);
       }
     }
 
     if (ui.button({ text:locale.quit, x:Game.WIDTH * 0.85, y:Game.WIDTH * 0.025, w:Game.WIDTH * 0.125, h:Game.HEIGHT * 0.067 }).hit) {
-      sequenceIndex = null;
       Game.scene = Game.sceneTitle;
+      Game.sequenceIndex = null;
     }
   }
 }

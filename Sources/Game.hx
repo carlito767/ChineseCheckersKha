@@ -31,6 +31,11 @@ class Game {
   public static var locale:Localization;
 
   public static var gamesave:Gamesave;
+  public static var sequenceIndex(default, set):Null<Int>;
+  static function set_sequenceIndex(value) {
+    Game.processQueue.add(new SelectSequenceProcess(value));
+    return sequenceIndex = value;
+  }
 
   public static var scene:Scene;
   public static var sceneTitle:SceneTitle;
@@ -55,6 +60,7 @@ class Game {
     locale.load(settings.language);
 
     gamesave = new Gamesave();
+    sequenceIndex = null;
 
     sceneTitle = new SceneTitle();
     scenePlay = new ScenePlay();
