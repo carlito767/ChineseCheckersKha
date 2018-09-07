@@ -108,40 +108,38 @@ class Board {
   // Allowed moves
   //
 
-  // TODO:[carlito 20180907] allowedMoves should return an array of moves, not tiles
-  public static function allowedMoves(gamesave:Gamesave):Array<Tile> {
-    var moves:Array<Tile> = [];
+  public static function allowedMoves(gamesave:Gamesave):Array<Move> {
+    var moves:Array<Move> = [];
     if (gamesave.currentPlayer == null) {
       return moves;
     }
 
     var player = gamesave.currentPlayer; 
-    for (tile in gamesave.tiles) {
-      if (tile.piece == player.id && allowedMovesForTile(gamesave, tile).length > 0) {
-        moves.push(tile);
+    for (from in gamesave.tiles) {
+      if (from.piece == player.id) {
+        for (move in Board.allowedMovesForTile(gamesave, from)) {
+          moves.push(move);
+        }
       }
     }
     return moves;
   }
 
-  // TODO:[carlito 20180907] allowedMovesForTile should return an array of moves, not tiles
-  public static function allowedMovesForTile(gamesave:Gamesave, tile:Tile):Array<Tile> {
-    var moves:Array<Tile> = [];
-
-    jumps(gamesave, tile, moves);
+  public static function allowedMovesForTile(gamesave:Gamesave, tile:Tile):Array<Move> {
+    var tiles:Array<Tile> = [];
+    jumps(gamesave, tile, tiles);
     for (neighbor in neighbors(gamesave, tile)) {
       if (neighbor.piece == null) {
-        moves.push(neighbor);
+        tiles.push(neighbor);
       }
     }
 
     // Once a peg has reached his home, it may not leave it
     if (tile.piece == tile.owner) {
       var i = 0;
-      while (i < moves.length) {
-        var moveTile = moves[i];
-        if (moveTile.owner != tile.owner) {
-          moves.splice(i, 1);
+      while (i < tiles.length) {
+        if (tiles[i].owner != tile.owner) {
+          tiles.splice(i, 1);
         }
         else {
           ++i;
@@ -149,6 +147,10 @@ class Board {
       }
     }
 
+    var moves:Array<Move> = [];
+    for (allowedTile in tiles) {
+      moves.push({ from:tile.id, to:allowedTile.id });
+    }
     return moves;
   }
 
@@ -204,7 +206,6 @@ class Board {
 
   public static function update(gamesave:Gamesave):Void {
     updateCurrentPlayer(gamesave);
-    updateAllowedMoves(gamesave);
   }
 
   static function updateCurrentPlayer(gamesave:Gamesave):Void {
@@ -228,9 +229,5 @@ class Board {
       }
     }
     gamesave.currentPlayer = player;
-  }
-
-  static function updateAllowedMoves(gamesave:Gamesave):Void {
-    gamesave.allowedMoves = (gamesave.selectedTile == null) ? allowedMoves(gamesave) : allowedMovesForTile(gamesave, gamesave.selectedTile);
   }
 }

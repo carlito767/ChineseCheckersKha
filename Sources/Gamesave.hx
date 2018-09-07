@@ -15,7 +15,6 @@ abstract Gamesave(GamesaveData) {
       moves:[],
       standings:[],
       currentPlayer:null,
-      allowedMoves:[],
       selectedTile:null,
     }
   }

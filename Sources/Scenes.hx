@@ -45,18 +45,28 @@ class Scenes {
     var boardHeight = (GameBoard.HEIGHT - 1) * distanceY + radius * 2;
     var dx = (Game.WIDTH - boardWidth) * 0.5;
     var dy = (Game.HEIGHT - boardHeight) * 0.5;
-    var moves = gamesave.allowedMoves;
+
+    var selectableTiles:Array<Int> = [];
+    if (gamesave.selectedTile == null) {
+      for (move in Board.allowedMoves(gamesave)) {
+        if (!selectableTiles.contains(move.from)) {
+          selectableTiles.push(move.from);
+        }
+      }
+    }
+    else {
+      for (move in Board.allowedMovesForTile(gamesave, gamesave.selectedTile)) {
+        if (!selectableTiles.contains(move.to)) {
+          selectableTiles.push(move.to);
+        }
+      }
+    }
+
     for (tile in gamesave.tiles) {
       var tx = dx + (tile.x - 1) * distanceX;
       var ty = dy + (tile.y - 1) * distanceY;
-      var selectable = false;
-      for (move in moves) {
-        selectable = (tile.id == move.id);
-        if (selectable) {
-          break;
-        }
-      }
       var selected = (gamesave.selectedTile != null && gamesave.selectedTile.id == tile.id);
+      var selectable = selectableTiles.contains(tile.id);
       var emphasis:UITileEmphasis = None;
       if (selectable) {
         emphasis = (gamesave.selectedTile == null) ? Selectable : AllowedMove;
@@ -69,7 +79,7 @@ class Scenes {
         if (selected) {
           gamesave.selectedTile = null;
         }
-        else if (!gamesave.allowedMoves.contains(tile)) {
+        else if (!selectable) {
           gamesave.selectedTile = null;
           if (tile.piece == gamesave.currentPlayer.id) {
             if (Board.allowedMovesForTile(gamesave, tile).length > 0) {

@@ -8,21 +8,7 @@ class AI {
       return null;
     }
 
-    if (gamesave.currentPlayer == null) {
-      // No player, no move
-      return null;
-    }
-
-    // TODO:[carlito 20180907] use Board.allowedMoves instead
-    var moves:Array<Move> = [];
-    var player = gamesave.currentPlayer; 
-    for (from in gamesave.tiles) {
-      if (from.piece == player.id) {
-        for (to in Board.allowedMovesForTile(gamesave, from)) {
-          moves.push({ from:from.id, to:to.id });
-        }
-      }
-    }
+    var moves:Array<Move> = Board.allowedMoves(gamesave);
     if (moves.length > 0) {
       var moveIndex = Math.floor(Math.random() * moves.length);
       return moves[moveIndex];
