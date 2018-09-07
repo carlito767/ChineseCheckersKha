@@ -107,6 +107,7 @@ class Board {
   // Allowed moves
   //
 
+  // TODO:[carlito 20180907] allowedMoves should return an array of moves, not tiles
   public static function allowedMoves(gamesave:Gamesave):Array<Tile> {
     var moves:Array<Tile> = [];
     if (gamesave.currentPlayer == null) {
@@ -122,6 +123,7 @@ class Board {
     return moves;
   }
 
+  // TODO:[carlito 20180907] allowedMovesForTile should return an array of moves, not tiles
   public static function allowedMovesForTile(gamesave:Gamesave, tile:Tile):Array<Tile> {
     var moves:Array<Tile> = [];
 
