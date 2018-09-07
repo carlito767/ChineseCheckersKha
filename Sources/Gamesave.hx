@@ -3,7 +3,7 @@ import gato.Storage;
 @:forward
 abstract Gamesave(GamesaveData) {
   static inline var GAMESAVE_FILENAME = 'gamesave';
-  // TODO: reset to 1 when the game is ready
+  // TODO:[carlito 20180819] reset to 1 when the game is ready
   static inline var GAMESAVE_VERSION = 9;
 
   public inline function new() {

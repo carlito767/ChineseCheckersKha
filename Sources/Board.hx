@@ -5,6 +5,7 @@ import board.Player;
 import board.Sequence;
 import board.Tile;
 
+// TODO:[carlito 20180907] implement anti-spoiling rule (https://www.mastersofgames.com/rules/chinese-checkers-rules.htm)
 class Board {
   public static function create(tiles:Array<Tile>, players:Array<Player>, ?sequence:Sequence):Gamesave {
     var gamesave = new Gamesave();
@@ -151,7 +152,7 @@ class Board {
     return moves;
   }
 
-  // TODO: build with BoardBuilder?
+  // TODO:[carlito 20180811] build with BoardBuilder?
   static function neighbors(gamesave:Gamesave, tile:Tile):Array<Tile> {
     //    (1) (2)
     //      \ /

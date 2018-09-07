@@ -62,8 +62,8 @@ class Game {
 
     scene = Scenes.title;
 
-    // TODO: load keymap at compile time using macro and json
-    // TODO: allow developer actions only in debug mode
+    // TODO:[carlito 20180826] load keymap at compile time using macro and json
+    // TODO:[carlito 20180905] allow developer actions only in debug mode
     keymap = new Keymap();
     keymap.set(VirtualKey.D, new ToggleDeveloperInfosProcess());
     keymap.set(VirtualKey.L, new ChangeLanguageProcess());
