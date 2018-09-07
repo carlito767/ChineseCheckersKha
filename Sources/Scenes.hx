@@ -91,10 +91,8 @@ class Scenes {
           gamesave.selectedTile = tile;
         }
         else {
-          Board.applyMove(gamesave, gamesave.selectedTile, tile);
-          gamesave.selectedTile = null;
+          Board.move(gamesave, gamesave.selectedTile, tile);
         }
-        Board.update(gamesave);
       }
     }
 

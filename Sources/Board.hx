@@ -38,7 +38,7 @@ class Board {
   }
 
   public static function start(gamesave:Gamesave):Void {
-    update(gamesave);
+    updateCurrentPlayer(gamesave);
   }
 
   public static function isOver(gamesave:Gamesave):Bool {
@@ -60,13 +60,13 @@ class Board {
   public static function move(gamesave:Gamesave, from:Tile, to:Tile):Void {
     applyMove(gamesave, from, to);
     gamesave.selectedTile = null;
-    update(gamesave);
+    updateCurrentPlayer(gamesave);
   }
 
   public static function cancelLastMove(gamesave:Gamesave):Void {
     cancelMove(gamesave);
     gamesave.selectedTile = null;
-    update(gamesave);
+    updateCurrentPlayer(gamesave);
   }
 
   public static function applyMove(gamesave:Gamesave, from:Tile, to:Tile):Void {
@@ -203,10 +203,6 @@ class Board {
   //
   // Update
   //
-
-  public static function update(gamesave:Gamesave):Void {
-    updateCurrentPlayer(gamesave);
-  }
 
   static function updateCurrentPlayer(gamesave:Gamesave):Void {
     var player:Null<Player> = null;
