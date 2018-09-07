@@ -38,7 +38,7 @@ class Board {
   }
 
   public static function start(gamesave:Gamesave):Void {
-    updateCurrentPlayer(gamesave);
+    gamesave.currentPlayer = gamesave.players[gamesave.sequence[0]];
   }
 
   public static function isOver(gamesave:Gamesave):Bool {
@@ -58,21 +58,26 @@ class Board {
   //
 
   public static function move(gamesave:Gamesave, from:Tile, to:Tile):Void {
-    applyMove(gamesave, from, to);
-    gamesave.selectedTile = null;
-    updateCurrentPlayer(gamesave);
-  }
-
-  public static function cancelLastMove(gamesave:Gamesave):Void {
-    cancelMove(gamesave);
-    gamesave.selectedTile = null;
-    updateCurrentPlayer(gamesave);
-  }
-
-  public static function applyMove(gamesave:Gamesave, from:Tile, to:Tile):Void {
     to.piece = from.piece;
     from.piece = null;
     gamesave.moves.push({from:from.id, to:to.id});
+
+    // Update Selected Tile
+    gamesave.selectedTile = null;
+
+    // Update Current Player
+    var index = gamesave.sequence.indexOf(to.piece);
+    while (true) {
+      index++;
+      if (index == gamesave.sequence.length) {
+        index = 0;
+      }
+      var player = gamesave.players[gamesave.sequence[index]];
+      if (gamesave.standings.indexOf(player.id) == -1) {
+        gamesave.currentPlayer = player;
+        break;
+      }
+    }
 
     // Update Standings
     var victory = true;
@@ -97,6 +102,12 @@ class Board {
     var to = gamesave.tiles[move.to];
     from.piece = to.piece;
     to.piece = null;
+
+    // Update Selected Tile
+    gamesave.selectedTile = null;
+
+    // Update Current Player
+    gamesave.currentPlayer = gamesave.players[from.piece];
 
     // Update Standings
     if (gamesave.standings.length > 0 && gamesave.standings[gamesave.standings.length-1] == from.piece) {
@@ -198,32 +209,5 @@ class Board {
         }
       }
     }
-  }
-
-  //
-  // Update
-  //
-
-  static function updateCurrentPlayer(gamesave:Gamesave):Void {
-    var player:Null<Player> = null;
-    if (!isOver(gamesave)) {
-      if (gamesave.moves.length == 0) {
-        player = gamesave.players[gamesave.sequence[0]];
-      }
-      else {
-        var move = gamesave.moves[gamesave.moves.length-1];
-        var index = gamesave.sequence.indexOf(gamesave.tiles[move.to].piece);
-        if (index > -1) {
-          do {
-            index++;
-            if (index == gamesave.sequence.length) {
-              index = 0;
-            }
-            player = gamesave.players[gamesave.sequence[index]];
-          } while(gamesave.standings.indexOf(player.id) > -1);
-        }
-      }
-    }
-    gamesave.currentPlayer = player;
   }
 }

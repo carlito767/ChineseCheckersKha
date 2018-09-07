@@ -10,7 +10,7 @@ class UndoProcess implements Process {
 
   public function update(dt:Float):Void {
     if (Board.isRunning(Game.gamesave)) {
-      Board.cancelLastMove(Game.gamesave);
+      Board.cancelMove(Game.gamesave);
     }
     finished = true;
   }
