@@ -4,7 +4,7 @@ import gato.Storage;
 abstract Gamesave(GamesaveData) {
   static inline var GAMESAVE_FILENAME = 'gamesave';
   // TODO:[carlito 20180819] reset to 1 when the game is ready
-  static inline var GAMESAVE_VERSION = 9;
+  static inline var GAMESAVE_VERSION = 10;
 
   public inline function new() {
     this = {
@@ -14,7 +14,7 @@ abstract Gamesave(GamesaveData) {
       tiles:new Map(),
       moves:[],
       standings:[],
-      currentPlayer:null,
+      currentPlayerId:null,
       selectedTile:null,
     }
   }

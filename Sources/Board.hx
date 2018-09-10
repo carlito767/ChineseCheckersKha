@@ -38,7 +38,7 @@ class Board {
   }
 
   public static function start(gamesave:Gamesave):Void {
-    gamesave.currentPlayer = gamesave.players[gamesave.sequence[0]];
+    gamesave.currentPlayerId = gamesave.players[gamesave.sequence[0]].id;
   }
 
   public static function isOver(gamesave:Gamesave):Bool {
@@ -46,7 +46,7 @@ class Board {
   }
 
   public static function isRunning(gamesave:Gamesave):Bool {
-    return (gamesave.currentPlayer != null);
+    return (gamesave.currentPlayerId != null);
   }
 
   public static function victory(gamesave:Gamesave, id:Int):Bool {
@@ -72,9 +72,9 @@ class Board {
       if (index == gamesave.sequence.length) {
         index = 0;
       }
-      var player = gamesave.players[gamesave.sequence[index]];
-      if (gamesave.standings.indexOf(player.id) == -1) {
-        gamesave.currentPlayer = player;
+      var playerId = gamesave.players[gamesave.sequence[index]].id;
+      if (!gamesave.standings.contains(playerId)) {
+        gamesave.currentPlayerId = playerId;
         break;
       }
     }
@@ -107,7 +107,7 @@ class Board {
     gamesave.selectedTile = null;
 
     // Update Current Player
-    gamesave.currentPlayer = gamesave.players[from.piece];
+    gamesave.currentPlayerId = gamesave.players[from.piece].id;
 
     // Update Standings
     if (gamesave.standings.length > 0 && gamesave.standings[gamesave.standings.length-1] == from.piece) {
@@ -121,13 +121,13 @@ class Board {
 
   public static function allowedMoves(gamesave:Gamesave):Array<Move> {
     var moves:Array<Move> = [];
-    if (gamesave.currentPlayer == null) {
+    if (gamesave.currentPlayerId == null) {
       return moves;
     }
 
-    var player = gamesave.currentPlayer; 
+    var playerId = gamesave.currentPlayerId; 
     for (from in gamesave.tiles) {
-      if (from.piece == player.id) {
+      if (from.piece == playerId) {
         for (move in Board.allowedMovesForTile(gamesave, from)) {
           moves.push(move);
         }

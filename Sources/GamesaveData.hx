@@ -10,6 +10,6 @@ typedef GamesaveData = {
   var tiles:Map<Int, Tile>;
   var moves:Array<Move>;
   var standings:Array<Int>;
-  var currentPlayer:Null<Player>; // TODO:[carlito 20180811] store only id?
+  var currentPlayerId:Null<Int>;
   var selectedTile:Null<Tile>;    // TODO:[carlito 20180811] store only id?
 }

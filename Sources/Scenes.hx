@@ -81,7 +81,7 @@ class Scenes {
         }
         else if (!selectable) {
           gamesave.selectedTile = null;
-          if (tile.piece == gamesave.currentPlayer.id) {
+          if (tile.piece != null && tile.piece == gamesave.currentPlayerId) {
             if (Board.allowedMovesForTile(gamesave, tile).length > 0) {
               gamesave.selectedTile = tile;
             }
