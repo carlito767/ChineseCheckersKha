@@ -11,5 +11,5 @@ typedef GamesaveData = {
   var moves:Array<Move>;
   var standings:Array<Int>;
   var currentPlayerId:Null<Int>;
-  var selectedTile:Null<Tile>;    // TODO:[carlito 20180811] store only id?
+  var selectedTileId:Null<Int>;
 }

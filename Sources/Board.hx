@@ -63,7 +63,7 @@ class Board {
     gamesave.moves.push({from:from.id, to:to.id});
 
     // Update Selected Tile
-    gamesave.selectedTile = null;
+    gamesave.selectedTileId = null;
 
     // Update Current Player
     var index = gamesave.sequence.indexOf(to.piece);
@@ -104,7 +104,7 @@ class Board {
     to.piece = null;
 
     // Update Selected Tile
-    gamesave.selectedTile = null;
+    gamesave.selectedTileId = null;
 
     // Update Current Player
     gamesave.currentPlayerId = gamesave.players[from.piece].id;

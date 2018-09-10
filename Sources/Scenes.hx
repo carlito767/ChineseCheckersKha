@@ -47,7 +47,7 @@ class Scenes {
     var dy = (Game.HEIGHT - boardHeight) * 0.5;
 
     var selectableTiles:Array<Int> = [];
-    if (gamesave.selectedTile == null) {
+    if (gamesave.selectedTileId == null) {
       for (move in Board.allowedMoves(gamesave)) {
         if (!selectableTiles.contains(move.from)) {
           selectableTiles.push(move.from);
@@ -55,7 +55,8 @@ class Scenes {
       }
     }
     else {
-      for (move in Board.allowedMovesForTile(gamesave, gamesave.selectedTile)) {
+      var selectedTile = gamesave.tiles[gamesave.selectedTileId];
+      for (move in Board.allowedMovesForTile(gamesave, selectedTile)) {
         if (!selectableTiles.contains(move.to)) {
           selectableTiles.push(move.to);
         }
@@ -65,11 +66,11 @@ class Scenes {
     for (tile in gamesave.tiles) {
       var tx = dx + (tile.x - 1) * distanceX;
       var ty = dy + (tile.y - 1) * distanceY;
-      var selected = (gamesave.selectedTile != null && gamesave.selectedTile.id == tile.id);
+      var selected = (gamesave.selectedTileId == tile.id);
       var selectable = selectableTiles.contains(tile.id);
       var emphasis:UITileEmphasis = None;
       if (selectable) {
-        emphasis = (gamesave.selectedTile == null) ? Selectable : AllowedMove;
+        emphasis = (gamesave.selectedTileId == null) ? Selectable : AllowedMove;
       }
       else if (selected) {
         emphasis = Selected;
@@ -77,21 +78,22 @@ class Scenes {
       var player = (tile.piece == null) ? null : gamesave.players[tile.piece];
       if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Game.settings.showTileId) ? Std.string(tile.id) : null }).hit) {
         if (selected) {
-          gamesave.selectedTile = null;
+          gamesave.selectedTileId = null;
         }
         else if (!selectable) {
-          gamesave.selectedTile = null;
+          gamesave.selectedTileId = null;
           if (tile.piece != null && tile.piece == gamesave.currentPlayerId) {
             if (Board.allowedMovesForTile(gamesave, tile).length > 0) {
-              gamesave.selectedTile = tile;
+              gamesave.selectedTileId = tile.id;
             }
           }
         }
-        else if (gamesave.selectedTile == null) {
-          gamesave.selectedTile = tile;
+        else if (gamesave.selectedTileId == null) {
+          gamesave.selectedTileId = tile.id;
         }
         else {
-          Board.move(gamesave, gamesave.selectedTile, tile);
+          var selectedTile = gamesave.tiles[gamesave.selectedTileId];
+          Board.move(gamesave, selectedTile, tile);
         }
       }
     }
