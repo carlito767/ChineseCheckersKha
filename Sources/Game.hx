@@ -13,6 +13,7 @@ import gato.input.Keymap;
 import gato.input.VirtualKey;
 
 import Mui.MuiInput;
+import ai.*;
 import process.*;
 
 class Game {
@@ -67,7 +68,7 @@ class Game {
     keymap = new Keymap();
     keymap.set(VirtualKey.D, new ToggleDeveloperInfosProcess());
     keymap.set(VirtualKey.L, new ChangeLanguageProcess());
-    keymap.set(VirtualKey.S, new SearchMoveProcess(AI.minimax));
+    keymap.set(VirtualKey.S, new SearchMoveProcess(new MinimaxAI()));
     keymap.set(VirtualKey.Decimal, new ToggleHitboxProcess());
     keymap.set(VirtualKey.Number0, new ToggleTileIdProcess());
     keymap.set(VirtualKey.Number1, new QuickLoadProcess(1));

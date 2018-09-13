@@ -1,8 +1,13 @@
+package ai;
+
 import board.Move;
 
-class AI {
-  // TODO:[carlito 20180907] minimax algorithm
-  public static function minimax(gamesave:Gamesave):Null<Move> {
+// TODO:[carlito 20180907] minimax algorithm
+class MinimaxAI implements AI {
+  public function new() {
+  }
+
+  public function search(gamesave:Gamesave):Null<Move> {
     if (gamesave.sequence.length != 2) {
       // Works only with 2 players
       return null;
