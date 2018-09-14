@@ -14,7 +14,7 @@ abstract Settings(SettingsData) {
       language:'en',
 
       // Developer settings
-      showDeveloperInfos:false,
+      showDebugOverlay:false,
       showHitbox:false,
       showTileId:false,
     }

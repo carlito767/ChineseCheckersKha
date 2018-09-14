@@ -3,7 +3,7 @@ typedef UserSettings = {
 }
 
 typedef DeveloperSettings = {
-  var showDeveloperInfos:Bool;
+  var showDebugOverlay:Bool;
   var showHitbox:Bool;
   var showTileId:Bool;
 }

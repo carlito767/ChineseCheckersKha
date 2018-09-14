@@ -66,7 +66,7 @@ class Game {
     // TODO:[carlito 20180826] load keymap at compile time using macro and json
     // TODO:[carlito 20180905] allow developer actions only in debug mode
     keymap = new Keymap();
-    keymap.set(VirtualKey.D, new ToggleDeveloperInfosProcess());
+    keymap.set(VirtualKey.D, new ToggleDebugOverlayProcess());
     keymap.set(VirtualKey.L, new ChangeLanguageProcess());
     keymap.set(VirtualKey.S, new SearchMoveProcess(new MinimaxAI()));
     keymap.set(VirtualKey.Decimal, new ToggleHitboxProcess());
@@ -126,8 +126,8 @@ class Game {
 
     g2.disableScissor();
 
-    // Developer Infos
-    if (settings.showDeveloperInfos) {
+    // Debug Overlay
+    if (settings.showDebugOverlay) {
       g2.color = Color.White;
       g2.font = Assets.fonts.PaytoneOne;
       g2.fontSize = 25;
