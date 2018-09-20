@@ -2,7 +2,8 @@ package gato.input;
 
 import kha.input.Mouse as KhaMouse;
 
-class Mouse extends Controller {
+class Mouse implements Controller {
+  public var buttons(default, null):Map<Int, Bool> = new Map();
   public var x(default, null):Int = 0;
   public var y(default, null):Int = 0;
   public var movementX(default, null):Int = 0;
@@ -11,22 +12,28 @@ class Mouse extends Controller {
 
   var mouse:Null<KhaMouse> = null;
 
-  public function start():Void {
-    if (mouse != null) {
-      stop();
-    }
-
+  public function new() {
+    reset();
     mouse = KhaMouse.get();
     if (mouse != null) {
       mouse.notify(onMouseDown, onMouseUp, onMouseMove, onMouseWheel);
     }
   }
 
-  public function stop():Void {
+  public function reset():Void {
+    buttons = new Map();
+    x = 0;
+    y = 0;
+    movementX = 0;
+    movementY = 0;
+    delta = 0;
+  }
+
+  public function dispose():Void {
     if (mouse != null) {
       mouse.remove(onMouseDown, onMouseUp, onMouseMove, onMouseWheel);
       mouse = null;
-      down = new Map();
+      reset();
     }
   }
 
@@ -34,25 +41,16 @@ class Mouse extends Controller {
   // Callbacks
   //
 
-  function mouseButtonToVirtualKey(button:Int):Null<VirtualKey> {
-    return switch button {
-      case 0: VirtualKey.MouseLeftButton;
-      case 1: VirtualKey.MouseRightButton;
-      case 2: VirtualKey.MouseMiddleButton;
-      default: null;
-    }
-  }
-
   function onMouseDown(button:Int, x:Int, y:Int):Void {
+    buttons[button] = true;
     this.x = x;
     this.y = y;
-    onPressed(mouseButtonToVirtualKey(button));
   }
 
   function onMouseUp(button:Int, x:Int, y:Int):Void {
+    buttons[button] = false;
     this.x = x;
     this.y = y;
-    onReleased(mouseButtonToVirtualKey(button));
   }
 
   function onMouseMove(x:Int, y:Int, movementX:Int, movementY:Int):Void {
