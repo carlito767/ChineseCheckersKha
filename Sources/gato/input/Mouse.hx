@@ -42,13 +42,13 @@ class Mouse implements Controller {
   //
 
   function onMouseDown(button:Int, x:Int, y:Int):Void {
-    buttons[button] = true;
+    buttons.set(button, true);
     this.x = x;
     this.y = y;
   }
 
   function onMouseUp(button:Int, x:Int, y:Int):Void {
-    buttons[button] = false;
+    buttons.remove(button);
     this.x = x;
     this.y = y;
   }

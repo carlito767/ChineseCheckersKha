@@ -114,11 +114,9 @@ class Keymap {
 
   public function updateFromKeyboard(keyboard:Keyboard):Void {
     for (key in keyboard.isDown.keys()) {
-      if (keyboard.isDown[key]) {
-        var vk = KeyCodeToVirtualKey.get(key);
-        if (vk != null) {
-          isDown[vk] = true;
-        }
+      var vk = KeyCodeToVirtualKey.get(key);
+      if (vk != null) {
+        isDown[vk] = true;
       }
     }
   }
@@ -138,11 +136,9 @@ class Keymap {
 
   public function updateFromMouse(mouse:Mouse):Void {
     for (button in mouse.buttons.keys()) {
-      if (mouse.buttons[button]) {
-        var vk = mouseButtonToVirtualKey(button);
-        if (vk != null) {
-          isDown[vk] = true;
-        }
+      var vk = mouseButtonToVirtualKey(button);
+      if (vk != null) {
+        isDown[vk] = true;
       }
     }
   }

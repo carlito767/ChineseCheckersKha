@@ -33,10 +33,10 @@ class Keyboard implements Controller {
   //
 
   function onKeyDown(key:KeyCode):Void {
-    isDown[key] = true;
+    isDown.set(key, true);
   }
 
   function onKeyUp(key:KeyCode):Void {
-    isDown[key] = false;
+    isDown.remove(key);
   }
 }
