@@ -14,7 +14,7 @@ class SelectSequenceProcess implements Process {
   };
 
   public function update(dt:Float):Void {
-    var sequence = (sequenceIndex == null) ? null : GameBoard.sequences[sequenceIndex];
+    var sequence = (sequenceIndex == null) ? null : GameBoard.sequences[sequenceIndex].copy();
     Game.gamesave = Board.create(GameBoard.tiles, GameBoard.players, sequence);
     finished = true;
   }

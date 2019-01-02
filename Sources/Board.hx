@@ -9,7 +9,7 @@ import board.Tile;
 class Board {
   public static function create(tiles:Array<Tile>, players:Array<Player>, ?sequence:Sequence):Gamesave {
     var gamesave = new Gamesave();
-  
+
     // Players
     if (sequence != null) {
       gamesave.sequence = sequence;
@@ -38,19 +38,15 @@ class Board {
   }
 
   public static function start(gamesave:Gamesave):Void {
-    gamesave.currentPlayerId = gamesave.players[gamesave.sequence[0]].id;
+    gamesave.currentPlayerId = gamesave.sequence.shift();
   }
 
   public static function isOver(gamesave:Gamesave):Bool {
-    return (gamesave.standings.length > 0 && gamesave.standings.length == gamesave.sequence.length - 1);
+    return (gamesave.standings.length > 0 && gamesave.sequence.length == 1);
   }
 
   public static function isRunning(gamesave:Gamesave):Bool {
     return (gamesave.currentPlayerId != null);
-  }
-
-  public static function victory(gamesave:Gamesave, id:Int):Bool {
-    return (gamesave.standings.contains(id));
   }
 
   //
@@ -61,23 +57,6 @@ class Board {
     to.piece = from.piece;
     from.piece = null;
     gamesave.moves.push({from:from.id, to:to.id});
-
-    // Update Selected Tile
-    gamesave.selectedTileId = null;
-
-    // Update Current Player
-    var index = gamesave.sequence.indexOf(to.piece);
-    while (true) {
-      index++;
-      if (index == gamesave.sequence.length) {
-        index = 0;
-      }
-      var playerId = gamesave.players[gamesave.sequence[index]].id;
-      if (!gamesave.standings.contains(playerId)) {
-        gamesave.currentPlayerId = playerId;
-        break;
-      }
-    }
 
     // Update Standings
     var victory = true;
@@ -90,6 +69,15 @@ class Board {
     if (victory) {
       gamesave.standings.push(to.piece);
     }
+    else {
+      gamesave.sequence.push(to.piece);
+    }
+
+    // Update Selected Tile
+    gamesave.selectedTileId = null;
+
+    // Update Current Player
+    gamesave.currentPlayerId = gamesave.sequence.shift();
   }
 
   public static function cancelMove(gamesave:Gamesave):Void {
@@ -103,16 +91,19 @@ class Board {
     from.piece = to.piece;
     to.piece = null;
 
+    // Update Standings
+    if (gamesave.currentPlayerId != null) {
+      gamesave.sequence.unshift(gamesave.currentPlayerId);
+    }
+    if (gamesave.standings.length > 0 && gamesave.standings[gamesave.standings.length-1] == from.piece) {
+      gamesave.standings.pop();
+    }
+
     // Update Selected Tile
     gamesave.selectedTileId = null;
 
     // Update Current Player
-    gamesave.currentPlayerId = gamesave.players[from.piece].id;
-
-    // Update Standings
-    if (gamesave.standings.length > 0 && gamesave.standings[gamesave.standings.length-1] == from.piece) {
-      gamesave.standings.pop();
-    }
+    gamesave.currentPlayerId = gamesave.sequence.pop();
   }
 
   //

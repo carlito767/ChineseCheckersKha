@@ -143,6 +143,10 @@ class Game {
       g2.drawString('x: ${mouse.x}, y: ${mouse.y}', 15, 50);
       g2.drawString('movementX: ${mouse.movementX}, movementY: ${mouse.movementY}', 15, 70);
       g2.drawString('delta: ${mouse.delta}', 15, 90);
+
+      g2.drawString('current player: ${gamesave.currentPlayerId}', 10, 130);
+      g2.drawString('sequence: ${gamesave.sequence.toString()}', 10, 150);
+      g2.drawString('standings: ${gamesave.standings.toString()}', 10, 170);
     }
 
     g2.end();
