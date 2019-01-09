@@ -4,7 +4,7 @@ import haxe.Json;
 import kha.Assets;
 import kha.Storage as KhaStorage;
 
-class Storage<T> {
+class Storage {
 
   //
   // Local Storage
