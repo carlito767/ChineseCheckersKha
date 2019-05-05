@@ -8,9 +8,8 @@ import gato.Process;
 import gato.ProcessQueue;
 import gato.Scaling;
 import gato.Timer;
-import gato.input.Keyboard;
 import gato.input.Keymap;
-import gato.input.Mouse;
+import gato.input.Input;
 import gato.input.VirtualKey;
 
 import Mui.MuiInput;
@@ -41,8 +40,7 @@ class Game {
 
   public static var scene:UIFlow;
 
-  public static var keyboard:Keyboard;
-  public static var mouse:Mouse;
+  public static var input:Input;
 
   public static var keymap:Keymap;
 
@@ -66,8 +64,7 @@ class Game {
 
     scene = Scenes.title;
 
-    keyboard = new Keyboard();
-    mouse = new Mouse();
+    input = new Input();
 
     // TODO:[carlito 20180826] load keymap at compile time using macro and json
     // TODO:[carlito 20180905] allow developer actions only in debug mode
@@ -98,9 +95,9 @@ class Game {
   static function update() {
     timer.update();
 
-    keymap.updateFromKeyboard(keyboard);
-    keymap.updateFromMouse(mouse);
-    keymap.update(processQueue);
+    input.update();
+    keymap.update(input);
+    keymap.updateProcessQueue(processQueue);
 
     processQueue.update(timer.deltaTime);
   }
@@ -124,9 +121,9 @@ class Game {
     g2.scissor(Std.int(Scaling.dx), Std.int(Scaling.dy), Std.int(WIDTH * Scaling.scale), Std.int(HEIGHT * Scaling.scale));
 
     ui.begin({
-      x:mouse.x,
-      y:mouse.y,
-      select:mouse.buttons[0],
+      x:input.x,
+      y:input.y,
+      select:input.isDown[VirtualKey.MouseLeftButton],
     });
     ui.render(g2, scene);
     ui.end();
@@ -140,9 +137,9 @@ class Game {
       g2.fontSize = 25;
       g2.drawString('FPS: $fps', 10, 10);
       g2.drawString('Mouse:', 10, 30);
-      g2.drawString('x: ${mouse.x}, y: ${mouse.y}', 15, 50);
-      g2.drawString('movementX: ${mouse.movementX}, movementY: ${mouse.movementY}', 15, 70);
-      g2.drawString('delta: ${mouse.delta}', 15, 90);
+      g2.drawString('x: ${input.x}, y: ${input.y}', 15, 50);
+      g2.drawString('movementX: ${input.movementX}, movementY: ${input.movementY}', 15, 70);
+      g2.drawString('delta: ${input.delta}', 15, 90);
 
       g2.drawString('current player: ${gamesave.currentPlayerId}', 10, 130);
       g2.drawString('sequence: ${gamesave.sequence.toString()}', 10, 150);

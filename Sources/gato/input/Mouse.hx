@@ -3,12 +3,12 @@ package gato.input;
 import kha.input.Mouse as KhaMouse;
 
 class Mouse implements Controller {
-  public var buttons(default, null):Map<Int, Bool> = new Map();
-  public var x(default, null):Int = 0;
-  public var y(default, null):Int = 0;
-  public var movementX(default, null):Int = 0;
-  public var movementY(default, null):Int = 0;
-  public var delta(default, null):Int = 0;
+  public var buttons(default, null):Map<Int, Bool>;
+  public var x(default, null):Int;
+  public var y(default, null):Int;
+  public var movementX(default, null):Int;
+  public var movementY(default, null):Int;
+  public var delta(default, null):Int;
 
   var mouse:Null<KhaMouse> = null;
 
@@ -38,11 +38,38 @@ class Mouse implements Controller {
   }
 
   //
+  // Update Input
+  //
+
+  function mouseButtonToVirtualKey(button:Int):Null<VirtualKey> {
+    return switch button {
+      case 0: VirtualKey.MouseLeftButton;
+      case 1: VirtualKey.MouseRightButton;
+      case 2: VirtualKey.MouseMiddleButton;
+      default: null;
+    }
+  }
+
+  public function updateInput(input:Input):Void {
+    for (button in buttons.keys()) {
+      var vk = mouseButtonToVirtualKey(button);
+      if (vk != null) {
+        input.isDown[vk] = true;
+      }
+    }
+    input.x = x;
+    input.y = y;
+    input.movementX = movementX;
+    input.movementY = movementY;
+    input.delta = delta;
+  }
+
+  //
   // Callbacks
   //
 
   function onMouseDown(button:Int, x:Int, y:Int):Void {
-    buttons.set(button, true);
+    buttons[button] = true;
     this.x = x;
     this.y = y;
   }
