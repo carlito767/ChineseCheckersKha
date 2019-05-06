@@ -38,7 +38,7 @@ class Mouse implements Controller {
   }
 
   //
-  // Update Input
+  // Update Input Status
   //
 
   function mouseButtonToVirtualKey(button:Int):Null<VirtualKey> {
@@ -50,18 +50,18 @@ class Mouse implements Controller {
     }
   }
 
-  public function updateInput(input:Input):Void {
+  public function updateInputStatus(inputStatus:InputStatus):Void {
     for (button in buttons.keys()) {
       var vk = mouseButtonToVirtualKey(button);
       if (vk != null) {
-        input.isDown[vk] = true;
+        inputStatus.isDown[vk] = true;
       }
     }
-    input.x = x;
-    input.y = y;
-    input.movementX = movementX;
-    input.movementY = movementY;
-    input.delta = delta;
+    inputStatus.x = x;
+    inputStatus.y = y;
+    inputStatus.movementX = movementX;
+    inputStatus.movementY = movementY;
+    inputStatus.delta = delta;
   }
 
   //

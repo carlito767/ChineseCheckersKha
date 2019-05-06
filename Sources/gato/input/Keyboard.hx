@@ -29,7 +29,7 @@ class Keyboard implements Controller {
   }
 
   //
-  // Update Input
+  // Update Input Status
   //
 
   var KeyCodeToVirtualKey:Map<KeyCode, VirtualKey> = [
@@ -106,11 +106,11 @@ class Keyboard implements Controller {
     KeyCode.Shift => VirtualKey.Shift,
   ];
 
-  public function updateInput(input:Input):Void {
+  public function updateInputStatus(inputStatus:InputStatus):Void {
     for (key in isDown.keys()) {
       var vk = KeyCodeToVirtualKey.get(key);
       if (vk != null) {
-        input.isDown[vk] = true;
+        inputStatus.isDown[vk] = true;
       }
     }
   }
