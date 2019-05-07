@@ -5,12 +5,7 @@ import kha.input.KeyCode;
 import kha.input.Mouse;
 
 class Input {
-  public var isDown(default, null):Map<VirtualKey, Bool>;
-  public var x(default, null):Int;
-  public var y(default, null):Int;
-  public var movementX(default, null):Int;
-  public var movementY(default, null):Int;
-  public var delta(default, null):Int;
+  var inputStatus:InputStatus;
 
   var keyboard:Null<Keyboard> = null;
   var mouse:Null<Mouse> = null;
@@ -20,12 +15,15 @@ class Input {
   }
 
   public function reset():Void {
-    isDown = new Map();
-    x = 0;
-    y = 0;
-    movementX = 0;
-    movementY = 0;
-    delta = 0;
+    inputStatus = {
+      isDown:new Map(),
+      wasDown:new Map(),
+      x:0,
+      y:0,
+      movementX:0,
+      movementY:0,
+      delta:0,
+    };
   }
 
   public function initialize():Void {
@@ -52,6 +50,26 @@ class Input {
     }
 
     reset();
+  }
+
+  public function update():InputStatus {
+    var currentStatus:InputStatus = {
+      isDown:inputStatus.isDown,
+      wasDown:inputStatus.wasDown,
+      x:inputStatus.x,
+      y:inputStatus.y,
+      movementX:inputStatus.movementX,
+      movementY:inputStatus.movementY,
+      delta:inputStatus.delta,
+    };
+
+    inputStatus.wasDown = inputStatus.isDown;
+    inputStatus.isDown = new Map();
+    inputStatus.movementX = 0;
+    inputStatus.movementY = 0;
+    inputStatus.delta = 0;
+
+    return currentStatus;
   }
 
   //
@@ -137,14 +155,15 @@ class Input {
   function onKeyDown(key:KeyCode):Void {
     var vk = KeyCodeToVirtualKey[key];
     if (vk != null) {
-      isDown[vk] = true;
+      inputStatus.isDown[vk] = true;
     }
   }
 
   function onKeyUp(key:KeyCode):Void {
     var vk = KeyCodeToVirtualKey[key];
     if (vk != null) {
-      isDown.remove(vk);
+      inputStatus.isDown.remove(vk);
+      inputStatus.wasDown[vk] = true;
     }
   }
 
@@ -159,29 +178,30 @@ class Input {
   function onMouseDown(button:Int, x:Int, y:Int):Void {
     var vk = MouseButtonToVirtualKey[button];
     if (vk != null) {
-      isDown[vk] = true;
+      inputStatus.isDown[vk] = true;
     }
-    this.x = x;
-    this.y = y;
+    inputStatus.x = x;
+    inputStatus.y = y;
   }
 
   function onMouseUp(button:Int, x:Int, y:Int):Void {
     var vk = MouseButtonToVirtualKey[button];
     if (vk != null) {
-      isDown.remove(vk);
+      inputStatus.isDown.remove(vk);
+      inputStatus.wasDown[vk] = true;
     }
-    this.x = x;
-    this.y = y;
+    inputStatus.x = x;
+    inputStatus.y = y;
   }
 
   function onMouseMove(x:Int, y:Int, movementX:Int, movementY:Int):Void {
-    this.x = x;
-    this.y = y;
-    this.movementX = movementX;
-    this.movementY = movementY;
+    inputStatus.x = x;
+    inputStatus.y = y;
+    inputStatus.movementX = movementX;
+    inputStatus.movementY = movementY;
   }
 
   function onMouseWheel(delta:Int):Void {
-    this.delta = delta;
+    inputStatus.delta = delta;
   }
 }

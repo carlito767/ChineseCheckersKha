@@ -9,6 +9,7 @@ import gato.ProcessQueue;
 import gato.Scaling;
 import gato.Timer;
 import gato.input.Input;
+import gato.input.InputStatus;
 import gato.input.Keymap;
 import gato.input.VirtualKey;
 
@@ -41,6 +42,7 @@ class Game {
   public static var scene:UIFlow;
 
   public static var input:Input;
+  public static var inputStatus:InputStatus;
   public static var keymap:Keymap;
 
   static var ui:UI;
@@ -95,8 +97,8 @@ class Game {
   static function update() {
     timer.update();
 
-    keymap.update(input);
-    keymap.updateProcessQueue(processQueue);
+    inputStatus = input.update();
+    keymap.updateProcessQueue(inputStatus, processQueue);
 
     processQueue.update(timer.deltaTime);
   }
@@ -120,9 +122,9 @@ class Game {
     g2.scissor(Std.int(Scaling.dx), Std.int(Scaling.dy), Std.int(WIDTH * Scaling.scale), Std.int(HEIGHT * Scaling.scale));
 
     ui.begin({
-      x:input.x,
-      y:input.y,
-      select:input.isDown[VirtualKey.MouseLeftButton],
+      x:inputStatus.x,
+      y:inputStatus.y,
+      select:inputStatus.isDown[VirtualKey.MouseLeftButton],
     });
     ui.render(g2, scene);
     ui.end();
@@ -136,9 +138,9 @@ class Game {
       g2.fontSize = 25;
       g2.drawString('FPS: $fps', 10, 10);
       g2.drawString('Mouse:', 10, 30);
-      g2.drawString('x: ${input.x}, y: ${input.y}', 15, 50);
-      g2.drawString('movementX: ${input.movementX}, movementY: ${input.movementY}', 15, 70);
-      g2.drawString('delta: ${input.delta}', 15, 90);
+      g2.drawString('x: ${inputStatus.x}, y: ${inputStatus.y}', 15, 50);
+      g2.drawString('movementX: ${inputStatus.movementX}, movementY: ${inputStatus.movementY}', 15, 70);
+      g2.drawString('delta: ${inputStatus.delta}', 15, 90);
 
       g2.drawString('current player: ${gamesave.currentPlayerId}', 10, 130);
       g2.drawString('sequence: ${gamesave.sequence.toString()}', 10, 150);
