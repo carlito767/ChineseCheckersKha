@@ -16,8 +16,8 @@ class Keymap {
     mapping.remove(vk);
   }
 
-  public function update(inputStatus:InputStatus):Void {
-    for (vk in inputStatus.isDown.keys()) {
+  public function update(input:Input):Void {
+    for (vk in input.isDown.keys()) {
       isDown[vk] = true;
     }
   }

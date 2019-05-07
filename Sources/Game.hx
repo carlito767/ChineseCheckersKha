@@ -8,9 +8,8 @@ import gato.Process;
 import gato.ProcessQueue;
 import gato.Scaling;
 import gato.Timer;
-import gato.input.Keymap;
 import gato.input.Input;
-import gato.input.InputStatus;
+import gato.input.Keymap;
 import gato.input.VirtualKey;
 
 import Mui.MuiInput;
@@ -42,8 +41,6 @@ class Game {
   public static var scene:UIFlow;
 
   public static var input:Input;
-  public static var inputStatus:InputStatus;
-
   public static var keymap:Keymap;
 
   static var ui:UI;
@@ -67,6 +64,7 @@ class Game {
     scene = Scenes.title;
 
     input = new Input();
+    input.initialize();
 
     // TODO:[carlito 20180826] load keymap at compile time using macro and json
     // TODO:[carlito 20180905] allow developer actions only in debug mode
@@ -97,8 +95,7 @@ class Game {
   static function update() {
     timer.update();
 
-    inputStatus = input.status();
-    keymap.update(inputStatus);
+    keymap.update(input);
     keymap.updateProcessQueue(processQueue);
 
     processQueue.update(timer.deltaTime);
@@ -123,9 +120,9 @@ class Game {
     g2.scissor(Std.int(Scaling.dx), Std.int(Scaling.dy), Std.int(WIDTH * Scaling.scale), Std.int(HEIGHT * Scaling.scale));
 
     ui.begin({
-      x:inputStatus.x,
-      y:inputStatus.y,
-      select:inputStatus.isDown[VirtualKey.MouseLeftButton],
+      x:input.x,
+      y:input.y,
+      select:input.isDown[VirtualKey.MouseLeftButton],
     });
     ui.render(g2, scene);
     ui.end();
@@ -139,9 +136,9 @@ class Game {
       g2.fontSize = 25;
       g2.drawString('FPS: $fps', 10, 10);
       g2.drawString('Mouse:', 10, 30);
-      g2.drawString('x: ${inputStatus.x}, y: ${inputStatus.y}', 15, 50);
-      g2.drawString('movementX: ${inputStatus.movementX}, movementY: ${inputStatus.movementY}', 15, 70);
-      g2.drawString('delta: ${inputStatus.delta}', 15, 90);
+      g2.drawString('x: ${input.x}, y: ${input.y}', 15, 50);
+      g2.drawString('movementX: ${input.movementX}, movementY: ${input.movementY}', 15, 70);
+      g2.drawString('delta: ${input.delta}', 15, 90);
 
       g2.drawString('current player: ${gamesave.currentPlayerId}', 10, 130);
       g2.drawString('sequence: ${gamesave.sequence.toString()}', 10, 150);
