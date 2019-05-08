@@ -124,7 +124,7 @@ class Game {
     ui.begin({
       x:inputStatus.x,
       y:inputStatus.y,
-      select:inputStatus.isDown[VirtualKey.MouseLeftButton],
+      select:(inputStatus.isDown[VirtualKey.MouseLeftButton] == true && inputStatus.wasDown[VirtualKey.MouseLeftButton] != true),
     });
     ui.render(g2, scene);
     ui.end();

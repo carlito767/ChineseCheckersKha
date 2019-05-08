@@ -63,8 +63,10 @@ class Input {
       delta:inputStatus.delta,
     };
 
-    inputStatus.wasDown = inputStatus.isDown;
-    inputStatus.isDown = new Map();
+    inputStatus.wasDown = new Map();
+    for (vk in inputStatus.isDown.keys()) {
+      inputStatus.wasDown[vk] = inputStatus.isDown[vk];
+    }
     inputStatus.movementX = 0;
     inputStatus.movementY = 0;
     inputStatus.delta = 0;
@@ -163,7 +165,6 @@ class Input {
     var vk = KeyCodeToVirtualKey[key];
     if (vk != null) {
       inputStatus.isDown.remove(vk);
-      inputStatus.wasDown[vk] = true;
     }
   }
 
@@ -188,7 +189,6 @@ class Input {
     var vk = MouseButtonToVirtualKey[button];
     if (vk != null) {
       inputStatus.isDown.remove(vk);
-      inputStatus.wasDown[vk] = true;
     }
     inputStatus.x = x;
     inputStatus.y = y;
