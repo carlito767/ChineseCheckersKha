@@ -1,27 +1,27 @@
 package gato.input;
 
 class Keymap {
-  var mapping:Map<VirtualKey, Process> = new Map();
+  var mapping:Map<VirtualKey, String> = new Map();
 
   public function new() {
   }
 
-  public function set(vk:VirtualKey, process:Process):Void {
-    mapping.set(vk, process);
+  public function set(vk:VirtualKey, action:String):Void {
+    mapping.set(vk, action);
   }
 
   public function remove(vk:VirtualKey):Void {
     mapping.remove(vk);
   }
 
-  public function updateProcessQueue(inputStatus:InputStatus, processQueue:ProcessQueue):Void {
+  public function update(inputStatus:InputStatus):Array<String> {
+    var actions:Array<String> = [];
     for (vk in mapping.keys()) {
       // TODO:[carlito 20180826] allow to repeat process
       if (inputStatus.isDown[vk] == true && inputStatus.wasDown[vk] != true) {
-        var process = mapping[vk];
-        process.finished = false;
-        processQueue.add(process);
+        actions.push(mapping[vk]);
       }
     }
+    return actions;
   }
 }

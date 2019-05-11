@@ -71,18 +71,18 @@ class Game {
     // TODO:[carlito 20180826] load keymap at compile time using macro and json
     // TODO:[carlito 20180905] allow developer actions only in debug mode
     keymap = new Keymap();
-    keymap.set(VirtualKey.D, new ToggleDebugOverlayProcess());
-    keymap.set(VirtualKey.L, new ChangeLanguageProcess());
-    keymap.set(VirtualKey.S, new SearchMoveProcess(new MinimaxAI()));
-    keymap.set(VirtualKey.Decimal, new ToggleHitboxProcess());
-    keymap.set(VirtualKey.Number0, new ToggleTileIdProcess());
-    keymap.set(VirtualKey.Number1, new QuickLoadProcess(1));
-    keymap.set(VirtualKey.Number2, new QuickLoadProcess(2));
-    keymap.set(VirtualKey.Number3, new QuickLoadProcess(3));
-    keymap.set(VirtualKey.Number7, new QuickSaveProcess(1));
-    keymap.set(VirtualKey.Number8, new QuickSaveProcess(2));
-    keymap.set(VirtualKey.Number9, new QuickSaveProcess(3));
-    keymap.set(VirtualKey.Backspace, new UndoProcess());
+    keymap.set(VirtualKey.D, "ToggleDebugOverlay");
+    keymap.set(VirtualKey.L, "ChangeLanguage");
+    // keymap.set(VirtualKey.S, new SearchMoveProcess(new MinimaxAI()));
+    keymap.set(VirtualKey.Decimal, "ToggleHitbox");
+    keymap.set(VirtualKey.Number0, "ToggleTileId");
+    keymap.set(VirtualKey.Number1, "QuickLoad1");
+    keymap.set(VirtualKey.Number2, "QuickLoad2");
+    keymap.set(VirtualKey.Number3, "QuickLoad3");
+    keymap.set(VirtualKey.Number7, "QuickSave1");
+    keymap.set(VirtualKey.Number8, "QuickSave2");
+    keymap.set(VirtualKey.Number9, "QuickSave3");
+    keymap.set(VirtualKey.Backspace, "Undo");
 
     ui = new UI();
     UI.showHitbox = settings.showHitbox;
@@ -98,7 +98,40 @@ class Game {
     timer.update();
 
     inputStatus = input.update();
-    keymap.updateProcessQueue(inputStatus, processQueue);
+    var actions:Array<String> = keymap.update(inputStatus);
+    for (action in actions) {
+      switch action {
+      case "ChangeLanguage":
+        var newLanguage = (settings.language == 'en') ? 'fr' : 'en';
+        if (locale.load(newLanguage)) {
+          settings.language = newLanguage;
+          settings.save();
+        }
+      case "QuickLoad1" | "QuickLoad2" | "QuickLoad3":
+        var id = Std.parseInt(action.charAt(action.length - 1));
+        if (gamesave.load(id)) {
+          scene = Scenes.play;
+        }
+      case "QuickSave1" | "QuickSave2" | "QuickSave3":
+        var id = Std.parseInt(action.charAt(action.length - 1));
+        if (Board.isRunning(gamesave)) {
+          gamesave.save(id);
+        }
+      case "ToggleDebugOverlay":
+        settings.showDebugOverlay = !settings.showDebugOverlay;
+      case "ToggleHitbox":
+        settings.showHitbox = !settings.showHitbox;
+        UI.showHitbox = settings.showHitbox;
+      case "ToggleTileId":
+        settings.showTileId = !settings.showTileId;
+      case "Undo":
+        if (Board.isRunning(gamesave)) {
+          Board.cancelMove(gamesave);
+        }
+      case _:
+        trace('Unknown action ($action)');
+      }
+    }
 
     processQueue.update(timer.deltaTime);
   }
