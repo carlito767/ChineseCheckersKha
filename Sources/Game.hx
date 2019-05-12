@@ -64,6 +64,7 @@ class Game {
 
     input = new Input();
     input.initialize();
+    inputStatus = input.update();
 
     // TODO:[carlito 20180826] load keymap at compile time using macro and json
     // TODO:[carlito 20180905] allow developer actions only in debug mode
