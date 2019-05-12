@@ -11,8 +11,6 @@ import BoardChineseCheckers as GameBoard;
 import UI.Dimensions;
 import UI.UITileEmphasis;
 import UI.UIWindow;
-import process.ChangeLanguageProcess;
-import process.SelectSequenceProcess;
 
 class Scenes {
   public static function title(ui:UI):Void {
@@ -27,7 +25,7 @@ class Scenes {
       Game.scene = play;
     }
     if (ui.button({ text:'${locale.language} ${Game.settings.language.toUpperCase()}', x:Game.WIDTH * 0.63, y:Game.HEIGHT * 0.7, w:Game.WIDTH * 0.38, h:Game.HEIGHT * 0.08 }).hit) {
-      Game.processQueue.add(new ChangeLanguageProcess());
+      Game.handleAction("ChangeLanguage");
     }
   }
 

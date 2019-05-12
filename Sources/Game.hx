@@ -4,8 +4,6 @@ import kha.Framebuffer;
 import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
 
-import gato.Process;
-import gato.ProcessQueue;
 import gato.Scaling;
 import gato.Timer;
 import gato.input.Input;
@@ -13,9 +11,10 @@ import gato.input.InputStatus;
 import gato.input.Keymap;
 import gato.input.VirtualKey;
 
+import BoardChineseCheckers as GameBoard;
 import Mui.MuiInput;
 import ai.*;
-import process.*;
+import board.Move;
 
 class Game {
   public static inline var TITLE = 'ChineseCheckersKha';
@@ -26,7 +25,6 @@ class Game {
   public static var g4(default, null):Graphics4 = null;
 
   public static var timer:Timer;
-  public static var processQueue:ProcessQueue;
 
   public static var settings:Settings;
 
@@ -35,7 +33,8 @@ class Game {
   public static var gamesave:Gamesave;
   public static var sequenceIndex(default, set):Null<Int>;
   static function set_sequenceIndex(value) {
-    Game.processQueue.add(new SelectSequenceProcess(value));
+    var sequence = (value == null) ? null : GameBoard.sequences[value].copy();
+    gamesave = Board.create(GameBoard.tiles, GameBoard.players, sequence);
     return sequenceIndex = value;
   }
 
@@ -52,8 +51,6 @@ class Game {
 
   @:allow(Main)
   static function initialize():Void {
-    processQueue = new ProcessQueue();
-
     settings = new Settings();
     settings.load();
 
@@ -73,7 +70,7 @@ class Game {
     keymap = new Keymap();
     keymap.set(VirtualKey.D, "ToggleDebugOverlay");
     keymap.set(VirtualKey.L, "ChangeLanguage");
-    // keymap.set(VirtualKey.S, new SearchMoveProcess(new MinimaxAI()));
+    keymap.set(VirtualKey.S, "SearchMove");
     keymap.set(VirtualKey.Decimal, "ToggleHitbox");
     keymap.set(VirtualKey.Number0, "ToggleTileId");
     keymap.set(VirtualKey.Number1, "QuickLoad1");
@@ -100,40 +97,8 @@ class Game {
     inputStatus = input.update();
     var actions:Array<String> = keymap.update(inputStatus);
     for (action in actions) {
-      switch action {
-      case "ChangeLanguage":
-        var newLanguage = (settings.language == 'en') ? 'fr' : 'en';
-        if (locale.load(newLanguage)) {
-          settings.language = newLanguage;
-          settings.save();
-        }
-      case "QuickLoad1" | "QuickLoad2" | "QuickLoad3":
-        var id = Std.parseInt(action.charAt(action.length - 1));
-        if (gamesave.load(id)) {
-          scene = Scenes.play;
-        }
-      case "QuickSave1" | "QuickSave2" | "QuickSave3":
-        var id = Std.parseInt(action.charAt(action.length - 1));
-        if (Board.isRunning(gamesave)) {
-          gamesave.save(id);
-        }
-      case "ToggleDebugOverlay":
-        settings.showDebugOverlay = !settings.showDebugOverlay;
-      case "ToggleHitbox":
-        settings.showHitbox = !settings.showHitbox;
-        UI.showHitbox = settings.showHitbox;
-      case "ToggleTileId":
-        settings.showTileId = !settings.showTileId;
-      case "Undo":
-        if (Board.isRunning(gamesave)) {
-          Board.cancelMove(gamesave);
-        }
-      case _:
-        trace('Unknown action ($action)');
-      }
+      handleAction(action);
     }
-
-    processQueue.update(timer.deltaTime);
   }
 
   @:allow(Main)
@@ -181,5 +146,46 @@ class Game {
     }
 
     g2.end();
+  }
+
+  @:allow(Scenes)
+  static function handleAction(action:String):Void {
+    switch action {
+    case "ChangeLanguage":
+      var newLanguage = (settings.language == 'en') ? 'fr' : 'en';
+      if (locale.load(newLanguage)) {
+        settings.language = newLanguage;
+        settings.save();
+      }
+    case "QuickLoad1" | "QuickLoad2" | "QuickLoad3":
+      var id = Std.parseInt(action.charAt(action.length - 1));
+      if (gamesave.load(id)) {
+        scene = Scenes.play;
+      }
+    case "QuickSave1" | "QuickSave2" | "QuickSave3":
+      var id = Std.parseInt(action.charAt(action.length - 1));
+      if (Board.isRunning(gamesave)) {
+        gamesave.save(id);
+      }
+    case "SearchMove":
+      var timer = new Timer();
+      var ai = new MinimaxAI();
+      var move:Null<Move> = ai.search(Game.gamesave);
+      timer.update();
+      trace('[in ${timer.elapsedTime} seconds] move:$move');
+    case "ToggleDebugOverlay":
+      settings.showDebugOverlay = !settings.showDebugOverlay;
+    case "ToggleHitbox":
+      settings.showHitbox = !settings.showHitbox;
+      UI.showHitbox = settings.showHitbox;
+    case "ToggleTileId":
+      settings.showTileId = !settings.showTileId;
+    case "Undo":
+      if (Board.isRunning(gamesave)) {
+        Board.cancelMove(gamesave);
+      }
+    case _:
+      trace('Unknown action ($action)');
+    }
   }
 }
