@@ -1,14 +1,9 @@
-typedef UserSettings = {
+typedef SettingsData = {
+  // User settings
   var language:String;
-}
 
-typedef DeveloperSettings = {
+  // Developer settings
   var showDebugOverlay:Bool;
   var showHitbox:Bool;
   var showTileId:Bool;
-}
-
-typedef SettingsData = {
-  > UserSettings,
-  > DeveloperSettings,
 }
