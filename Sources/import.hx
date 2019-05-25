@@ -1,2 +1,2 @@
 import Global.*;
-using gato.ArrayExtension;
+using ArrayExtension;

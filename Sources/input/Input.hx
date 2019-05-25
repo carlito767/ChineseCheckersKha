@@ -1,4 +1,4 @@
-package gato.input;
+package input;
 
 import kha.input.Keyboard;
 import kha.input.KeyCode;

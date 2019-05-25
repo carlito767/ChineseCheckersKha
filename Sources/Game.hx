@@ -6,17 +6,14 @@ import kha.System;
 import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
 
-import gato.Scaling;
-import gato.Timer;
-import gato.input.Input;
-import gato.input.InputStatus;
-import gato.input.Keymap;
-import gato.input.VirtualKey;
-
 import BoardChineseCheckers as GameBoard;
 import Mui.MuiInput;
 import ai.*;
 import board.Move;
+import input.Input;
+import input.InputStatus;
+import input.Keymap;
+import input.VirtualKey;
 
 class Game {
   public static var g2(default, null):Graphics2 = null;

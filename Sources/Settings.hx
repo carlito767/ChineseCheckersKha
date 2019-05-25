@@ -1,5 +1,3 @@
-import gato.Storage;
-
 import SettingsData.DeveloperSettings;
 import SettingsData.UserSettings;
 

@@ -1,5 +1,3 @@
-package gato;
-
 import kha.Scheduler;
 
 class Timer {

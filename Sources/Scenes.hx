@@ -1,16 +1,14 @@
 import kha.Assets;
 import kha.input.KeyCode;
 
-import gato.input.VirtualKey;
-
-import board.Move;
-import board.Player;
-import board.Sequence;
-
 import BoardChineseCheckers as GameBoard;
 import UI.Dimensions;
 import UI.UITileEmphasis;
 import UI.UIWindow;
+import board.Move;
+import board.Player;
+import board.Sequence;
+import input.VirtualKey;
 
 class Scenes {
   public static function title(ui:UI):Void {

@@ -1,5 +1,3 @@
-import gato.Storage;
-
 @:forward
 abstract Gamesave(GamesaveData) {
   static inline var GAMESAVE_FILENAME = 'gamesave';

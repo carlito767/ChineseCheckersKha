@@ -1,4 +1,4 @@
-package gato.input;
+package input;
 
 class Keymap {
   var mapping:Map<VirtualKey, String> = new Map();

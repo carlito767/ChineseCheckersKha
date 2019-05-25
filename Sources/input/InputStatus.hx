@@ -1,4 +1,4 @@
-package gato.input;
+package input;
 
 typedef InputStatus = {
   var isDown:Map<VirtualKey, Bool>;

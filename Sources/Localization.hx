@@ -1,5 +1,3 @@
-import gato.Storage;
-
 @:forward
 abstract Localization(LocalizationData) {
   static inline var LOCALIZATION_DEFAULT = 'en';
