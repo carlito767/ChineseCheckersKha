@@ -48,7 +48,7 @@ class Game {
   static var fps:Int;
 
   @:allow(Main)
-  static function load(_):Void {
+  static function load():Void {
     var renderLoadingScreen = function(framebuffers:Array<Framebuffer>) {
       var g2 = framebuffers[0].g2;
       g2.begin();
@@ -109,7 +109,7 @@ class Game {
     timer = new Timer();
   }
 
-  static function update() {
+  static function update():Void {
     timer.update();
 
     inputStatus = input.update();
@@ -187,7 +187,7 @@ class Game {
     case "SearchMove":
       var timer = new Timer();
       var ai = new MinimaxAI();
-      var move:Null<Move> = ai.search(Game.gamesave);
+      var move:Null<Move> = ai.search(gamesave);
       timer.update();
       trace('[in ${timer.elapsedTime} seconds] move:$move');
     case "ToggleDebugOverlay":

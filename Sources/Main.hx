@@ -26,6 +26,8 @@ class Main {
     resize();
     #end
 
-    System.start({ title:TITLE, width:WIDTH, height:HEIGHT, framebuffer:{ samplesPerPixel:4 } }, Game.load);
+    System.start({ title:TITLE, width:WIDTH, height:HEIGHT, framebuffer:{ samplesPerPixel:4 } }, function(_) {
+      Game.load();
+    });
   }
 }
