@@ -19,10 +19,6 @@ import ai.*;
 import board.Move;
 
 class Game {
-  public static inline var TITLE = 'ChineseCheckersKha';
-  public static inline var WIDTH = 800;
-  public static inline var HEIGHT = 600;
-
   public static var g2(default, null):Graphics2 = null;
   public static var g4(default, null):Graphics4 = null;
 
