@@ -3,10 +3,7 @@ import js.Browser.document;
 import js.Browser.window;
 import js.html.CanvasElement;
 #end
-import kha.Scheduler;
 import kha.System;
-
-import gato.Loader;
 
 class Main {
   public static function main() {
@@ -29,11 +26,6 @@ class Main {
     resize();
     #end
 
-    Loader.onDone = function() {
-      Game.initialize();
-      Scheduler.addTimeTask(Game.update, 0, 1 / 60);
-      System.notifyOnFrames(Game.render);
-    }
-    System.start({ title:Game.TITLE, width:Game.WIDTH, height:Game.HEIGHT, framebuffer:{ samplesPerPixel:4 } }, Loader.load);
+    System.start({ title:Game.TITLE, width:Game.WIDTH, height:Game.HEIGHT, framebuffer:{ samplesPerPixel:4 } }, Game.load);
   }
 }

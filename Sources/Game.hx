@@ -1,6 +1,8 @@
 import kha.Assets;
 import kha.Color;
 import kha.Framebuffer;
+import kha.Scheduler;
+import kha.System;
 import kha.graphics2.Graphics as Graphics2;
 import kha.graphics4.Graphics as Graphics4;
 
@@ -50,6 +52,26 @@ class Game {
   static var fps:Int;
 
   @:allow(Main)
+  static function load(_):Void {
+    var renderLoadingScreen = function(framebuffers:Array<Framebuffer>) {
+      var g2 = framebuffers[0].g2;
+      g2.begin();
+      var width = Assets.progress * System.windowWidth();
+      var height = System.windowHeight() * 0.02;
+      var y = (System.windowHeight() - height) * 0.5;
+      g2.color = Color.White;
+      g2.fillRect(0, y, width, height);
+      g2.end();
+    }
+    System.notifyOnFrames(renderLoadingScreen);
+    Assets.loadEverything(function() {
+      System.removeFramesListener(renderLoadingScreen);
+      initialize();
+      Scheduler.addTimeTask(update, 0, 1 / 60);
+      System.notifyOnFrames(render);
+    });
+  }
+
   static function initialize():Void {
     settings = new Settings();
     settings.load();
@@ -91,7 +113,6 @@ class Game {
     timer = new Timer();
   }
 
-  @:allow(Main)
   static function update() {
     timer.update();
 
@@ -102,7 +123,6 @@ class Game {
     }
   }
 
-  @:allow(Main)
   static function render(framebuffers:Array<Framebuffer>):Void {
     // FPS
     if (timer.elapsedTime >= 1.0) {
