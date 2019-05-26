@@ -12,14 +12,15 @@ import board.Move;
 class Game {
   public static var g2(default, null):Graphics = null;
 
+  public static var gb(default, null):GameBoard = new GameBoard();
+
   public static var language:String;
   public static var locale:Localization;
 
   public static var gamesave:Gamesave;
   public static var sequenceIndex(default, set):Null<Int>;
   static function set_sequenceIndex(value) {
-    var sequence = (value == null) ? null : GameBoard.sequences[value].copy();
-    gamesave = Board.create(GameBoard.tiles, GameBoard.players, sequence);
+    gamesave = gb.newGamesave(value);
     return sequenceIndex = value;
   }
 

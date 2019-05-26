@@ -1,42 +1,10 @@
 import kha.Color;
 
 import board.Move;
-import board.Player;
-import board.Sequence;
 import board.Tile;
 
 // TODO:[carlito 20180907] implement anti-spoiling rule (https://www.mastersofgames.com/rules/chinese-checkers-rules.htm)
 class Board {
-  public static function create(tiles:Array<Tile>, players:Array<Player>, ?sequence:Sequence):Gamesave {
-    var gamesave = new Gamesave();
-
-    // Players
-    if (sequence != null) {
-      gamesave.sequence = sequence;
-      for (player in players) {
-        if (sequence.contains(player.id)) {
-          gamesave.players[player.id] = {
-            id:player.id,
-            color:player.color,
-          }
-        }
-      }
-    }
-
-    // Tiles
-    for (tile in tiles) {
-      gamesave.tiles[tile.id] = {
-        id:tile.id,
-        x:tile.x,
-        y:tile.y,
-        owner:tile.owner,
-        piece:(tile.piece != null && gamesave.players[tile.piece] != null) ? tile.piece : null,
-      }
-    }
-
-    return gamesave;
-  }
-
   public static function start(gamesave:Gamesave):Void {
     gamesave.currentPlayerId = gamesave.sequence.shift();
   }
@@ -156,7 +124,6 @@ class Board {
     return moves;
   }
 
-  // TODO:[carlito 20180811] build with BoardBuilder?
   static function neighbors(gamesave:Gamesave, tile:Tile):Array<Tile> {
     //    (1) (2)
     //      \ /
