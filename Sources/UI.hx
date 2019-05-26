@@ -2,7 +2,7 @@ import kha.Assets;
 import kha.Color;
 import kha.Font;
 import kha.Image;
-import kha.graphics2.Graphics as Graphics2;
+import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
 import kha.System;
 
@@ -86,9 +86,9 @@ typedef UIWindow = {
 
 @:build(UIBuilder.build())
 class UI extends Mui {
-  var g2:Graphics2;
+  var g2:Graphics;
 
-  public function render(g2:Graphics2, flow:UIFlow):Void {
+  public function render(g2:Graphics, flow:UIFlow):Void {
     this.g2 = g2;
     flow(this);
   }

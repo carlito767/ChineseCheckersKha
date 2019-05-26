@@ -3,8 +3,7 @@ import kha.Color;
 import kha.Framebuffer;
 import kha.Scheduler;
 import kha.System;
-import kha.graphics2.Graphics as Graphics2;
-import kha.graphics4.Graphics as Graphics4;
+import kha.graphics2.Graphics;
 
 import BoardChineseCheckers as GameBoard;
 import Mui.MuiInput;
@@ -15,8 +14,7 @@ import input.Keymap;
 import input.VirtualKey;
 
 class Game {
-  public static var g2(default, null):Graphics2 = null;
-  public static var g4(default, null):Graphics4 = null;
+  public static var g2(default, null):Graphics = null;
 
   public static var timer:Timer;
 
@@ -102,7 +100,6 @@ class Game {
 
   static function render(framebuffers:Array<Framebuffer>):Void {
     g2 = framebuffers[0].g2;
-    g4 = framebuffers[0].g4;
 
     Scaling.update(WIDTH, HEIGHT);
 
