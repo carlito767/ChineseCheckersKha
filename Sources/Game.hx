@@ -16,8 +16,6 @@ import input.VirtualKey;
 class Game {
   public static var g2(default, null):Graphics = null;
 
-  public static var timer:Timer;
-
   public static var language:String;
   public static var locale:Localization;
 
@@ -84,13 +82,9 @@ class Game {
     keymap.set(VirtualKey.Backspace, "Undo");
 
     ui = new UI();
-
-    timer = new Timer();
   }
 
   static function update():Void {
-    timer.update();
-
     inputStatus = input.update();
     var actions:Array<String> = keymap.update(inputStatus);
     for (action in actions) {
