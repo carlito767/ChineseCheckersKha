@@ -73,12 +73,6 @@ class Game {
     // TODO:[carlito 20180905] allow developer actions only in debug mode
     keymap = new Keymap();
     keymap.set(VirtualKey.L, "ChangeLanguage");
-    keymap.set(VirtualKey.Number1, "QuickLoad1");
-    keymap.set(VirtualKey.Number2, "QuickLoad2");
-    keymap.set(VirtualKey.Number3, "QuickLoad3");
-    keymap.set(VirtualKey.Number7, "QuickSave1");
-    keymap.set(VirtualKey.Number8, "QuickSave2");
-    keymap.set(VirtualKey.Number9, "QuickSave3");
     keymap.set(VirtualKey.Backspace, "Undo");
 
     ui = new UI();
@@ -118,16 +112,6 @@ class Game {
     case "ChangeLanguage":
       language = (language == 'en') ? 'fr' : 'en';
       locale.load(language);
-    case "QuickLoad1" | "QuickLoad2" | "QuickLoad3":
-      var id = Std.parseInt(action.charAt(action.length - 1));
-      if (gamesave.load(id)) {
-        scene = Scenes.play;
-      }
-    case "QuickSave1" | "QuickSave2" | "QuickSave3":
-      var id = Std.parseInt(action.charAt(action.length - 1));
-      if (Board.isRunning(gamesave)) {
-        gamesave.save(id);
-      }
     case "Undo":
       if (Board.isRunning(gamesave)) {
         Board.cancelMove(gamesave);
