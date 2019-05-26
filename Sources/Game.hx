@@ -20,8 +20,7 @@ class Game {
 
   public static var timer:Timer;
 
-  public static var settings:Settings;
-
+  public static var language:String;
   public static var locale:Localization;
 
   public static var gamesave:Gamesave;
@@ -62,11 +61,8 @@ class Game {
   }
 
   static function initialize():Void {
-    settings = new Settings();
-    settings.load();
-
-    locale = new Localization();
-    locale.load(settings.language);
+    language = 'en';
+    locale = new Localization(language);
 
     gamesave = new Gamesave();
     sequenceIndex = null;
@@ -129,11 +125,8 @@ class Game {
   static function handleAction(action:String):Void {
     switch action {
     case "ChangeLanguage":
-      var newLanguage = (settings.language == 'en') ? 'fr' : 'en';
-      if (locale.load(newLanguage)) {
-        settings.language = newLanguage;
-        settings.save();
-      }
+      language = (language == 'en') ? 'fr' : 'en';
+      locale.load(language);
     case "QuickLoad1" | "QuickLoad2" | "QuickLoad3":
       var id = Std.parseInt(action.charAt(action.length - 1));
       if (gamesave.load(id)) {

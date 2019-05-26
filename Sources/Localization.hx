@@ -1,9 +1,7 @@
 @:forward
 abstract Localization(LocalizationData) {
-  static inline var LOCALIZATION_DEFAULT = 'en';
-
-  public inline function new() {
-    this = Storage.loadJson('language_${LOCALIZATION_DEFAULT}.json');
+  public inline function new(id:String) {
+    this = Storage.loadJson('language_${id}.json');
   }
 
   // TODO:[carlito 20180825] check language_*.json files at compile time

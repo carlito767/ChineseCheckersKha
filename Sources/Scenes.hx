@@ -22,7 +22,7 @@ class Scenes {
     if (ui.button({ text:locale.newGame, x:WIDTH * 0.63, y:HEIGHT * 0.58, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
       Game.scene = play;
     }
-    if (ui.button({ text:'${locale.language} ${Game.settings.language.toUpperCase()}', x:WIDTH * 0.63, y:HEIGHT * 0.7, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
+    if (ui.button({ text:'${locale.language} ${Game.language.toUpperCase()}', x:WIDTH * 0.63, y:HEIGHT * 0.7, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
       Game.handleAction("ChangeLanguage");
     }
   }
