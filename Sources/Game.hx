@@ -8,7 +8,6 @@ import kha.graphics4.Graphics as Graphics4;
 
 import BoardChineseCheckers as GameBoard;
 import Mui.MuiInput;
-import ai.*;
 import board.Move;
 import input.Input;
 import input.InputStatus;
@@ -86,7 +85,6 @@ class Game {
     keymap = new Keymap();
     keymap.set(VirtualKey.D, "ToggleDebugOverlay");
     keymap.set(VirtualKey.L, "ChangeLanguage");
-    keymap.set(VirtualKey.S, "SearchMove");
     keymap.set(VirtualKey.Decimal, "ToggleHitbox");
     keymap.set(VirtualKey.Number0, "ToggleTileId");
     keymap.set(VirtualKey.Number1, "QuickLoad1");
@@ -181,12 +179,6 @@ class Game {
       if (Board.isRunning(gamesave)) {
         gamesave.save(id);
       }
-    case "SearchMove":
-      var timer = new Timer();
-      var ai = new MinimaxAI();
-      var move:Null<Move> = ai.search(gamesave);
-      timer.update();
-      trace('[in ${timer.elapsedTime} seconds] move:$move');
     case "ToggleDebugOverlay":
       settings.showDebugOverlay = !settings.showDebugOverlay;
     case "ToggleHitbox":
