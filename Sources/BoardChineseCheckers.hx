@@ -84,7 +84,15 @@ class BoardChineseCheckers {
   }
 
   public function newGamesave(?sequenceIndex:Int):Gamesave {
-    var gamesave = new Gamesave();
+    var gamesave:Gamesave = {
+      sequence:[],
+      players:new Map(),
+      tiles:new Map(),
+      moves:[],
+      standings:[],
+      currentPlayerId:null,
+      selectedTileId:null,
+    };
 
     // Players
     var sequence = sequences[sequenceIndex];

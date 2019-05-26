@@ -54,7 +54,6 @@ class Game {
     language = 'en';
     locale = new Localization(language);
 
-    gamesave = new Gamesave();
     sequenceIndex = null;
 
     scene = Scenes.title;
