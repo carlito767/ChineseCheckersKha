@@ -4,11 +4,7 @@ abstract Settings(SettingsData) {
 
   public inline function new() {
     this = {
-      // User settings
       language:'en',
-
-      // Developer settings
-      showTileId:false,
     }
   }
 

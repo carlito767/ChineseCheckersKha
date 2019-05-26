@@ -72,7 +72,7 @@ class Scenes {
         emphasis = Selected;
       }
       var player = (tile.piece == null) ? null : gamesave.players[tile.piece];
-      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player, id:(Game.settings.showTileId) ? Std.string(tile.id) : null }).hit) {
+      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player }).hit) {
         if (selected) {
           gamesave.selectedTileId = null;
         }

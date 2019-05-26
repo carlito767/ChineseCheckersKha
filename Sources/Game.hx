@@ -81,7 +81,6 @@ class Game {
     // TODO:[carlito 20180905] allow developer actions only in debug mode
     keymap = new Keymap();
     keymap.set(VirtualKey.L, "ChangeLanguage");
-    keymap.set(VirtualKey.Number0, "ToggleTileId");
     keymap.set(VirtualKey.Number1, "QuickLoad1");
     keymap.set(VirtualKey.Number2, "QuickLoad2");
     keymap.set(VirtualKey.Number3, "QuickLoad3");
@@ -145,8 +144,6 @@ class Game {
       if (Board.isRunning(gamesave)) {
         gamesave.save(id);
       }
-    case "ToggleTileId":
-      settings.showTileId = !settings.showTileId;
     case "Undo":
       if (Board.isRunning(gamesave)) {
         Board.cancelMove(gamesave);

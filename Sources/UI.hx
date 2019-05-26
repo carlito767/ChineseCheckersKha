@@ -258,15 +258,6 @@ class UI extends Mui {
       g2.color = Color.Black;
       g2.drawCircle(cx, cy, radius, radius * 0.1);
     }
-
-    if (object.id != null) {
-      var color = (object.player == null) ? Color.Black : object.player.color;
-      g2.color = Color.fromBytes(255 - color.Rb, 255 - color.Gb, 255 - color.Bb);
-      g2.font = Assets.fonts.StickRice;
-      g2.fontSize = Std.int(object.h * 0.7);
-      var coordinates = centerText(object.id, object);
-      g2.drawString(object.id, coordinates.x, coordinates.y);
-    }
   }
 
   //
