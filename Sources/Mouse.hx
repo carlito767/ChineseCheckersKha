@@ -1,9 +1,9 @@
 import kha.input.Mouse as KhaMouse;
 
+import Mui.MuiInput;
+
 class Mouse {
-  public var x(default,null):Int = 0;
-  public var y(default,null):Int = 0;
-  public var select:Bool = false;
+  public var input(default, null):MuiInput = { x:0, y:0, select:false };
 
   var mouse:Null<KhaMouse> = null;
 
@@ -19,22 +19,22 @@ class Mouse {
   //
 
   function onMouseDown(button:Int, x:Int, y:Int):Void {
-    this.x = x;
-    this.y = y;
+    input.x = x;
+    input.y = y;
     if (button == 0) {
-      select = true;
+      input.select = true;
     }
   }
 
   function onMouseUp(button:Int, x:Int, y:Int):Void {
     if (button == 0) {
-      select = false;
+      input.select = false;
     }
   }
 
   function onMouseMove(x:Int, y:Int, movementX:Int, movementY:Int):Void {
-    this.x = x;
-    this.y = y;
+    input.x = x;
+    input.y = y;
   }
 
   function onMouseWheel(delta:Int):Void {
