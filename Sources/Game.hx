@@ -10,7 +10,6 @@ import Mui.MuiInput;
 import board.Move;
 import input.Input;
 import input.InputStatus;
-import input.Keymap;
 import input.VirtualKey;
 
 class Game {
@@ -31,7 +30,6 @@ class Game {
 
   public static var input:Input;
   public static var inputStatus:InputStatus;
-  public static var keymap:Keymap;
 
   static var ui:UI;
 
@@ -69,21 +67,11 @@ class Game {
     input.initialize();
     inputStatus = input.update();
 
-    // TODO:[carlito 20180826] load keymap at compile time using macro and json
-    // TODO:[carlito 20180905] allow developer actions only in debug mode
-    keymap = new Keymap();
-    keymap.set(VirtualKey.L, "ChangeLanguage");
-    keymap.set(VirtualKey.Backspace, "Undo");
-
     ui = new UI();
   }
 
   static function update():Void {
     inputStatus = input.update();
-    var actions:Array<String> = keymap.update(inputStatus);
-    for (action in actions) {
-      handleAction(action);
-    }
   }
 
   static function render(framebuffers:Array<Framebuffer>):Void {
