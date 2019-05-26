@@ -8,9 +8,6 @@ import kha.graphics2.Graphics;
 import BoardChineseCheckers as GameBoard;
 import Mui.MuiInput;
 import board.Move;
-import input.Input;
-import input.InputStatus;
-import input.VirtualKey;
 
 class Game {
   public static var g2(default, null):Graphics = null;
@@ -28,9 +25,7 @@ class Game {
 
   public static var scene:UIFlow;
 
-  public static var input:Input;
-  public static var inputStatus:InputStatus;
-
+  static var mouse:Mouse;
   static var ui:UI;
 
   @:allow(Main)
@@ -63,15 +58,11 @@ class Game {
 
     scene = Scenes.title;
 
-    input = new Input();
-    input.initialize();
-    inputStatus = input.update();
-
+    mouse = new Mouse();
     ui = new UI();
   }
 
   static function update():Void {
-    inputStatus = input.update();
   }
 
   static function render(framebuffers:Array<Framebuffer>):Void {
@@ -82,11 +73,7 @@ class Game {
     g2.begin();
     g2.scissor(Std.int(Scaling.dx), Std.int(Scaling.dy), Std.int(WIDTH * Scaling.scale), Std.int(HEIGHT * Scaling.scale));
 
-    ui.begin({
-      x:inputStatus.x,
-      y:inputStatus.y,
-      select:(inputStatus.isDown[VirtualKey.MouseLeftButton] == true && inputStatus.wasDown[VirtualKey.MouseLeftButton] != true),
-    });
+    ui.begin({ x:mouse.x, y:mouse.y, select:mouse.select });
     ui.render(g2, scene);
     ui.end();
 

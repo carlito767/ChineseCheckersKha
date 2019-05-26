@@ -8,7 +8,6 @@ import UI.UIWindow;
 import board.Move;
 import board.Player;
 import board.Sequence;
-import input.VirtualKey;
 
 class Scenes {
   public static function title(ui:UI):Void {
