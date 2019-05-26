@@ -8,7 +8,6 @@ abstract Settings(SettingsData) {
       language:'en',
 
       // Developer settings
-      showHitbox:false,
       showTileId:false,
     }
   }

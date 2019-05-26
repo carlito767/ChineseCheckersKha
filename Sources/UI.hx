@@ -86,8 +86,6 @@ typedef UIWindow = {
 
 @:build(UIBuilder.build())
 class UI extends Mui {
-  public static var showHitbox = false;
-
   var g2:Graphics2;
 
   public function render(g2:Graphics2, flow:UIFlow):Void {
@@ -187,11 +185,6 @@ class UI extends Mui {
     g2.fontSize = Std.int(object.h * 0.7);
     var coordinates = centerText(object.text, object);
     g2.drawString(object.text, coordinates.x, coordinates.y);
-
-    if (showHitbox) {
-      g2.color = Color.Green;
-      g2.drawRect(coordinates.x, coordinates.y, g2.font.width(g2.fontSize, object.text), g2.font.height(g2.fontSize));
-    }
   }
 
   //

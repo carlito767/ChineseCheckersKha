@@ -17,10 +17,6 @@ class UIBuilder {
                   scaleObject(object);
                   var eval:MuiEval = evaluate(object);
                   ${f.expr};
-                  if (showHitbox) {
-                    g2.color = Color.Green;
-                    g2.drawRect(object.x, object.y, object.w, object.h);
-                  }
                   return eval;
                 }
               }

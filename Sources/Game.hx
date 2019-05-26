@@ -81,7 +81,6 @@ class Game {
     // TODO:[carlito 20180905] allow developer actions only in debug mode
     keymap = new Keymap();
     keymap.set(VirtualKey.L, "ChangeLanguage");
-    keymap.set(VirtualKey.Decimal, "ToggleHitbox");
     keymap.set(VirtualKey.Number0, "ToggleTileId");
     keymap.set(VirtualKey.Number1, "QuickLoad1");
     keymap.set(VirtualKey.Number2, "QuickLoad2");
@@ -92,7 +91,6 @@ class Game {
     keymap.set(VirtualKey.Backspace, "Undo");
 
     ui = new UI();
-    UI.showHitbox = settings.showHitbox;
 
     timer = new Timer();
   }
@@ -147,9 +145,6 @@ class Game {
       if (Board.isRunning(gamesave)) {
         gamesave.save(id);
       }
-    case "ToggleHitbox":
-      settings.showHitbox = !settings.showHitbox;
-      UI.showHitbox = settings.showHitbox;
     case "ToggleTileId":
       settings.showTileId = !settings.showTileId;
     case "Undo":

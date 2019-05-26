@@ -3,6 +3,5 @@ typedef SettingsData = {
   var language:String;
 
   // Developer settings
-  var showHitbox:Bool;
   var showTileId:Bool;
 }
