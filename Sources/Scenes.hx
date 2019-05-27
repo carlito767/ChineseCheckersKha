@@ -1,5 +1,7 @@
 import kha.Assets;
 
+import Localization.language;
+import Localization.locale;
 import UI.Dimensions;
 import UI.UITileEmphasis;
 import UI.UIWindow;
@@ -9,8 +11,6 @@ import board.Sequence;
 
 class Scenes {
   public static function title(ui:UI):Void {
-    var locale = Game.locale;
-
     ui.image({ image:Assets.images.BackgroundTitle, x:0, y:0, w:WIDTH, h:HEIGHT });
 
     ui.title({ text:locale.title1, x:WIDTH * 0.45, y:HEIGHT * 0.13, w:0, h:HEIGHT * 0.167 });
@@ -19,14 +19,13 @@ class Scenes {
     if (ui.button({ text:locale.newGame, x:WIDTH * 0.63, y:HEIGHT * 0.58, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
       Game.scene = play;
     }
-    if (ui.button({ text:'${locale.language} ${Game.language.toUpperCase()}', x:WIDTH * 0.63, y:HEIGHT * 0.7, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
-      Game.handleAction("ChangeLanguage");
+    if (ui.button({ text:'${locale.language} ${language.toUpperCase()}', x:WIDTH * 0.63, y:HEIGHT * 0.7, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
+      Localization.next();
     }
   }
 
   public static function play(ui:UI):Void {
     var gamesave = Game.gamesave;
-    var locale = Game.locale;
 
     ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:WIDTH, h:HEIGHT });
 

@@ -1,18 +1,27 @@
-@:forward
-abstract Localization(LocalizationData) {
-  public inline function new(id:String) {
-    this = Storage.loadJson('language_${id}.json');
+class Localization {
+  public static var language(get, never):String;
+  static inline function get_language() {
+    return languages[0];
   }
 
-  // TODO:[carlito 20180825] check language_*.json files at compile time
-  public inline function load(id:String):Bool {
-    trace('Loading localization ($id)...');
-    var data:Null<LocalizationData> = Storage.loadJson('language_$id.json');
-    if (data == null) {
-      trace('Localization not found ($id)');
-      return false;
+  public static var locale(get, never):LocalizationData;
+  static inline function get_locale() {
+    return locales[language];
+  }
+
+  static var languages:Array<String> = ['en', 'fr'];
+  static var locales:Map<String, LocalizationData> = new Map();
+
+  public static function initialize() {
+    for (id in languages) {
+      var data:Null<LocalizationData> = Storage.loadJson('language_$id.json');
+      if (data != null) {
+        locales[id] = data;
+      }
     }
-    this = data;
-    return true;
+  }
+
+  public static function next():Void {
+    languages.push(languages.shift());
   }
 }

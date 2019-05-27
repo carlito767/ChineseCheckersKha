@@ -13,9 +13,6 @@ class Game {
 
   public static var gb(default, null):GameBoard = new GameBoard();
 
-  public static var language:String;
-  public static var locale:Localization;
-
   public static var gamesave:Gamesave;
   public static var sequenceIndex(default, set):Null<Int>;
   static function set_sequenceIndex(value) {
@@ -50,8 +47,7 @@ class Game {
   }
 
   static function initialize():Void {
-    language = 'en';
-    locale = new Localization(language);
+    Localization.initialize();
 
     sequenceIndex = null;
 
@@ -83,9 +79,6 @@ class Game {
   @:allow(Scenes)
   static function handleAction(action:String):Void {
     switch action {
-    case "ChangeLanguage":
-      language = (language == 'en') ? 'fr' : 'en';
-      locale.load(language);
     case "Undo":
       if (Board.isRunning(gamesave)) {
         Board.cancelMove(gamesave);
