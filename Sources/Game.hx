@@ -7,7 +7,6 @@ import kha.graphics2.Graphics;
 
 import BoardChineseCheckers as GameBoard;
 import Mui.MuiInput;
-import board.Move;
 
 class Game {
   public static var g2(default, null):Graphics = null;
