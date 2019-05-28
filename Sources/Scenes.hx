@@ -33,8 +33,8 @@ class Scenes {
     var radius = HEIGHT * 0.027;
     var distanceX = radius * 1.25;
     var distanceY = radius * 1.25 * 1.7;
-    var boardWidth = (Game.gb.WIDTH - 1) * distanceX + radius * 2;
-    var boardHeight = (Game.gb.HEIGHT - 1) * distanceY + radius * 2;
+    var boardWidth = (Game.board.WIDTH - 1) * distanceX + radius * 2;
+    var boardHeight = (Game.board.HEIGHT - 1) * distanceY + radius * 2;
     var dx = (WIDTH - boardWidth) * 0.5;
     var dy = (HEIGHT - boardHeight) * 0.5;
 
@@ -125,7 +125,7 @@ class Scenes {
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);
 
-      var sequences = Game.gb.sequences;
+      var sequences = Game.board.sequences;
       var nb = sequences.length;
       var w = (dimensions.width - (nb - 1) * dimensions.margin) / nb;
       var dx = (dimensions.width + dimensions.margin) / nb;

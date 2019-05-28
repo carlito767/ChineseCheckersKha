@@ -2,7 +2,7 @@ import board.Player;
 import board.Sequence;
 import board.Tile;
 
-class BoardChineseCheckers {
+class BoardChineseCheckers implements IBoard {
   public var WIDTH(default, null):Int = 0;
   public var HEIGHT(default, null):Int = 0;
   public var sequences(default, null):Array<Sequence> = [];
@@ -83,7 +83,7 @@ class BoardChineseCheckers {
     sequences = data.sequences;
   }
 
-  public function newGamesave(?sequenceIndex:Int):Gamesave {
+  public function newGame(?sequenceIndex:Int):Gamesave {
     var gamesave:Gamesave = {
       sequence:[],
       players:new Map(),
