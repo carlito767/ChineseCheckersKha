@@ -6,11 +6,8 @@ import kha.System;
 import kha.graphics2.Graphics;
 
 import BoardChineseCheckers as GameBoard;
-import Mui.MuiInput;
 
 class Game {
-  public static var g2(default, null):Graphics = null;
-
   public static var gb(default, null):GameBoard = new GameBoard();
 
   public static var gamesave:Gamesave;
@@ -61,7 +58,7 @@ class Game {
   }
 
   static function render(framebuffers:Array<Framebuffer>):Void {
-    g2 = framebuffers[0].g2;
+    var g2 = framebuffers[0].g2;
 
     Scaling.update(WIDTH, HEIGHT);
 
