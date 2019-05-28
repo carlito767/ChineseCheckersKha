@@ -75,16 +75,4 @@ class Game {
     g2.disableScissor();
     g2.end();
   }
-
-  @:allow(Scenes)
-  static function handleAction(action:String):Void {
-    switch action {
-    case "Undo":
-      if (Board.isRunning(gamesave)) {
-        Board.cancelMove(gamesave);
-      }
-    case _:
-      trace('Unknown action ($action)');
-    }
-  }
 }
