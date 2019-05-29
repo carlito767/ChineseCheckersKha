@@ -5,13 +5,15 @@ import kha.Scheduler;
 import kha.System;
 import kha.graphics2.Graphics;
 
+import Boards.CookedBoard;
+
 class Game {
-  public static var board(default, never):IBoard = new BoardChineseCheckers();
+  public static var board(default, never):CookedBoard = BoardChineseCheckers.cook();
 
   public static var gamesave:Gamesave;
   public static var sequenceIndex(default, set):Null<Int>;
   static function set_sequenceIndex(value) {
-    gamesave = board.newGame(value);
+    gamesave = Board.newGame(board, value);
     return sequenceIndex = value;
   }
 

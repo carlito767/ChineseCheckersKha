@@ -1,10 +1,54 @@
 import kha.Color;
 
+import Boards.CookedBoard;
 import board.Move;
 import board.Tile;
 
 // TODO:[carlito 20180907] implement anti-spoiling rule (https://www.mastersofgames.com/rules/chinese-checkers-rules.htm)
 class Board {
+  public static function newGame(board:CookedBoard, ?sequenceIndex:Int):Gamesave {
+    var gamesave:Gamesave = {
+      sequence:[],
+      players:new Map(),
+      tiles:new Map(),
+      moves:[],
+      standings:[],
+      currentPlayerId:null,
+      selectedTileId:null,
+    };
+
+    // Players
+    var sequence = board.sequences[sequenceIndex];
+    if (sequence != null) {
+      gamesave.sequence = sequence.copy();
+      for (player in board.players) {
+        if (sequence.contains(player.id)) {
+          gamesave.players[player.id] = {
+            id:player.id,
+            color:player.color,
+          }
+        }
+      }
+    }
+
+    // Tiles
+    for (tile in board.tiles) {
+      gamesave.tiles[tile.id] = {
+        id:tile.id,
+        x:tile.x,
+        y:tile.y,
+        owner:tile.owner,
+        piece:(tile.piece != null && gamesave.players[tile.piece] != null) ? tile.piece : null,
+      }
+    }
+
+    return gamesave;
+  }
+
+  //
+  // State
+  //
+
   public static function start(gamesave:Gamesave):Void {
     gamesave.currentPlayerId = gamesave.sequence.shift();
   }
