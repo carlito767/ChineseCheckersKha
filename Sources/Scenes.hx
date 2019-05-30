@@ -109,44 +109,47 @@ class Scenes {
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);
 
-      var nb = standings.length;
-      var h = (dimensions.height - (nb - 1) * dimensions.margin) / nb;
-      var dy = (dimensions.height + dimensions.margin) / nb;
-      for (i in 0...nb) {
+      var n = standings.length;
+      var h = dimensions.height / n;
+      for (i in 0...n) {
         ui.rank({
           rank:Std.string(i+1),
           player:standings[i],
           x:dimensions.left,
-          y:dimensions.top + dy * i,
+          y:dimensions.top + h * i,
           w:dimensions.width,
           h:h,
         });
       }
     }
     else if (!Board.isRunning(state)) {
-      var window:UIWindow = { x:WIDTH * 0.3, y:HEIGHT * 0.33, w:WIDTH * 0.4, h:HEIGHT * 0.34, title:locale.numberOfPlayers };
+      var window:UIWindow = { x:WIDTH * 0.3, y:HEIGHT * 0.33, w:WIDTH * 0.4, h:HEIGHT * 0.25, title:locale.numberOfPlayers };
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);
 
       var sequences = Game.board.sequences;
-      var nb = sequences.length;
-      var w = (dimensions.width - (nb - 1) * dimensions.margin) / nb;
-      var dx = (dimensions.width + dimensions.margin) / nb;
-      for (i in 0...nb) {
+      var n = sequences.length;
+      var spacing = 0.3;
+      var w = dimensions.width / (n + spacing * (n + 1));
+      var h = Math.min(dimensions.height * 0.9, w);
+      var margin = w * spacing;
+      var dx = margin;
+      var dy = (dimensions.height - h) * 0.45;
+      for (i in 0...n) {
         var sequence:Sequence = sequences[i];
         if (ui.button({
           text:Std.string(sequence.length),
           selected:(Game.selectedSequenceIndex == i),
-          x:dimensions.left + dx * i,
-          y:dimensions.top,
+          x:dimensions.left + dx + ((w + margin) * i),
+          y:dimensions.top + dy,
           w:w,
-          h:w,
+          h:h,
         }).hit) {
           Game.selectedSequenceIndex = i;
         }
       }
 
-      if (ui.button({ text:locale.play, disabled:(Game.selectedSequenceIndex == null), x:dimensions.left, y:dimensions.bottom - HEIGHT * 0.067, w:dimensions.width, h:HEIGHT * 0.067 }).hit) {
+      if (ui.button({ text:locale.play, disabled:(Game.selectedSequenceIndex == null), x:dimensions.left, y:dimensions.bottom + HEIGHT * 0.01, w:dimensions.width, h:HEIGHT * 0.067 }).hit) {
         Board.start(state);
       }
     }

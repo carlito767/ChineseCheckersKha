@@ -16,7 +16,6 @@ typedef Coordinates = {
 }
 
 typedef Dimensions = {
-  var margin:Float;
   var width:Float;
   var height:Float;
   var left:Float;
@@ -110,15 +109,13 @@ class UI extends Mui {
 
   public static function dimensions(window:UIWindow):Dimensions {
     var dy = (window.title == null) ? 0 : window.h * 0.2;
-    var margin = window.w * 0.05;
-    var width = window.w - margin * 2;
-    var height = window.h - dy - margin * 2;
-    var left = window.x + margin;
+    var width = window.w;
+    var height = window.h - dy;
+    var left = window.x;
     var right = left + width;
-    var top = window.y + dy + margin;
+    var top = window.y + dy;
     var bottom = top + height;
     return {
-      margin:margin,
       width:width,
       height:height,
       left:left,
@@ -281,7 +278,7 @@ class UI extends Mui {
     background(object);
     if (object.title != null) {
       var h = object.h * 0.2;
-      var margin = h * 0.15;
+      var margin = h * 0.1;
       var title:MuiObject = { x:object.x + margin, y:object.y + margin, w:object.w - margin * 2, h:h - margin * 2 };
       g2.color = Color.Purple;
       g2.fillRect(title.x, title.y, title.w, title.h);
