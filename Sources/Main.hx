@@ -33,7 +33,7 @@ class Main {
       System.notifyOnFrames(renderLoadingScreen);
       Assets.loadEverything(function() {
         System.removeFramesListener(renderLoadingScreen);
-        Game.initialize();
+        new Game();
       });
     });
   }

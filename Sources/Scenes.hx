@@ -17,7 +17,7 @@ class Scenes {
     ui.title({ text:locale.title2, x:WIDTH * 0.48, y:HEIGHT * 0.3, w:0, h:HEIGHT * 0.167 });
 
     if (ui.button({ text:locale.newGame, x:WIDTH * 0.63, y:HEIGHT * 0.58, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
-      Game.scene = play;
+      Game.ME.scene = play;
     }
     if (ui.button({ text:'${locale.language} ${language.toUpperCase()}', x:WIDTH * 0.63, y:HEIGHT * 0.7, w:WIDTH * 0.38, h:HEIGHT * 0.08 }).hit) {
       Localization.next();
@@ -25,7 +25,7 @@ class Scenes {
   }
 
   public static function play(ui:UI):Void {
-    var state = Game.state;
+    var state = Game.ME.state;
 
     ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:WIDTH, h:HEIGHT });
 
@@ -33,13 +33,13 @@ class Scenes {
     var radius = HEIGHT * 0.027;
     var distanceX = radius * 1.25;
     var distanceY = radius * 1.25 * 1.7;
-    var boardWidth = (Game.board.WIDTH - 1) * distanceX + radius * 2;
-    var boardHeight = (Game.board.HEIGHT - 1) * distanceY + radius * 2;
+    var boardWidth = (Game.ME.board.WIDTH - 1) * distanceX + radius * 2;
+    var boardHeight = (Game.ME.board.HEIGHT - 1) * distanceY + radius * 2;
     var dx = (WIDTH - boardWidth) * 0.5;
     var dy = (HEIGHT - boardHeight) * 0.5;
 
     var selectableTiles:Array<Int> = [];
-    if (Game.selectedTileId == null) {
+    if (Game.ME.selectedTileId == null) {
       for (move in Board.allowedMoves(state)) {
         if (!selectableTiles.contains(move.from)) {
           selectableTiles.push(move.from);
@@ -47,7 +47,7 @@ class Scenes {
       }
     }
     else {
-      var selectedTile = state.tiles[Game.selectedTileId];
+      var selectedTile = state.tiles[Game.ME.selectedTileId];
       for (move in Board.allowedMovesForTile(state, selectedTile)) {
         if (!selectableTiles.contains(move.to)) {
           selectableTiles.push(move.to);
@@ -58,11 +58,11 @@ class Scenes {
     for (tile in state.tiles) {
       var tx = dx + (tile.x - 1) * distanceX;
       var ty = dy + (tile.y - 1) * distanceY;
-      var selected = (Game.selectedTileId == tile.id);
+      var selected = (Game.ME.selectedTileId == tile.id);
       var selectable = selectableTiles.contains(tile.id);
       var emphasis:UITileEmphasis = None;
       if (selectable) {
-        emphasis = (Game.selectedTileId == null) ? Selectable : AllowedMove;
+        emphasis = (Game.ME.selectedTileId == null) ? Selectable : AllowedMove;
       }
       else if (selected) {
         emphasis = Selected;
@@ -70,29 +70,29 @@ class Scenes {
       var color = (tile.piece == null) ? null : state.players[tile.piece].color;
       if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, color:color }).hit) {
         if (selected) {
-          Game.selectedTileId = null;
+          Game.ME.selectedTileId = null;
         }
         else if (!selectable) {
-          Game.selectedTileId = null;
+          Game.ME.selectedTileId = null;
           if (tile.piece != null && tile.piece == state.currentPlayerId) {
             if (Board.allowedMovesForTile(state, tile).length > 0) {
-              Game.selectedTileId = tile.id;
+              Game.ME.selectedTileId = tile.id;
             }
           }
         }
-        else if (Game.selectedTileId == null) {
-          Game.selectedTileId = tile.id;
+        else if (Game.ME.selectedTileId == null) {
+          Game.ME.selectedTileId = tile.id;
         }
         else {
-          var selectedTile = state.tiles[Game.selectedTileId];
+          var selectedTile = state.tiles[Game.ME.selectedTileId];
           Board.move(state, selectedTile, tile);
-          Game.selectedTileId = null;
+          Game.ME.selectedTileId = null;
         }
       }
     }
 
     if (Board.isOver(state)) {
-      Game.selectedTileId = null;
+      Game.ME.selectedTileId = null;
 
       var standings:Array<Player> = [];
       for (playerId in state.standings) {
@@ -127,7 +127,7 @@ class Scenes {
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);
 
-      var sequences = Game.board.sequences;
+      var sequences = Game.ME.board.sequences;
       var n = sequences.length;
       var spacing = 0.3;
       var w = dimensions.width / (n + spacing * (n + 1));
@@ -139,24 +139,24 @@ class Scenes {
         var sequence:Sequence = sequences[i];
         if (ui.button({
           text:Std.string(sequence.length),
-          selected:(Game.selectedSequenceIndex == i),
+          selected:(Game.ME.selectedSequenceIndex == i),
           x:dimensions.left + dx + ((w + margin) * i),
           y:dimensions.top + dy,
           w:w,
           h:h,
         }).hit) {
-          Game.selectedSequenceIndex = i;
+          Game.ME.selectedSequenceIndex = i;
         }
       }
 
-      if (ui.button({ text:locale.play, disabled:(Game.selectedSequenceIndex == null), x:dimensions.left, y:dimensions.bottom + HEIGHT * 0.01, w:dimensions.width, h:HEIGHT * 0.067 }).hit) {
+      if (ui.button({ text:locale.play, disabled:(Game.ME.selectedSequenceIndex == null), x:dimensions.left, y:dimensions.bottom + HEIGHT * 0.01, w:dimensions.width, h:HEIGHT * 0.067 }).hit) {
         Board.start(state);
       }
     }
 
     if (ui.button({ text:locale.quit, x:WIDTH * 0.85, y:WIDTH * 0.025, w:WIDTH * 0.125, h:HEIGHT * 0.067 }).hit) {
-      Game.scene = title;
-      Game.selectedSequenceIndex = null;
+      Game.ME.scene = title;
+      Game.ME.selectedSequenceIndex = null;
     }
   }
 }

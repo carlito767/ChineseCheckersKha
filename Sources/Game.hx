@@ -5,25 +5,29 @@ import kha.System;
 import Boards.CookedBoard;
 
 class Game {
-  public static var board(default, never):CookedBoard = BoardChineseCheckers.cook();
+  public static var ME:Game;
+
+  public var board(default, never):CookedBoard = BoardChineseCheckers.cook();
   // public static var board(default, never):CookedBoard = BoardDebug.cook();
 
-  public static var state:BoardState;
-  public static var selectedSequenceIndex(default, set):Null<Int>;
-  static function set_selectedSequenceIndex(value) {
+  public var state:BoardState;
+  public var selectedSequenceIndex(default, set):Null<Int>;
+  function set_selectedSequenceIndex(value) {
     state = Board.newState(board, value);
     selectedTileId = null;
     return selectedSequenceIndex = value;
   }
-  public static var selectedTileId:Null<Int>;
+  public var selectedTileId:Null<Int>;
 
-  public static var scene:UIFlow;
+  public var scene:UIFlow;
 
-  static var mouse:Mouse;
-  static var ui:UI;
+  var mouse:Mouse;
+  var ui:UI;
 
   @:allow(Main)
-  static function initialize():Void {
+  function new() {
+    ME = this;
+
     Localization.initialize();
 
     selectedSequenceIndex = null;
@@ -37,10 +41,10 @@ class Game {
     System.notifyOnFrames(render);
   }
 
-  static function update():Void {
+  function update():Void {
   }
 
-  static function render(framebuffers:Array<Framebuffer>):Void {
+  function render(framebuffers:Array<Framebuffer>):Void {
     var g2 = framebuffers[0].g2;
 
     Scaling.update(WIDTH, HEIGHT);
