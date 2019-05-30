@@ -1,9 +1,6 @@
-import kha.Assets;
-import kha.Color;
 import kha.Framebuffer;
 import kha.Scheduler;
 import kha.System;
-import kha.graphics2.Graphics;
 
 import Boards.CookedBoard;
 
@@ -26,26 +23,6 @@ class Game {
   static var ui:UI;
 
   @:allow(Main)
-  static function load():Void {
-    var renderLoadingScreen = function(framebuffers:Array<Framebuffer>) {
-      var g2 = framebuffers[0].g2;
-      g2.begin();
-      var width = Assets.progress * System.windowWidth();
-      var height = System.windowHeight() * 0.02;
-      var y = (System.windowHeight() - height) * 0.5;
-      g2.color = Color.White;
-      g2.fillRect(0, y, width, height);
-      g2.end();
-    }
-    System.notifyOnFrames(renderLoadingScreen);
-    Assets.loadEverything(function() {
-      System.removeFramesListener(renderLoadingScreen);
-      initialize();
-      Scheduler.addTimeTask(update, 0, 1 / 60);
-      System.notifyOnFrames(render);
-    });
-  }
-
   static function initialize():Void {
     Localization.initialize();
 
@@ -55,6 +32,9 @@ class Game {
 
     mouse = new Mouse();
     ui = new UI();
+
+    Scheduler.addTimeTask(update, 0, 1 / 60);
+    System.notifyOnFrames(render);
   }
 
   static function update():Void {
