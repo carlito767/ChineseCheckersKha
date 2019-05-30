@@ -59,7 +59,7 @@ class Game {
     g2.begin();
     g2.scissor(Std.int(Scaling.dx), Std.int(Scaling.dy), Std.int(WIDTH * Scaling.scale), Std.int(HEIGHT * Scaling.scale));
 
-    ui.begin(mouse.input);
+    ui.begin({ x:mouse.x, y:mouse.y, select:mouse.isPressed(0) });
     ui.render(g2, scene);
     ui.end();
 
