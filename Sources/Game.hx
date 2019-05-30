@@ -2,7 +2,11 @@ import kha.Framebuffer;
 import kha.Scheduler;
 import kha.System;
 
-import Boards.CookedBoard;
+import board.Board;
+import board.BoardChineseCheckers;
+import board.BoardDebug;
+import board.BoardState;
+import board.CookedBoard;
 
 class Game {
   public static var ME:Game;

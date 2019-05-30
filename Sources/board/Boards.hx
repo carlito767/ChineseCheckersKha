@@ -1,19 +1,9 @@
-import board.Player;
-import board.Tile;
-import board.Sequence;
+package board;
 
 typedef RawBoard = {
   var board:Array<String>;
   var homes:Array<{owner:Int, color:Int}>;
   var sequences:Array<Array<Int>>;
-}
-
-typedef CookedBoard = {
-  var WIDTH:Int;
-  var HEIGHT:Int;
-  var players:Array<Player>;
-  var tiles:Array<Tile>;
-  var sequences:Array<Sequence>;
 }
 
 class Boards {

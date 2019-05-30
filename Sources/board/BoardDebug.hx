@@ -1,4 +1,4 @@
-import Boards.CookedBoard;
+package board;
 
 class BoardDebug {
   static public function cook():CookedBoard {

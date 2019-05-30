@@ -1,10 +1,4 @@
-import kha.Color;
-
-import Boards.CookedBoard;
-import board.Move;
-import board.Player;
-import board.Sequence;
-import board.Tile;
+package board;
 
 // TODO:[carlito 20180907] implement anti-spoiling rule (https://www.mastersofgames.com/rules/chinese-checkers-rules.htm)
 class Board {

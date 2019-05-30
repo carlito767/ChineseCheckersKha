@@ -1,7 +1,4 @@
-import board.Move;
-import board.Player;
-import board.Sequence;
-import board.Tile;
+package board;
 
 typedef BoardState = {
   var sequence:Sequence;

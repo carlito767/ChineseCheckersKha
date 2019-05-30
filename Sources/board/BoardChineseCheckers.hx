@@ -1,4 +1,4 @@
-import Boards.CookedBoard;
+package board;
 
 class BoardChineseCheckers {
   static public function cook():CookedBoard {
