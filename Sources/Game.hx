@@ -9,6 +9,7 @@ import Boards.CookedBoard;
 
 class Game {
   public static var board(default, never):CookedBoard = BoardChineseCheckers.cook();
+  // public static var board(default, never):CookedBoard = BoardDebug.cook();
 
   public static var state:BoardState;
   public static var selectedSequenceIndex(default, set):Null<Int>;
