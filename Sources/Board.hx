@@ -2,28 +2,20 @@ import kha.Color;
 
 import Boards.CookedBoard;
 import board.Move;
+import board.Player;
+import board.Sequence;
 import board.Tile;
 
 // TODO:[carlito 20180907] implement anti-spoiling rule (https://www.mastersofgames.com/rules/chinese-checkers-rules.htm)
 class Board {
-  public static function newGame(board:CookedBoard, ?sequenceIndex:Int):Gamesave {
-    var gamesave:Gamesave = {
-      sequence:[],
-      players:new Map(),
-      tiles:new Map(),
-      moves:[],
-      standings:[],
-      currentPlayerId:null,
-      selectedTileId:null,
-    };
-
+  public static function newState(board:CookedBoard, ?sequenceIndex:Int):BoardState {
     // Players
+    var players = new Map<Int, Player>();
     var sequence = board.sequences[sequenceIndex];
     if (sequence != null) {
-      gamesave.sequence = sequence.copy();
       for (player in board.players) {
         if (sequence.contains(player.id)) {
-          gamesave.players[player.id] = {
+          players[player.id] = {
             id:player.id,
             color:player.color,
           }
@@ -32,106 +24,115 @@ class Board {
     }
 
     // Tiles
+    var tiles = new Map<Int, Tile>();
     for (tile in board.tiles) {
-      gamesave.tiles[tile.id] = {
+      tiles[tile.id] = {
         id:tile.id,
         x:tile.x,
         y:tile.y,
         owner:tile.owner,
-        piece:(tile.piece != null && gamesave.players[tile.piece] != null) ? tile.piece : null,
+        piece:(tile.piece != null && players[tile.piece] != null) ? tile.piece : null,
       }
     }
 
-    return gamesave;
+    return {
+      sequence:(sequence == null) ? [] : sequence.copy(),
+      players:players,
+      tiles:tiles,
+      moves:[],
+      standings:[],
+      currentPlayerId:null,
+      selectedTileId:null,
+    };
   }
 
   //
   // State
   //
 
-  public static function start(gamesave:Gamesave):Void {
-    gamesave.currentPlayerId = gamesave.sequence.shift();
+  public static function start(state:BoardState):Void {
+    state.currentPlayerId = state.sequence.shift();
   }
 
-  public static function isOver(gamesave:Gamesave):Bool {
-    return (gamesave.standings.length > 0 && gamesave.sequence.length == 1);
+  public static function isOver(state:BoardState):Bool {
+    return (state.standings.length > 0 && state.sequence.length == 1);
   }
 
-  public static function isRunning(gamesave:Gamesave):Bool {
-    return (gamesave.currentPlayerId != null);
+  public static function isRunning(state:BoardState):Bool {
+    return (state.currentPlayerId != null);
   }
 
   //
   // Moves
   //
 
-  public static function move(gamesave:Gamesave, from:Tile, to:Tile):Void {
+  public static function move(state:BoardState, from:Tile, to:Tile):Void {
     to.piece = from.piece;
     from.piece = null;
-    gamesave.moves.push({from:from.id, to:to.id});
+    state.moves.push({from:from.id, to:to.id});
 
     // Update Standings
     var victory = true;
-    for (tile in gamesave.tiles) {
+    for (tile in state.tiles) {
       if (tile.piece == to.piece && tile.owner != to.piece) {
         victory = false;
         break;
       }
     }
     if (victory) {
-      gamesave.standings.push(to.piece);
+      state.standings.push(to.piece);
     }
     else {
-      gamesave.sequence.push(to.piece);
+      state.sequence.push(to.piece);
     }
 
     // Update Selected Tile
-    gamesave.selectedTileId = null;
+    state.selectedTileId = null;
 
     // Update Current Player
-    gamesave.currentPlayerId = gamesave.sequence.shift();
+    state.currentPlayerId = state.sequence.shift();
   }
 
-  public static function cancelMove(gamesave:Gamesave):Void {
-    if (gamesave.moves.length == 0) {
+  public static function cancelMove(state:BoardState):Void {
+    if (state.moves.length == 0) {
       return;
     }
 
-    var move = gamesave.moves.pop();
-    var from = gamesave.tiles[move.from];
-    var to = gamesave.tiles[move.to];
+    var move = state.moves.pop();
+    var from = state.tiles[move.from];
+    var to = state.tiles[move.to];
     from.piece = to.piece;
     to.piece = null;
 
     // Update Standings
-    if (gamesave.currentPlayerId != null) {
-      gamesave.sequence.unshift(gamesave.currentPlayerId);
+    if (state.currentPlayerId != null) {
+      state.sequence.unshift(state.currentPlayerId);
     }
-    if (gamesave.standings.length > 0 && gamesave.standings[gamesave.standings.length-1] == from.piece) {
-      gamesave.standings.pop();
+    if (state.standings.length > 0 && state.standings[state.standings.length-1] == from.piece) {
+      state.standings.pop();
     }
 
     // Update Selected Tile
-    gamesave.selectedTileId = null;
+    state.selectedTileId = null;
 
     // Update Current Player
-    gamesave.currentPlayerId = gamesave.sequence.pop();
+    state.currentPlayerId = state.sequence.pop();
   }
 
   //
   // Allowed moves
   //
 
-  public static function allowedMoves(gamesave:Gamesave):Array<Move> {
+  public static function allowedMoves(state:BoardState):Array<Move> {
     var moves:Array<Move> = [];
-    if (gamesave.currentPlayerId == null) {
+    if (state.currentPlayerId == null) {
       return moves;
     }
 
-    var playerId = gamesave.currentPlayerId; 
-    for (from in gamesave.tiles) {
+    var playerId = state.currentPlayerId; 
+    for (from in state.tiles) {
       if (from.piece == playerId) {
-        for (move in Board.allowedMovesForTile(gamesave, from)) {
+        for (move in Board.allowedMovesForTile(state, from)) {
           moves.push(move);
         }
       }
@@ -139,10 +140,10 @@ class Board {
     return moves;
   }
 
-  public static function allowedMovesForTile(gamesave:Gamesave, tile:Tile):Array<Move> {
+  public static function allowedMovesForTile(state:BoardState, tile:Tile):Array<Move> {
     var tiles:Array<Tile> = [];
-    jumps(gamesave, tile, tiles);
-    for (neighbor in neighbors(gamesave, tile)) {
+    jumps(state, tile, tiles);
+    for (neighbor in neighbors(state, tile)) {
       if (neighbor.piece == null) {
         tiles.push(neighbor);
       }
@@ -168,14 +169,14 @@ class Board {
     return moves;
   }
 
-  static function neighbors(gamesave:Gamesave, tile:Tile):Array<Tile> {
+  static function neighbors(state:BoardState, tile:Tile):Array<Tile> {
     //    (1) (2)
     //      \ /
     //  (3)- * -(4)
     //      / \
     //    (5) (6)
     var tiles:Array<Tile> = [];
-    for (neighbor in gamesave.tiles) {
+    for (neighbor in state.tiles) {
       if (
         ((neighbor.x == tile.x - 1) && (neighbor.y == tile.y - 1)) || // (1)
         ((neighbor.x == tile.x + 1) && (neighbor.y == tile.y - 1)) || // (2)
@@ -190,10 +191,10 @@ class Board {
     return tiles;
   }
 
-  static function jump(gamesave:Gamesave, from:Tile, via:Tile):Null<Tile> {
+  static function jump(state:BoardState, from:Tile, via:Tile):Null<Tile> {
     var x = via.x + (via.x - from.x);
     var y = via.y + (via.y - from.y);
-    for (tile in gamesave.tiles) {
+    for (tile in state.tiles) {
       if (tile.x == x && tile.y == y) {
         return tile;
       }
@@ -201,13 +202,13 @@ class Board {
     return null;
   }
 
-  static function jumps(gamesave:Gamesave, tile:Tile, tiles:Array<Tile>):Void {
-    for (neighbor in neighbors(gamesave, tile)) {
+  static function jumps(state:BoardState, tile:Tile, tiles:Array<Tile>):Void {
+    for (neighbor in neighbors(state, tile)) {
       if (neighbor.piece != null) {
-        var jumpTile = jump(gamesave, tile, neighbor);
+        var jumpTile = jump(state, tile, neighbor);
         if (jumpTile != null && jumpTile.piece == null && !tiles.contains(jumpTile)) {
           tiles.push(jumpTile);
-          jumps(gamesave, jumpTile, tiles);
+          jumps(state, jumpTile, tiles);
         }
       }
     }

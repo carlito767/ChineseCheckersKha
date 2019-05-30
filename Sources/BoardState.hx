@@ -3,7 +3,7 @@ import board.Player;
 import board.Sequence;
 import board.Tile;
 
-typedef Gamesave = {
+typedef BoardState = {
   var sequence:Sequence;
   var players:Map<Int, Player>;
   var tiles:Map<Int, Tile>;

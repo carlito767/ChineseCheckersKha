@@ -25,7 +25,7 @@ class Scenes {
   }
 
   public static function play(ui:UI):Void {
-    var gamesave = Game.gamesave;
+    var state = Game.state;
 
     ui.image({ image:Assets.images.BackgroundPlay, x:0, y:0, w:WIDTH, h:HEIGHT });
 
@@ -39,65 +39,65 @@ class Scenes {
     var dy = (HEIGHT - boardHeight) * 0.5;
 
     var selectableTiles:Array<Int> = [];
-    if (gamesave.selectedTileId == null) {
-      for (move in Board.allowedMoves(gamesave)) {
+    if (state.selectedTileId == null) {
+      for (move in Board.allowedMoves(state)) {
         if (!selectableTiles.contains(move.from)) {
           selectableTiles.push(move.from);
         }
       }
     }
     else {
-      var selectedTile = gamesave.tiles[gamesave.selectedTileId];
-      for (move in Board.allowedMovesForTile(gamesave, selectedTile)) {
+      var selectedTile = state.tiles[state.selectedTileId];
+      for (move in Board.allowedMovesForTile(state, selectedTile)) {
         if (!selectableTiles.contains(move.to)) {
           selectableTiles.push(move.to);
         }
       }
     }
 
-    for (tile in gamesave.tiles) {
+    for (tile in state.tiles) {
       var tx = dx + (tile.x - 1) * distanceX;
       var ty = dy + (tile.y - 1) * distanceY;
-      var selected = (gamesave.selectedTileId == tile.id);
+      var selected = (state.selectedTileId == tile.id);
       var selectable = selectableTiles.contains(tile.id);
       var emphasis:UITileEmphasis = None;
       if (selectable) {
-        emphasis = (gamesave.selectedTileId == null) ? Selectable : AllowedMove;
+        emphasis = (state.selectedTileId == null) ? Selectable : AllowedMove;
       }
       else if (selected) {
         emphasis = Selected;
       }
-      var player = (tile.piece == null) ? null : gamesave.players[tile.piece];
+      var player = (tile.piece == null) ? null : state.players[tile.piece];
       if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player }).hit) {
         if (selected) {
-          gamesave.selectedTileId = null;
+          state.selectedTileId = null;
         }
         else if (!selectable) {
-          gamesave.selectedTileId = null;
-          if (tile.piece != null && tile.piece == gamesave.currentPlayerId) {
-            if (Board.allowedMovesForTile(gamesave, tile).length > 0) {
-              gamesave.selectedTileId = tile.id;
+          state.selectedTileId = null;
+          if (tile.piece != null && tile.piece == state.currentPlayerId) {
+            if (Board.allowedMovesForTile(state, tile).length > 0) {
+              state.selectedTileId = tile.id;
             }
           }
         }
-        else if (gamesave.selectedTileId == null) {
-          gamesave.selectedTileId = tile.id;
+        else if (state.selectedTileId == null) {
+          state.selectedTileId = tile.id;
         }
         else {
-          var selectedTile = gamesave.tiles[gamesave.selectedTileId];
-          Board.move(gamesave, selectedTile, tile);
+          var selectedTile = state.tiles[state.selectedTileId];
+          Board.move(state, selectedTile, tile);
         }
       }
     }
 
-    if (Board.isOver(gamesave)) {
+    if (Board.isOver(state)) {
       var standings:Array<Player> = [];
-      for (playerId in gamesave.standings) {
-        standings.push(gamesave.players[playerId]);
+      for (playerId in state.standings) {
+        standings.push(state.players[playerId]);
       }
       // Who is the great loser?
-      for (player in gamesave.players) {
-        if (!gamesave.standings.contains(player.id)) {
+      for (player in state.players) {
+        if (!state.standings.contains(player.id)) {
           standings.push(player);
         }
       }
@@ -120,7 +120,7 @@ class Scenes {
         });
       }
     }
-    else if (!Board.isRunning(gamesave)) {
+    else if (!Board.isRunning(state)) {
       var window:UIWindow = { x:WIDTH * 0.3, y:HEIGHT * 0.33, w:WIDTH * 0.4, h:HEIGHT * 0.34, title:locale.numberOfPlayers };
       var dimensions:Dimensions = UI.dimensions(window);
       ui.window(window);
@@ -144,7 +144,7 @@ class Scenes {
       }
 
       if (ui.button({ text:locale.play, disabled:(Game.sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - HEIGHT * 0.067, w:dimensions.width, h:HEIGHT * 0.067 }).hit) {
-        Board.start(gamesave);
+        Board.start(state);
       }
     }
 

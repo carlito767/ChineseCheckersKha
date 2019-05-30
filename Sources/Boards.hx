@@ -20,7 +20,7 @@ class Boards {
   public static function cook(data:RawBoard):CookedBoard {
     // Players
     var players:Array<Player> = [];
-    var owners = new Map();
+    var owners = new Map<Int, Int>();
     var id = 0;
     for (home in data.homes) {
       players.push({

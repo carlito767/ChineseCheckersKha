@@ -10,10 +10,10 @@ import Boards.CookedBoard;
 class Game {
   public static var board(default, never):CookedBoard = BoardChineseCheckers.cook();
 
-  public static var gamesave:Gamesave;
+  public static var state:BoardState;
   public static var sequenceIndex(default, set):Null<Int>;
   static function set_sequenceIndex(value) {
-    gamesave = Board.newGame(board, value);
+    state = Board.newState(board, value);
     return sequenceIndex = value;
   }
 
