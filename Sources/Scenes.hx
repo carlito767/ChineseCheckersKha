@@ -92,6 +92,8 @@ class Scenes {
     }
 
     if (Board.isOver(state)) {
+      Game.selectedTileId = null;
+
       var standings:Array<Player> = [];
       for (playerId in state.standings) {
         standings.push(state.players[playerId]);

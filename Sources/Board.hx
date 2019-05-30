@@ -53,12 +53,13 @@ class Board {
     state.currentPlayerId = state.sequence.shift();
   }
 
-  public static function isOver(state:BoardState):Bool {
-    return (state.standings.length > 0 && state.sequence.length == 1);
-  }
-
   public static function isRunning(state:BoardState):Bool {
     return (state.currentPlayerId != null);
+  }
+
+  // We assume that there are at least two players
+  public static function isOver(state:BoardState):Bool {
+    return (state.currentPlayerId != null && state.sequence.length == 0);
   }
 
   //
