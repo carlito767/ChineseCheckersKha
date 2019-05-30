@@ -10,7 +10,7 @@ class BoardDebug {
       ],
       homes:[
         { owner:2, color:0xff000000 }, // black
-        { owner:3, color:0xff008080 }, // teal
+        { owner:3, color:0xffff0000 }, // red
         { owner:1, color:0xff008000 }, // green
       ],
       sequences:[

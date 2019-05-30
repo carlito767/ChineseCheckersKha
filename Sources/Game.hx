@@ -15,7 +15,7 @@ class Game {
   public static var ME:Game;
 
   public var board(default, never):CookedBoard = BoardChineseCheckers.cook();
-  // public static var board(default, never):CookedBoard = BoardDebug.cook();
+  // public var board(default, never):CookedBoard = BoardDebug.cook();
 
   public var state:BoardState;
   public var selectedSequenceIndex(default, set):Null<Int>;
