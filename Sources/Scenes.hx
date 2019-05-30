@@ -2,13 +2,11 @@ import kha.Assets;
 
 import Localization.language;
 import Localization.locale;
-import UI.Dimensions;
-import UI.UITileEmphasis;
-import UI.UIWindow;
 import board.Board;
 import board.Move;
 import board.Player;
 import board.Sequence;
+import ui.UI;
 
 class Scenes {
   public static function title(ui:UI):Void {

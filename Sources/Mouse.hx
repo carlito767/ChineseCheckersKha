@@ -1,6 +1,6 @@
 import kha.input.Mouse as KhaMouse;
 
-import Mui.MuiInput;
+import ui.MuiInput;
 
 class Mouse {
   public var input(default, null):MuiInput = { x:0, y:0, select:false };

@@ -7,6 +7,8 @@ import board.BoardChineseCheckers;
 import board.BoardDebug;
 import board.BoardState;
 import board.CookedBoard;
+import ui.UI;
+import ui.UIFlow;
 
 class Game {
   public static var ME:Game;

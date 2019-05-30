@@ -4,30 +4,11 @@
 // Inspired by: Immediate Mode GUI: https://caseymuratori.com/blog_0001
 //
 
+package ui;
+
 import kha.Scheduler;
 
-typedef MuiEval = {
-  var hot:Bool;
-  var active:Bool;
-  var hit:Bool;
-  var longPress:Bool;
-  var longPressRatio:Float;
-}
-
 typedef MuiId = Int;
-
-typedef MuiInput = {
-  var x:Float;
-  var y:Float;
-  var select:Bool;
-}
-
-typedef MuiObject = {
-  var x:Float;
-  var y:Float;
-  var w:Float;
-  var h:Float;
-}
 
 class Mui {
   static inline var LONG_PRESS_BEGIN = 0.2;

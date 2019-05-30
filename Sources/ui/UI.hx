@@ -1,3 +1,5 @@
+package ui;
+
 import kha.Assets;
 import kha.Color;
 import kha.Font;
@@ -5,9 +7,6 @@ import kha.Image;
 import kha.graphics2.Graphics;
 using kha.graphics2.GraphicsExtension;
 import kha.System;
-
-import Mui.MuiEval;
-import Mui.MuiObject;
 
 typedef Coordinates = {
   var x:Float;
@@ -76,7 +75,7 @@ typedef UIWindow = {
 // UI
 //
 
-@:build(UIBuilder.build())
+@:build(ui.UIBuilder.build())
 class UI extends Mui {
   var g2:Graphics;
 
