@@ -44,11 +44,6 @@ typedef UIImage = {
   var image:Image;
 }
 
-typedef UIPlayer = {
-  > MuiObject,
-  var player:Player;
-}
-
 typedef UIRank = {
   > DisableableObject,
   var rank:String;
