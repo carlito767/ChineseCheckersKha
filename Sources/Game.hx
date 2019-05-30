@@ -11,11 +11,13 @@ class Game {
   public static var board(default, never):CookedBoard = BoardChineseCheckers.cook();
 
   public static var state:BoardState;
-  public static var sequenceIndex(default, set):Null<Int>;
-  static function set_sequenceIndex(value) {
+  public static var selectedSequenceIndex(default, set):Null<Int>;
+  static function set_selectedSequenceIndex(value) {
     state = Board.newState(board, value);
-    return sequenceIndex = value;
+    selectedTileId = null;
+    return selectedSequenceIndex = value;
   }
+  public static var selectedTileId:Null<Int>;
 
   public static var scene:UIFlow;
 
@@ -46,7 +48,7 @@ class Game {
   static function initialize():Void {
     Localization.initialize();
 
-    sequenceIndex = null;
+    selectedSequenceIndex = null;
 
     scene = Scenes.title;
 

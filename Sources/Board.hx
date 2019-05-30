@@ -42,7 +42,6 @@ class Board {
       moves:[],
       standings:[],
       currentPlayerId:null,
-      selectedTileId:null,
     };
   }
 
@@ -86,9 +85,6 @@ class Board {
       state.sequence.push(to.piece);
     }
 
-    // Update Selected Tile
-    state.selectedTileId = null;
-
     // Update Current Player
     state.currentPlayerId = state.sequence.shift();
   }
@@ -111,9 +107,6 @@ class Board {
     if (state.standings.length > 0 && state.standings[state.standings.length-1] == from.piece) {
       state.standings.pop();
     }
-
-    // Update Selected Tile
-    state.selectedTileId = null;
 
     // Update Current Player
     state.currentPlayerId = state.sequence.pop();

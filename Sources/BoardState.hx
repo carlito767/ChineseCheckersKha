@@ -10,5 +10,4 @@ typedef BoardState = {
   var moves:Array<Move>;
   var standings:Array<Int>;
   var currentPlayerId:Null<Int>;
-  var selectedTileId:Null<Int>;
 }

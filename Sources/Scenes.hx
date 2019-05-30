@@ -39,7 +39,7 @@ class Scenes {
     var dy = (HEIGHT - boardHeight) * 0.5;
 
     var selectableTiles:Array<Int> = [];
-    if (state.selectedTileId == null) {
+    if (Game.selectedTileId == null) {
       for (move in Board.allowedMoves(state)) {
         if (!selectableTiles.contains(move.from)) {
           selectableTiles.push(move.from);
@@ -47,7 +47,7 @@ class Scenes {
       }
     }
     else {
-      var selectedTile = state.tiles[state.selectedTileId];
+      var selectedTile = state.tiles[Game.selectedTileId];
       for (move in Board.allowedMovesForTile(state, selectedTile)) {
         if (!selectableTiles.contains(move.to)) {
           selectableTiles.push(move.to);
@@ -58,11 +58,11 @@ class Scenes {
     for (tile in state.tiles) {
       var tx = dx + (tile.x - 1) * distanceX;
       var ty = dy + (tile.y - 1) * distanceY;
-      var selected = (state.selectedTileId == tile.id);
+      var selected = (Game.selectedTileId == tile.id);
       var selectable = selectableTiles.contains(tile.id);
       var emphasis:UITileEmphasis = None;
       if (selectable) {
-        emphasis = (state.selectedTileId == null) ? Selectable : AllowedMove;
+        emphasis = (Game.selectedTileId == null) ? Selectable : AllowedMove;
       }
       else if (selected) {
         emphasis = Selected;
@@ -70,22 +70,23 @@ class Scenes {
       var player = (tile.piece == null) ? null : state.players[tile.piece];
       if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player }).hit) {
         if (selected) {
-          state.selectedTileId = null;
+          Game.selectedTileId = null;
         }
         else if (!selectable) {
-          state.selectedTileId = null;
+          Game.selectedTileId = null;
           if (tile.piece != null && tile.piece == state.currentPlayerId) {
             if (Board.allowedMovesForTile(state, tile).length > 0) {
-              state.selectedTileId = tile.id;
+              Game.selectedTileId = tile.id;
             }
           }
         }
-        else if (state.selectedTileId == null) {
-          state.selectedTileId = tile.id;
+        else if (Game.selectedTileId == null) {
+          Game.selectedTileId = tile.id;
         }
         else {
-          var selectedTile = state.tiles[state.selectedTileId];
+          var selectedTile = state.tiles[Game.selectedTileId];
           Board.move(state, selectedTile, tile);
+          Game.selectedTileId = null;
         }
       }
     }
@@ -133,24 +134,24 @@ class Scenes {
         var sequence:Sequence = sequences[i];
         if (ui.button({
           text:Std.string(sequence.length),
-          selected:(Game.sequenceIndex == i),
+          selected:(Game.selectedSequenceIndex == i),
           x:dimensions.left + dx * i,
           y:dimensions.top,
           w:w,
           h:w,
         }).hit) {
-          Game.sequenceIndex = i;
+          Game.selectedSequenceIndex = i;
         }
       }
 
-      if (ui.button({ text:locale.play, disabled:(Game.sequenceIndex == null), x:dimensions.left, y:dimensions.bottom - HEIGHT * 0.067, w:dimensions.width, h:HEIGHT * 0.067 }).hit) {
+      if (ui.button({ text:locale.play, disabled:(Game.selectedSequenceIndex == null), x:dimensions.left, y:dimensions.bottom - HEIGHT * 0.067, w:dimensions.width, h:HEIGHT * 0.067 }).hit) {
         Board.start(state);
       }
     }
 
     if (ui.button({ text:locale.quit, x:WIDTH * 0.85, y:WIDTH * 0.025, w:WIDTH * 0.125, h:HEIGHT * 0.067 }).hit) {
       Game.scene = title;
-      Game.sequenceIndex = null;
+      Game.selectedSequenceIndex = null;
     }
   }
 }
