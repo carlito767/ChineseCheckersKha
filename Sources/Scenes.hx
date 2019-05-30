@@ -67,8 +67,8 @@ class Scenes {
       else if (selected) {
         emphasis = Selected;
       }
-      var player = (tile.piece == null) ? null : state.players[tile.piece];
-      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, player:player }).hit) {
+      var color = (tile.piece == null) ? null : state.players[tile.piece].color;
+      if (ui.tile({ x:tx, y:ty, w:radius * 2, h: radius * 2, emphasis:emphasis, color:color }).hit) {
         if (selected) {
           Game.selectedTileId = null;
         }
@@ -114,7 +114,7 @@ class Scenes {
       for (i in 0...n) {
         ui.rank({
           rank:Std.string(i+1),
-          player:standings[i],
+          color:standings[i].color,
           x:dimensions.left,
           y:dimensions.top + h * i,
           w:dimensions.width,

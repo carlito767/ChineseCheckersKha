@@ -8,7 +8,6 @@ import kha.System;
 
 import Mui.MuiEval;
 import Mui.MuiObject;
-import board.Player;
 
 typedef Coordinates = {
   var x:Float;
@@ -47,7 +46,7 @@ typedef UIImage = {
 typedef UIRank = {
   > DisableableObject,
   var rank:String;
-  @:optional var player:Player;
+  @:optional var color:Int;
 }
 
 enum UITileEmphasis {
@@ -60,8 +59,7 @@ enum UITileEmphasis {
 typedef UITile = {
   > MuiObject,
   var emphasis:UITileEmphasis;
-  @:optional var id:String;
-  @:optional var player:Player;
+  @:optional var color:Int;
 }
 
 typedef UITitle = {
@@ -207,10 +205,10 @@ class UI extends Mui {
     g2.color = Color.White;
     g2.drawString(object.rank, coordinates.x, coordinates.y);
     // Player
-    if (object.player != null) {
+    if (object.color != null) {
       var coordinates = center(object);
       var radius = Math.min(object.w, object.h) * 0.5 * 0.7;
-      g2.color = object.player.color;
+      g2.color = object.color;
       g2.fillCircle(coordinates.x, coordinates.y, radius);
       g2.color = Color.White;
       g2.drawCircle(coordinates.x, coordinates.y, radius, 2);
@@ -227,8 +225,8 @@ class UI extends Mui {
     var cx = object.x + radius;
     var cy = object.y + radius;
 
-    if (object.player != null) {
-      g2.color = object.player.color;
+    if (object.color != null) {
+      g2.color = object.color;
       g2.fillCircle(cx, cy, radius);
     }
 
