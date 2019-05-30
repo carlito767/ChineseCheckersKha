@@ -7,6 +7,7 @@ import board.BoardChineseCheckers;
 import board.BoardDebug;
 import board.BoardState;
 import board.CookedBoard;
+import localization.Localization;
 import ui.UI;
 import ui.UIFlow;
 

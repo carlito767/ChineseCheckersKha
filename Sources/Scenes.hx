@@ -1,11 +1,12 @@
 import kha.Assets;
 
-import Localization.language;
-import Localization.locale;
 import board.Board;
 import board.Move;
 import board.Player;
 import board.Sequence;
+import localization.Localization;
+import localization.Localization.language;
+import localization.Localization.locale;
 import ui.UI;
 
 class Scenes {

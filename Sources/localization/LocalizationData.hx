@@ -1,3 +1,5 @@
+package localization;
+
 typedef LocalizationData = {
   var language:String;
   var newGame:String;

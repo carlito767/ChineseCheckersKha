@@ -1,3 +1,5 @@
+package localization;
+
 class Localization {
   public static var language(get, never):String;
   static inline function get_language() {
