@@ -1,7 +1,6 @@
 import kha.Assets;
 
 import board.Board;
-import board.Move;
 import board.Player;
 import board.Sequence;
 import localization.Localization;
