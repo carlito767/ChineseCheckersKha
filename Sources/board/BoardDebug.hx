@@ -2,7 +2,7 @@ package board;
 
 class BoardDebug {
   static public function cook():CookedBoard {
-    return Boards.cook({
+    return Board.newBoard({
       board:[
         '  2  ',
         ' * * ',

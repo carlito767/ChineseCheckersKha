@@ -2,7 +2,7 @@ package board;
 
 class BoardChineseCheckers {
   static public function cook():CookedBoard {
-    return Boards.cook({
+    return Board.newBoard({
       board:[
         '            4            ',
         '           4 4           ',
