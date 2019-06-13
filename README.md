@@ -1,3 +1,7 @@
+#### STATUS : Abandoned
+
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 # ChineseCheckersKha
 
 Chinese Checkers game in [Haxe](https://haxe.org/) with [Kha](http://kha.tech/)
